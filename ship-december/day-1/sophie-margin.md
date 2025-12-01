@@ -9,6 +9,7 @@
         
         S -> J: my version of the post
         Sit with the post(s)
+        How did we get here
         
         Write a secret part 2
 
@@ -32,15 +33,6 @@
 
 📝 Sophie's blog post
 
-hello. This post is not interesting
-
-# What did we ship?
-
-We shipped a minimum viable version of the following system:
-
-   1. There is a git-repo with a folder named `ship-dec` and sub folders from `/day-1` to `/day-31`
-
-   2. If we commit a markdown file called `post.md` to `/ship-december/day-1` then it will be available for viewing at `sophie-jarred.researchlog.dev/ship-december/day-1`
 
 # How did we get here?
 
@@ -56,11 +48,20 @@ Sophie and I have a harebrained scheme inspired by Inkhaven to ship a working pi
 
 As far as a shared plan goes, all we have at this time is some text messages saying “let’s do it.”
 
-## A brief timeline
+## Some key events
 
 1. Jarred woke up early, had some caffine, and wrote a "written a highly provisional 1st entry for our research log 😄😅😬"
 
 2. Sophie woke up and send Jarred the following message: ![alt text](https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/image.png)
+
+## What did we ship?
+
+We shipped a minimum viable version of the following system:
+
+   1. There is a git-repo with a folder named `ship-dec` and sub folders from `/day-1` to `/day-31`
+
+   2. If we commit a markdown file called `post.md` to `/ship-december/day-1` then it will be available for viewing at `sophie-jarred.researchlog.dev/ship-december/day-1`
+
 
 # What else happened today?
 
