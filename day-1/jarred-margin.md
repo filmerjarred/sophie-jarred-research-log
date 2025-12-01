@@ -1,3 +1,5 @@
+
+
 #### **some preamble**
 
 The kingdom of heaven is that sometimes we can generate order and that we can accept and extend grace.
@@ -35,6 +37,8 @@ Sophie: I am awake\!
 
 * Is it okay that I’ve already written a provisional plan in which we ship a webpage which records a message to a google doc?  
   Sophie: :O YES. Can I see?\!?
+
+  Jarred: ha, yes, read on\!
 
 #### **some thoughts on gnawing one’s bone**
 
@@ -76,3 +80,54 @@ It would be cool if I could say aloud "I feel worse today, I wonder perhaps it w
 
 Part of what's going on with whispers is that I remember I had relevant thoughts about a subject that I've never seen written down but I don't remember what they were or in what context I had them.
 
+\---
+
+Ok. Here is a potential plan for today.
+
+#### **a plan**
+
+We could make a webpage which implements a simple design pattern. The design pattern is this:
+
+1. I have a thought, the structure and content of which I would like to remember later  
+     
+2. I tap a button or icon on my phone (which is for better or worse almost always to hand)  
+     
+3. I speak my thought at my phone  
+     
+4. This is sufficient to have words reflecting my speech end up in a more durable form than my memory, say in a google doc.
+
+#### **assorted design considerations**
+
+1. It would be nice for everything we ship to be easy for anyone to try out, like always an ostensibly working prototype.
+
+2. Should we implement the pattern using a website or a mobile app? Some more on this actually:   
+   * If it's a website:  
+     1. then it can be used the same on both apple and android phones
+
+     2. we can trigger the recording via a shortcut icon
+
+     3. however this means we can't trigger the recording via pressing physical buttons and it will require the phone to be unlocked
+
+     4. There is likely to be trouble minimising the app. Like if you start recording and then close the app it’s not obvious to me the webpage will remain recording.
+
+   *  If it's a mobile app:  
+     1. the inverse of all the above points. We would need separate apps, we could trigger recording via buttons (and on android without unlocking the phone)
+
+3. It's important to me that the recording is robustly captured and there is a start and stop signal. Even a 1% chance my capture will be lost tends to turn me off using a system completely.
+
+4. To make it immediately usable I think I should just add my personal capped openai api key and a default google doc which they can change if they like?
+
+5. Ideally it would work offline, even if just to capture the recording.
+
+
+#### **some todos**
+
+- [x] ~~Write some provisional Ship December rules which seem satisfying for today~~
+
+- [x] ~~Jarred and Sophie connect over this provisional 1st day entry into our research log~~
+
+- [x] ~~Make a substack called something like “Jarred & Sophie’s Research Log”?~~
+
+- [ ] Make a substack post like Ship December Day 1? Or SD 1?
+
+- [ ] Ship some software (potentially based on the Jarred laid out? Or whatever we come up with based on it?)
