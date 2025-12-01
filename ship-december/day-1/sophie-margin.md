@@ -1,8 +1,20 @@
-✅ Sophie’s jobs
+✅ Agenda items
 
-    - [ ] Command in the command palette which will open the markdown preview  
-    - [ ] Make a list of people we will email this too  
-    - [x] Document this pivot in the markdown
+    9:30am: Sophie's tasks
+        - [x] Command in the command palette which will open the markdown preview  
+        - [x] Make a list of people we will email this too  
+        - [x] Document this pivot in the markdown
+
+    11:40am: Debrief agenda
+        
+        S -> J: my version of the post
+        Sit with the post(s)
+        
+        Write a secret part 2
+
+        All but press send on the email
+
+
 
 🔥 A place for things to land
 
@@ -16,12 +28,19 @@
 
     Project idea: I want to have tag for markdown where i can view two authors in different fonts
 
+---
 
 📝 Sophie's blog post
 
 hello. This post is not interesting
 
 # What did we ship?
+
+We shipped a minimum viable version of the following system:
+
+   1. There is a git-repo with a folder named `ship-dec` and sub folders from `/day-1` to `/day-31`
+
+   2. If we commit a markdown file called `post.md` to `/ship-december/day-1` then it will be available for viewing at `sophie-jarred.researchlog.dev/ship-december/day-1`
 
 # How did we get here?
 
@@ -37,7 +56,11 @@ Sophie and I have a harebrained scheme inspired by Inkhaven to ship a working pi
 
 As far as a shared plan goes, all we have at this time is some text messages saying “let’s do it.”
 
-## 
+## A brief timeline
+
+1. Jarred woke up early, had some caffine, and wrote a "written a highly provisional 1st entry for our research log 😄😅😬"
+
+2. Sophie woke up and send Jarred the following message: ![alt text](https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/image.png)
 
 # What else happened today?
 
@@ -81,3 +104,64 @@ It would be cool if I could say aloud "I feel worse today, I wonder perhaps it w
 
 Part of what's going on with whispers is that I remember I had relevant thoughts about a subject that I've never seen written down but I don't remember what they were or in what context I had them.
 
+## FAQ (where F = 1)
+
+Q:  What counts as shipped?  
+A: First we say some words about an idea. Then later we can click some buttons on our phones and/or laptops and then a reliably cool thing related happens on the screen.
+
+Q: What happens if we fail to ship?  
+A: If we miss one day, then we admit our failure to Harri and he is egregiously disappointed in us. Or we aren't allowed to wear a coat the next day. If we miss two days in a row, then the project is over.
+
+Q: Is it okay that I (Jarred) have already written a minor essay about bones (below) in which I use a lot of “I” statements and not “We” statements?  
+A: This question is in fact the whole project.
+
+Q: Is it okay that I’ve already written a provisional plan in which we ship a webpage which records a message to a google doc?  
+A: :O YES. Can I see?\!?
+
+```
+Ok. Here is a potential plan for today.
+
+#### **a plan**
+
+We could make a webpage which implements a simple design pattern. The design pattern is this:
+
+1. I have a thought, the structure and content of which I would like to remember later  
+     
+2. I tap a button or icon on my phone (which is for better or worse almost always to hand)  
+     
+3. I speak my thought at my phone  
+     
+4. This is sufficient to have words reflecting my speech end up in a more durable form than my memory, say in a google doc.
+
+#### **assorted design considerations**
+
+1. It would be nice for everything we ship to be easy for anyone to try out, like always an ostensibly working prototype.
+
+2. Should we implement the pattern using a website or a mobile app? Some more on this actually:   
+   * If it's a website:  
+     1. then it can be used the same on both apple and android phones
+
+     2. we can trigger the recording via a shortcut icon
+
+     3. however this means we can't trigger the recording via pressing physical buttons and it will require the phone to be unlocked
+
+     4. There is likely to be trouble minimising the app. Like if you start recording and then close the app it’s not obvious to me the webpage will remain recording.
+
+   *  If it's a mobile app:  
+     1. the inverse of all the above points. We would need separate apps, we could trigger recording via buttons (and on android without unlocking the phone)
+
+3. It's important to me that the recording is robustly captured and there is a start and stop signal. Even a 1% chance my capture will be lost tends to turn me off using a system completely.
+
+4. To make it immediately usable I think I should just add my personal capped openai api key and a default google doc which they can change if they like?
+
+5. Ideally it would work offline, even if just to capture the recording.
+
+```
+
+## Secret Part 2
+
+"Sophie wants a debrief where we write down all the things and we really imagine that we actually did them."
+
+Improve the website
+    - A side bar with each of the days
+    - Adding a homepage, adding the rules
