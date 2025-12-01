@@ -30,7 +30,7 @@ function wrapHtml(content, title) {
       pre { background: #f4f4f4; padding: 1em; overflow-x: auto; border-radius: 5px; }
       pre code { background: none; padding: 0; }
       img { max-width: 100%; height: auto; }
-      hr { border: none; border-top: 1px solid #eee; margin: 2em 0; }
+      hr { border: none; border-top: 1px solid #a1a1a1; margin: 2em 0; }
    </style>
 </head>
 <body>
