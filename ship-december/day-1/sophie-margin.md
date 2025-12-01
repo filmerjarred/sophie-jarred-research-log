@@ -21,6 +21,13 @@
 
     I'm writing a math thesis with my friend and collegaue David Jaz Myers. It's meant to be a tight-end-to-end story. David is blessed (and cursed) with having SO MANY GOOD IDEAS. And so whenever he has a good idea that doesn't fit into the tight end-to-end story, I tell him "put it in the secret Part 2". The secret part 2 is a bunch of chapters along the lines of "Imagine this tight end-to-end story but with this cool additional feature!". And so I think we also need a section of each blog post that's like a secret part II. 
 
+
+    "Sophie wants a debrief where we write down all the things and we really imagine that we actually did them."
+
+    Improve the website
+        - A side bar with each of the days
+        - Adding a homepage, adding the rules
+
     ---
 
     I'm nervous that I feel like I can't write in a post.
@@ -65,7 +72,7 @@ We shipped a minimum viable version of the following system:
 
 # What else happened today?
 
-## Jarred wrote down **some thoughts on gnawing one's bone**
+## **some thoughts on gnawing one's bone**
 
 I have a bone that I would like to gnaw. It's about penetration into deep knots… it's about progress. 
 
@@ -159,10 +166,3 @@ We could make a webpage which implements a simple design pattern. The design pat
 
 ```
 
-## Secret Part 2
-
-"Sophie wants a debrief where we write down all the things and we really imagine that we actually did them."
-
-Improve the website
-    - A side bar with each of the days
-    - Adding a homepage, adding the rules
