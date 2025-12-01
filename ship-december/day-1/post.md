@@ -4,21 +4,21 @@
 
 *The kingdom of heaven is that sometimes we can generate order and that we can accept and extend grace.*
 
-**[Sophie 4pm]** I don't get this
+[ Sophie 4pm ] I don't get this
 
-**[Jarred 4pm]** I have a weakness for starting essays with a cryptic bit of poetry which sort of underlies the whole thing
+[ Jarred 4pm ] I have a weakness for starting essays with a cryptic bit of poetry which sort of underlies the whole thing
 
-**[Sophie 4pm]** What does it mean?
+[ Sophie 4pm ] What does it mean?
 
-**[Jarred 4pm]** It's like... the place for humanity that I belive is possible that I have hope in... it's possible because we have this faculty for recognising and generating clarity and order. Like our external world can in fact improve, we can improve it and make it kinder to inhabit. Some Christians I know might call this rightousness. But a capacity and sense for rightousness tends to react with the human prepensity for shame and collapse. If you create a kind between actions or a way of being (rightousness) and outcomes then it can stand to reason that bad outcomes, mess, etc can be attributed to character flaw, which then creates more problems. So there's this balance like... you need recognition and striving for order and you also need constant infusions of grace for one's self and for others... anyway
-
-- - -
-
-**[Sophie 2pm]** I'm nervous that I feel like I can't write in a post.
+[ Jarred 4pm ] It's like... the place for humanity that I belive is possible that I have hope in... it's possible because we have this faculty for recognising and generating clarity and order. Like our external world can in fact improve, we can improve it and make it kinder to inhabit. Some Christians I know might call this rightousness. But a capacity and sense for rightousness tends to react with the human prepensity for shame and collapse. If you create a kind between actions or a way of being (rightousness) and outcomes then it can stand to reason that bad outcomes, mess, etc can be attributed to character flaw, which then creates more problems. So there's this balance like... you need recognition and striving for order and you also need constant infusions of grace for one's self and for others... anyway
 
 - - -
 
-**[Jarred 7am]**
+[ Sophie 2pm ] I'm nervous that I feel like I can't write in a post.
+
+- - -
+
+[ Jarred 7am ]
 
 Sophie and I have a harebrained research scheme inspired by Inkhaven to ship a working piece of software every workday in the month of December. I’m toying with calling it Ship December but she has yet to sign off. “December” would be a formidable name for a ship I think.
 
@@ -42,7 +42,7 @@ Hopefully Sophie can answer these and more when she wakes up.
 
 ### FAQ (where F = 1)
 
-**[Sophie 12pm]**
+[ Sophie 12pm ]
 
 I am awake\!
 
@@ -59,7 +59,7 @@ Q: Is it okay that I’ve already written a provisional plan in which we ship a 
 A: :O YES. Can I see?\!?
 
 ```
-[Jarred 9am]
+[ Jarred 9am ]
 Ok. Here is a potential plan for today.
 
 We could make a webpage which implements a simple design pattern. The design pattern is this:
@@ -77,7 +77,7 @@ We could make a webpage which implements a simple design pattern. The design pat
 
 ### What did we ship today?
 
-**[Sophie 5pm]**
+[ Sophie 5pm ]
 
 tldr; we shipped our website and our first research post
 
@@ -95,7 +95,7 @@ We shipped a minimum viable version of the following system:
 
 ### some thoughts on the gnawing of one’s bone
 
-**[Jarred 7am]**
+[ Jarred 7am ]
 
 I have a bone that I would like to gnaw. It's about penetration into deep knots… it's about progress. 
 
@@ -139,7 +139,7 @@ Part of what's going on with whispers is that I remember I had relevant thoughts
 
 ### A brief aside on togglers and aeroplanes
 
-**[Jarred 6pm]**
+[ Jarred 6pm ]
 
 Surley this is much too long. My apologies.
 
