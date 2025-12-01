@@ -4,15 +4,17 @@ The kingdom of heaven is that sometimes we can generate order and that we can ac
 
 \---
 
-I’d like to ship some software today. Before I begin (inadvisably) I'm trying to remember why.
+I (Jarred) would like to ship some software today. Before I begin I'm inadvisedly trying to remember why.
 
-Sophie and I have a harebrained scheme inspired by Inkhaven to ship a working piece of software every work day in the month of December. I’m toying with calling it Ship December but she has yet to sign off. “December” would be a formidable name for a ship I think.
+Sophie and I have a harebrained research scheme inspired by Inkhaven to ship a working piece of software every workday in the month of December. I’m toying with calling it Ship December but she has yet to sign off. “December” would be a formidable name for a ship I think.
+
+It's 6.30am for me in Hamilton Canada. Sophie is asleep as for her it's currently 3.30am in Berkley.
 
 As far as a shared plan goes, all we have at this time is some text messages saying “let’s do it.”
 
 Some questions which reasonably present themselves at this juncture:
 
-* What counts as shipped?
+* What counts as having successfully shipped?
 
 * What happens if we fail to ship?
 
@@ -24,7 +26,7 @@ Hopefully Sophie can answer these and more when she wakes up.
 
 Sophie: I am awake\!
 
-* What counts as shipped?  
+* What counts as having successfully shipped?
   Sophie: First we say some words about an idea. Then later we can click some buttons on our phones and/or laptops and then a reliably cool thing related happens on the screen.
 
 * What happens if we fail to ship?  
