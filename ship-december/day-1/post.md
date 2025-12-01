@@ -122,13 +122,15 @@ I will relate to you now the events of the day as they unfolded, and then we wil
 
 1. Jarred woke up early, had some caffine, and wrote most of this post
 
-2. Sophie woke up and send Jarred the following message
+2. Sophie woke up and send Jarred the following message:
 
-![alt text](https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/image.png)
+   ![alt text](https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/image.png)
 
 3. We decided to ship a minimum viable version of the following system:
-   a. there will exist a git-repo with a folder named "ship-dec" and sub folders from "day-1" to "day-31"
-   b. if we commit a markdown file called "post.md" to /ship-december/day-1 then it will be available for viewing at "sophie-jarred.researchlog.dev/ship-december/day-1"
+
+   a. There will exist a git-repo with a folder named `ship-dec` and sub folders from `/day-1` to `/day-31`
+
+   b. If we commit a markdown file called `post.md` to `/ship-december/day-1` then it will be available for viewing at `sophie-jarred.researchlog.dev/ship-december/day-1`
 
 4. We registered the domain name, set up a cloudflare worker to do the routing, and now it works!
 
