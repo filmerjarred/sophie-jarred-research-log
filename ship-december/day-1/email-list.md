@@ -1,6 +1,6 @@
 🐦 LARC hosts
     
-    John Salvatier
+    * John Salvatier
 
     Valerie Daniel
     Xerxes Lopez Yglesia
@@ -10,31 +10,31 @@
     
     John Steidley
     Malcolm Ocean
-    Jack Carroll
+    * Jack Carroll
     Lulie Tannet
 
 
 
 👋 People we live with
     
-    Sandra Sobanska
-    Adam Shai
+    * Sandra Sobanska
+    * Adam Shai
     Maplewood housemates?
 
 
 🎩 Esteemed neighbors
     
-    James Baker
+    * James Baker
     Blake Borgeson
     Josefine Roding
     
-    David Yu
+    * David Yu
 
     Peter van Hardenberg
 
 ⏳ Topos
 
-    Brendan Fong
+    * Brendan Fong
     David Spivak
     Evan Patterson
     Beth Williams
@@ -52,11 +52,11 @@
 
 🙂 Best friends
     
-    Harri Besceli
+    * Harri Besceli
 
 🪢 Family
 
-    Marcus Libkind
+    * Marcus Libkind
 
 
 ---
