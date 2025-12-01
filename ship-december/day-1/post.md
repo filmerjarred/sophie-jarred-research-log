@@ -10,7 +10,7 @@
 
 [ Sophie 4pm ] What does it mean?
 
-[ Jarred 4pm ] It's like... the place for humanity that I belive is possible that I have hope in... it's possible because we have this faculty for recognising and generating clarity and order. Like our external world can in fact improve, we can improve it and make it kinder to inhabit. Some Christians I know might call this rightousness. But a capacity and sense for rightousness tends to react with the human prepensity for shame and collapse. If you create a kind between actions or a way of being (rightousness) and outcomes then it can stand to reason that bad outcomes, mess, etc can be attributed to character flaw, which then creates more problems. So there's this balance like... you need recognition and striving for order and you also need constant infusions of grace for one's self and for others... anyway
+[ Jarred 6.30pm ] It's like... the place for humanity that I belive is possible that I have hope in... it's possible because we have this faculty for recognising and generating clarity and order. Like our external world can in fact improve, we can improve it and make it kinder to inhabit. Some Christians I know might call this rightousness. But a capacity and sense for rightousness tends to react with the human prepensity for shame and collapse. If you create a kind between actions or a way of being (rightousness) and outcomes then it can stand to reason that bad outcomes, mess, etc can be attributed to character flaw, which then creates more problems. So there's this balance like... you need recognition and striving for order and you also need constant infusions of grace for one's self and for others... anyway
 
 - - -
 
