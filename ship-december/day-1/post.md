@@ -1,3 +1,7 @@
+[🏡 home](https://sophie-jarred.researchlog.dev/)
+
+[⏭️ next](https://sophie-jarred.researchlog.dev/ship-december/day-2)
+
 #### **some preamble**
 
 *The kingdom of heaven is that sometimes we can generate order and that we can accept and extend grace.*
