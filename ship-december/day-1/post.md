@@ -1,10 +1,22 @@
 #### **some preamble**
 
-The kingdom of heaven is that sometimes we can generate order and that we can accept and extend grace.
+*The kingdom of heaven is that sometimes we can generate order and that we can accept and extend grace.*
 
-\---
+**[Sophie 4pm]** I don't get this
 
-I (Jarred) would like to ship some software today. Before I begin I'm inadvisedly trying to remember why.
+**[Jarred 4pm]** I have a weakness for starting essays with a cryptic bit of poetry which sort of underlies the whole thing
+
+**[Sophie 4pm]** What does it mean?
+
+**[Jarred 4pm]** It's like... the place for humanity that I belive is possible that I have hope in... it's possible because we have this faculty for recognising and generating clarity and order. Like our external world can in fact improve, we can improve it and make it kinder to inhabit. Some Christians I know might call this rightousness. But a capacity and sense for rightousness tends to react with the human prepensity for shame and collapse. If you create a kind between actions or a way of being (rightousness) and outcomes then it can stand to reason that bad outcomes, mess, etc can be attributed to character flaw, which then creates more problems. So there's this balance like... you need recognition and striving for order and you also need constant infusions of grace for one's self and for others... anyway
+
+- - -
+
+**[Sophie 2pm]** I'm nervous that I feel like I can't write in a post.
+
+- - -
+
+**[Jarred 7am]**
 
 Sophie and I have a harebrained research scheme inspired by Inkhaven to ship a working piece of software every workday in the month of December. I’m toying with calling it Ship December but she has yet to sign off. “December” would be a formidable name for a ship I think.
 
@@ -20,29 +32,72 @@ Some questions which reasonably present themselves at this juncture:
 
 * Is it okay that I (Jarred) have already written a minor essay about bones (below) in which I use a lot of “I” statements and not “We” statements?
 
-* Is it okay that I’ve already written a provisional plan in which we ship a webpage which records a message to a google doc?
+* Is it okay that I’ve already written a caffinated provisional plan in which we ship a webpage which records a message to a google doc?
 
 Hopefully Sophie can answer these and more when she wakes up.
 
-Sophie: I am awake\!
+- - -
 
-* What counts as having successfully shipped?
-  Sophie: First we say some words about an idea. Then later we can click some buttons on our phones and/or laptops and then a reliably cool thing related happens on the screen.
+### FAQ (where F = 1)
 
-* What happens if we fail to ship?  
-  Sophie: If we miss one day, then we admit our failure to Harri and he is egregiously disappointed in us. Or we go without coats for a day. If we miss two days in a row, then the project is over.
+**[Sophie 12pm]**
 
-* Is it okay that I (Jarred) have already written a minor essay about bones (below) in which I use a lot of “I” statements and not “We” statements?  
-  Sophie: Obviously, this question is the whole project.
+I am awake\!
 
-* Is it okay that I’ve already written a provisional plan in which we ship a webpage which records a message to a google doc?  
-  Sophie: :O YES. Can I see?\!?
+Q: What counts as shipped?  
+A: First we say some words about an idea. Then later we can click some buttons on our phones and/or laptops and then a reliably cool thing related happens on the screen. The cool thing needs to be available over the public internet.
 
-#### **some thoughts on gnawing one’s bone**
+Q: What happens if we fail to ship?  
+A: If we miss one day, then we admit our failure to Harri and he is egregiously disappointed in us. Or we aren't allowed to wear a coat the next day. If we miss two days in a row, then the project is over.
+
+Q: Is it okay that I (Jarred) have already written a minor essay about bones (below) in which I use a lot of “I” statements and not “We” statements?  
+A: This question is in fact the whole project.
+
+Q: Is it okay that I’ve already written a provisional plan in which we ship a webpage which records a message to a google doc?  
+A: :O YES. Can I see?\!?
+
+```
+[Jarred 9am]
+Ok. Here is a potential plan for today.
+
+We could make a webpage which implements a simple design pattern. The design pattern is this:
+
+1. I have a thought, the structure and content of which I would like to remember later
+
+2. I tap a button or icon on my phone (which is for better or worse almost always to hand)
+
+3. I speak my thought at my phone
+
+4. This is sufficient to have words reflecting my speech end up in a more durable form than my memory, say in a google doc.
+```
+
+- - -
+
+### What did we ship today?
+
+**[Sophie 5pm]**
+
+tldr; we shipped our website and our first research post
+
+![alt text](https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/image.png)
+
+ We both got excited about this and decided to piviot from the original plan involving a recording a message (maybe we will do this tomorrow).
+
+We shipped a minimum viable version of the following system:
+
+1. There is a git-repo with a folder named `ship-dec` and sub folders from `/day-1` to `/day-31`
+
+2. If we commit a markdown file called `post.md` to `/ship-december/day-1` then it will be available for viewing at [sophie-jarred.researchlog.dev/ship-december/day-1](https://sophie-jarred.researchlog.dev/ship-december/day-1)
+
+- - -
+
+### some thoughts on the gnawing of one’s bone
+
+**[Jarred 7am]**
 
 I have a bone that I would like to gnaw. It's about penetration into deep knots… it's about progress. 
 
-My bone is about confusion, that’s true. It's about coherence. It's about "*what do you mean by that?*" and how it is like to say and hear that sentence many times in one conversation.
+My bone is about confusion, that’s true. It's about coherence. It's about "*what do you mean by that?*" and what it's like to say and hear that sentence many times in one conversation.
 
 My bone is about deeply tangled whispers I think. Some asides and definitions on all this to follow.
 
@@ -78,66 +133,18 @@ It would be cool if I could say aloud "I feel worse today, I wonder perhaps it w
 
 Part of what's going on with whispers is that I remember I had relevant thoughts about a subject that I've never seen written down but I don't remember what they were or in what context I had them.
 
+- - -
 
-\---
+### A brief aside on togglers and aeroplanes
 
-Ok. Here is a potential plan for today.
+**[Jarred 6pm]**
 
-#### **a plan**
+Surley this is much too long. My apologies.
 
-We could make a webpage which implements a simple design pattern. The design pattern is this:
+A couple of times this afternoon I've been a bit on auto pilot with this Ship December project. This is perhaps not a good sign for the first day. When I remember this "gnawing ones bone" thing I perk back up. I'm excited by the opportunity to spend a month gnawing whatever bone this is.
 
-1. I have a thought, the structure and content of which I would like to remember later  
-     
-2. I tap a button or icon on my phone (which is for better or worse almost always to hand)  
-     
-3. I speak my thought at my phone  
-     
-4. This is sufficient to have words reflecting my speech end up in a more durable form than my memory, say in a google doc.
+Sophie told me something a very wise matehmetician said to her.
 
-#### **assorted design considerations**
+"Imagine you were teleported into a 747 jet areoplane and you had to fly it straight away. One might imagine you would be quite careful, especially with the blaring red buttons. Imagine the same thing happens to a toddler. You might imagine they would just pressing every button, especially the big red ones. If you want to do math research, be more like the baby."
 
-1. It would be nice for everything we ship to be easy for anyone to try out, like always an ostensibly working prototype.
-
-2. Should we implement the pattern using a website or a mobile app? Some more on this actually:   
-   * If it's a website:  
-     1. then it can be used the same on both apple and android phones
-
-     2. we can trigger the recording via a shortcut icon
-
-     3. however this means we can't trigger the recording via pressing physical buttons and it will require the phone to be unlocked
-
-     4. There is likely to be trouble minimising the app. Like if you start recording and then close the app it’s not obvious to me the webpage will remain recording.
-
-   *  If it's a mobile app:  
-     1. the inverse of all the above points. We would need separate apps, we could trigger recording via buttons (and on android without unlocking the phone)
-
-3. It's important to me that the recording is robustly captured and there is a start and stop signal. Even a 1% chance my capture will be lost tends to turn me off using a system completely.
-
-4. To make it immediately usable I think I should just add my personal capped openai api key and a default google doc which they can change if they like?
-
-5. Ideally it would work offline, even if just to capture the recording.
-
-#### **what actually happened**
-
-I will relate to you now the events of the day as they unfolded, and then we will have our first public immutable research log.
-
-1. Jarred woke up early, had some caffine, and wrote most of this post
-
-2. Sophie woke up and send Jarred the following message:
-
-   ![alt text](https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/image.png)
-
-3. We both got excited about this and decided to piviot from the original plan involving a recording a message (maybe we will do this tomorrow).
-
-3. We decided to ship a minimum viable version of the following system:
-
-   a. There will exist a [git-repo](https://github.com/filmerjarred/sophie-jarred-research-log) with a folder named `ship-december` which has sub folders from `/day-1` to `/day-31`
-
-   b. If we commit a markdown file named `post.md` to the `/ship-december/day-1` folder then it will be made available for viewing at [sophie-jarred.researchlog.dev/ship-december/day-1](https://sophie-jarred.researchlog.dev/ship-december/day-1)
-
-   c. The content in `day-1` shall be forever unchanged after today, and if we want to extend it we will copy into `day-2`!
-
-4. We registered the domain name, set up a cloudflare worker to do the routing, and now it works!
-
-
+I'm excited to "just start" trying to build a thrown together system for Sophie and I to collaborate where we experiment a bunch and see what happens.
