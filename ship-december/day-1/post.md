@@ -1,6 +1,4 @@
-[🏡 home](https://sophie-jarred.researchlog.dev/)
-
-[⏭️ next](https://sophie-jarred.researchlog.dev/ship-december/day-2)
+🏡 [home](https://sophie-jarred.researchlog.dev/)&nbsp;&nbsp;&nbsp;⏭️ [next](https://sophie-jarred.researchlog.dev/ship-december/day-2)
 
 #### **some preamble**
 
