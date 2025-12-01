@@ -152,3 +152,5 @@ Sophie told me something a very wise matehmetician said to her.
 "Imagine you were teleported into a 747 jet areoplane and you had to fly it straight away. One might imagine you would be quite careful, especially with the blaring red buttons. Imagine the same thing happens to a toddler. You might imagine they would just pressing every button, especially the big red ones. If you want to do math research, be more like the baby."
 
 I'm excited to "just start" trying to build a thrown together system for Sophie and I to collaborate where we experiment a bunch and see what happens.
+
+🏡 [home](https://sophie-jarred.researchlog.dev/)&nbsp;&nbsp;&nbsp;⏭️ [next](https://sophie-jarred.researchlog.dev/ship-december/day-2)
