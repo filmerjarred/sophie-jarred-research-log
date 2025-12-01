@@ -116,8 +116,5 @@ We could make a webpage which implements a simple design pattern. The design pat
 
 5. Ideally it would work offline, even if just to capture the recording.
 
-/---
+#### **what actually happened**
 
-
-
-/---
