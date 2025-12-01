@@ -126,11 +126,15 @@ I will relate to you now the events of the day as they unfolded, and then we wil
 
    ![alt text](https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/image.png)
 
+3. We both got excited about this and decided to piviot from the original plan involving a recording a message (maybe we will do this tomorrow).
+
 3. We decided to ship a minimum viable version of the following system:
 
-   a. There will exist a git-repo with a folder named `ship-dec` and sub folders from `/day-1` to `/day-31`
+   a. There will exist a [git-repo](https://github.com/filmerjarred/sophie-jarred-research-log) with a folder named `ship-december` which has sub folders from `/day-1` to `/day-31`
 
-   b. If we commit a markdown file called `post.md` to `/ship-december/day-1` then it will be available for viewing at `sophie-jarred.researchlog.dev/ship-december/day-1`
+   b. If we commit a markdown file named `post.md` to the `/ship-december/day-1` folder then it will be made available for viewing at [sophie-jarred.researchlog.dev/ship-december/day-1](https://sophie-jarred.researchlog.dev/ship-december/day-1)
+
+   c. The content in `day-1` shall be forever unchanged after today, and if we want to extend it we will copy into `day-2`!
 
 4. We registered the domain name, set up a cloudflare worker to do the routing, and now it works!
 

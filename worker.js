@@ -22,7 +22,6 @@ function wrapHtml(content, title) {
          max-width: 800px;
          margin: 0 auto;
          padding: 2rem;
-         color: #333;
       }
       h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; }
       h1 { border-bottom: 2px solid #eee; padding-bottom: 0.3em; }
@@ -47,7 +46,7 @@ export default {
 
       // Handle root path
       if (!path) {
-         return new Response(wrapHtml('<h1>Welcome</h1><p>Try <a href="/day-1">/day-1</a></p>', 'Home'), {
+         return new Response(wrapHtml('<h1>Welcome</h1><p>Try <a href="/ship-december/day-1">/day-1</a></p>', 'Home'), {
             headers: { 'Content-Type': 'text/html; charset=utf-8' },
          });
       }
