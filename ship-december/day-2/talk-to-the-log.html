@@ -215,12 +215,12 @@
         const REALTIME_API_URL = 'wss://api.openai.com/v1/realtime?model=gpt-realtime';
         const STORAGE_KEY = 'openai_api_key';
         // Base64 encoded API key (decode with atob)
-        const EMBEDDED_KEY = 'c2stcHJvai0zV1VWMXJWSHNpRVpiZkplV2tCaTBFNDNfN3M2QXdQdGJtOFB4ZzFFOHhMWmdWWEM4VXRYSVQ4MUNZTU43ak1LdEZmb0dUX2ZsTVQzQmxia0ZKNHN4SDhsM2ZQbVMxR2RkMkVlMFdvOEU0QWJwelJsRUY4WmltNHd6TnQ1cURvNTRBaV93SE1XYl9id1FKZHRhWWJ0VnQ0TC1wY0E=';
+        const EMBEDDED_KEY = 'c2stcHJvai0zV1VWMXJWSHNpRVpiZkplV2tCaTBFNDNfN3M2QXdQdGJtOFB4ZzFFOHhMWmdWWEM4VXRYSVQ4MUNZTUs3ak1LdEZmb0dUX2ZsTVQzQmxia0ZKNHN4SDhsM2ZQbVMxR2RkMkVlMFdvOEU0QWJwelJsRUY4WmltNHd6TnQ1cURvNTRBaV93SE1XYl9id1FKZHRhWWJ0VnQ0TC1wY0E=';
 
         // Get API key - priority: localStorage > embedded
         function getApiKey() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) return stored;
+            // const stored = localStorage.getItem(STORAGE_KEY);
+            // if (stored) return stored;
 
             // Use embedded key as fallback
             if (EMBEDDED_KEY) {
@@ -354,8 +354,8 @@
 
                 ws = new WebSocket(REALTIME_API_URL, [
                     'realtime',
-                    `openai-insecure-api-key.${OPENAI_API_KEY}`,
-                    'openai-beta.realtime-v1'
+                  //   `openai-insecure-api-key.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`
+                    `openai-insecure-api-key.${OPENAI_API_KEY}`
                 ]);
 
                 ws.onopen = () => {
@@ -364,28 +364,35 @@
                     ws.send(JSON.stringify({
                         type: 'session.update',
                         session: {
-                           model: "gpt-realtime",
-
-                            modalities: ['text', 'audio'],
-                           
-                            instructions: `Please always use English
+                           type: "realtime",
+                           output_modalities: ["audio"],
+                           audio: {
+                              input: {
+                                 format: {
+                                    type: "audio/pcm",
+                                    rate: 24000,
+                                 },
+                                 transcription: {
+                                    model: "gpt-4o-transcribe"
+                                 },
+                                 turn_detection: {
+                                    type: "semantic_vad"
+                                 }
+                              },
+                              output: {
+                                 format: {
+                                    type: "audio/pcm",
+                                    rate: 24000,
+                                 },
+                                 voice: "marin",
+                              },
+                           },
+                                                   
+                            instructions: `Please always use English.
 You are embeded within a research log
 Your task is to act as the helpful librarian of this research log
 The main content of the research log is stored in "daily posts" and you can access these posts via provided mcp tools in order to answer the user's questions. 
 The first post was on "Monday December 1st 2025". If the user wants "yesterday's post" then you will need to figure out what today is and then count backwards to the right day number. The posts are generally broken up into sections by linebreaks and bolded titles.`,
-                            voice: 'alloy',
-                            input_audio_format: 'pcm16',
-                            output_audio_format: 'pcm16',
-
-                            input_audio_transcription: {
-                                model: 'whisper-1'
-                            },
-                            turn_detection: {
-                                type: 'server_vad',
-                                threshold: 0.5,
-                                prefix_padding_ms: 300,
-                                silence_duration_ms: 500
-                            },
                             tools: [
                                 {
                                     type: 'function',
@@ -414,8 +421,10 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
 
                 ws.onmessage = async (event) => {
                     const data = JSON.parse(event.data);
+                    console.log(data)
 
-                    if (data.type === 'response.audio.delta') {
+                    // Updated event names per latest API docs (2025)
+                    if (data.type === 'response.output_audio.delta') {
                         playAudioDelta(data.delta);
                     } else if (data.type === 'error') {
                         setStatus('Error: ' + data.error.message, 'error');
@@ -423,10 +432,10 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
                         setStatus('Listening...', 'connected');
                     } else if (data.type === 'conversation.item.input_audio_transcription.completed') {
                         addMessage('user', data.transcript, 'voice');
-                    } else if (data.type === 'response.audio_transcript.done') {
+                    } else if (data.type === 'response.output_audio_transcript.done') {
                         addMessage('assistant', data.transcript, 'voice');
                         setStatus('Connected - voice active', 'connected');
-                    } else if (data.type === 'response.text.done') {
+                    } else if (data.type === 'response.output_text.done') {
                         addMessage('assistant', data.text, 'text');
                         setStatus('Connected', 'connected');
                     } else if (data.type === 'response.function_call_arguments.done') {
@@ -440,6 +449,9 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
                                     for (const content of item.content) {
                                         if (content.type === 'text' && content.text) {
                                             addMessage('assistant', content.text, 'text');
+                                        } else if (content.type === 'output_audio' && content.transcript) {
+                                            // Handle output_audio transcript in response.done
+                                            addMessage('assistant', content.transcript, 'voice');
                                         }
                                     }
                                 }
@@ -571,9 +583,6 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
 
                 ws.send(JSON.stringify({
                     type: 'response.create',
-                    response: {
-                        modalities: ['text']
-                    }
                 }));
 
             } catch (err) {
