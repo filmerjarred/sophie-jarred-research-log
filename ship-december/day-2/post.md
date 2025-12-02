@@ -40,7 +40,7 @@ We have an AI librarian up and running at at [/talk-to-the-log](https://sophie-j
 
 It lacks the polish to be useful just yet I think, but it does work.
 
-I wonder if I can embed it here...
+I wonder if I can embed it here live... I'll add a screenshot and a button which should load the demo up.
 
 <div id="embed-container">
   <div id="iframe-view" style="display: none;">
@@ -48,7 +48,6 @@ I wonder if I can embed it here...
     <br>
     <iframe id="live-embed" src="" width="100%" height="600" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
     <br>
-   I can!
   </div>
 
   <div id="screenshot-view">
@@ -83,10 +82,24 @@ I suppose I'd just need to email this post to our audience.
 
 It feels a little cheap somehow... the thing that's been shipped isn't proper yet.
 
-And it's sort of worse that it "looks like" it's proper. Like a sales person who acts like they've answered my question but they haven't.
+And it's sort of worse that it "looks like" it could be useful I think.
 
-That reminds me, I need to extend this airbnb. Also it's lunch time and I'm starving.
+That's a very pernicious feeling when I'm interacting with a product that looks like it should work / should be useful but there are dumb things obviously wrong with it
+
+It is however lunch time, and I'm starving.
 
 okokokok, by the spirit of the rules I say we have shipped, and this afternoon we'll see about shipping something that actually feels satisfying.
+
+- - -
+
+[ Jarred 3pm ]
+
+Right, we're back.
+
+There was an issue with the voice cutting in and out and cracking. That's fixed in [/talk-to-the-log-2](https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log-2).
+
+I might try to give it something so that I can save notes to self, and then see what it's like to chat with it while I make dinner... oh! And maybe also a tool to put words up on the screen?
+
+
 
 ⏮️ [previous](https://sophie-jarred.researchlog.dev/ship-december/day-1)&nbsp;&nbsp;&nbsp;🏡 [home](https://sophie-jarred.researchlog.dev/)&nbsp;&nbsp;&nbsp;⏭️ [next](https://sophie-jarred.researchlog.dev/ship-december/day-3)
