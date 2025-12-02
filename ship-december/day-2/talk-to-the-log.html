@@ -214,34 +214,22 @@
     <script>
         const REALTIME_API_URL = 'wss://api.openai.com/v1/realtime?model=gpt-realtime';
         const STORAGE_KEY = 'openai_api_key';
+        // Base64 encoded API key (decode with atob)
+        const EMBEDDED_KEY = 'c2stcHJvai1UU3RURFVqVFhrMVNlOXFYc3VDcE5lMWxLbC1BVkRJbVYxSlhxMzBnVjRrSUxZSm1WNzRGa05pQW9BM0h3T1JnbFlMX1JfWEpVNFQzQmxia0ZKbWNBYmRKT21PYjlYejVCd1pUZ2RXRTVkVGZPc3VnWVNkUXVXRkYwczl6bTc2Q2R4eDNTM0sxTVl4TWxWYnkxQS15RXpzcVphMzgzd0E';
 
-        // Check for key in URL query string (base64 encoded as 'k' param)
-        function getKeyFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            const encoded = params.get('k');
-            if (encoded) {
-                try {
-                    return atob(encoded);
-                } catch (e) {
-                    console.warn('Invalid base64 key in URL');
-                    return null;
-                }
-            }
-            return null;
-        }
-
-        // Get API key - priority: localStorage > URL
+        // Get API key - priority: localStorage > embedded
         function getApiKey() {
             const stored = localStorage.getItem(STORAGE_KEY);
             if (stored) return stored;
 
-            const urlKey = getKeyFromUrl();
-            if (urlKey) {
-                // Save URL key to localStorage for future use
-                localStorage.setItem(STORAGE_KEY, urlKey);
-                // Clean the URL so the key isn't visible/shareable
-                window.history.replaceState({}, '', window.location.pathname);
-                return urlKey;
+            // Use embedded key as fallback
+            if (EMBEDDED_KEY) {
+                try {
+                    return atob(EMBEDDED_KEY);
+                } catch (e) {
+                    console.warn('Invalid embedded key');
+                    return null;
+                }
             }
             return null;
         }

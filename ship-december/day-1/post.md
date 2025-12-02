@@ -21,8 +21,6 @@ As far as a plan goes all we have at this time is some text messages saying “l
 
 Some questions which reasonably present themselves at this juncture:
 
-* What will we ship today?
-
 * What counts as having successfully shipped?
 
 * What happens if we fail to ship?
@@ -149,6 +147,9 @@ This can be somewhat tangling.
 
 - - -
 
+*[ Sophie 2pm ]* I'm nervous that I feel like I can't write in a blog post.
+- - -
+
 *[ Sophie 4pm ]*
 
 **We shipped!**
@@ -159,25 +160,19 @@ We shipped a minimum viable version of the following system:
 
 2. The `ship-december` folder has sub folders like `day-1`, `day-2`, etc.
 
-3. If we create a markdown file called `post.md` in the `day-1` folder of the git repo then it it will magically be available on the public internet to view on our website! [sophie-jarred.researchlog.dev/ship-december/day-1](https://sophie-jarred.researchlog.dev/ship-december/day-1)
-
-- - -
-
-*[ Sophie 2pm ]* I'm nervous that I feel like I can't write in a blog post.
+3. If we create a markdown file called `post.md` in the `day-1` folder of the git repo then it it will magically be available on the public internet to view on our website like so! [sophie-jarred.researchlog.dev/ship-december/day-1](https://sophie-jarred.researchlog.dev/ship-december/day-1)
 
 - - -
 
 **another exchange**
 
-*[ Jarred 6am ]* The kingdom of heaven is the notion that we are able to generate order and also that we can accept and extend grace.
+*[ Sophie 4pm ]* I don't get this opening line about the kingdom of heaven.
 
-*[ Sophie 4pm ]* I don't get this opening line.
-
-*[ Jarred 4pm ]* I have a weakness for starting essays with a cryptic bit of poetry which sort of underlies the whole thing.
+*[ Jarred 4pm ]* I have a weakness for starting essays with a cryptic bit of poetry which I imagine sort of underlies the whole thing.
 
 *[ Jarred 6.30pm to himself ]* What does it mean?
 
-*[ Jarred 6.30pm to himself ]* It's like... the place for humanity that I belive is possible that I have hope in... it's possible because we have this faculty for recognising and generating clarity and order. Like our external world can in fact improve, we can improve it and make it kinder to inhabit. Some Christians I know might call this rightousness. But a capacity and sense for rightousness tends to react with the human prepensity for shame and collapse. If you create a kind between actions or a way of being (rightousness) and outcomes then it can stand to reason that bad outcomes, mess, etc can be attributed to character flaw, which then creates more problems. So there's this balance like... you need recognition and striving for order and you also need to constantly be inviting ones self and others into to a state of grace... anyway.
+*[ Jarred 6.30pm to himself ]* It's like... there is a place for humanity that I belive is possible... that I have hope about... it's possible for this place to exist because this faculty for recognising and generating clarity and order exists. Like our external world can in-fact improve, we can improve it and make it kinder to inhabit. That's real. Some Christians I know might call this capacity "rightousness", "justice" or "integrity". Rightousness as a focus alone can react with the human prepensity for shame and collapse. If you create a link between actions and a way of being (rightousness) and good desierable outcomes then it can stand to reason that bad outcomes, mess, etc can be attributed to character flaw. Shame and lived experience that I am not good enough creates disorder. This becomes quite a tangle. For the Kingdom to feel reachable then I need both recognition and striving for order and I also need to constantly be inviting myself and accepting invitations and offering invitations into a state of grace... anyway.
 
 - - -
 
@@ -212,12 +207,7 @@ Sophie recently shared some very wise advice a prolific mathematician gave her.
 
 *[Sophie 10pm]*
 
-**a voice note from a night walk**
-
-<audio controls>
-  <source src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/sophie-1.m4a" type="audio/mp4">
-</audio>
-
+**exerpts from a voice note from a night walk**
 
 "I did not send out the blog post on purpose. Because I have followed the spirit of aliveness and it has led me here."
 
@@ -229,7 +219,9 @@ Sophie recently shared some very wise advice a prolific mathematician gave her.
 
 "Learning what you actually did [today], and like, maybe trying to add something myself. That's the skill that I want to build this month."
 
-"Maybe we ship something every work day in December, except for Fridays where we circle or something? I think if it continues to be this full frontal I might need something like that."
+"Maybe we ship something every work day in December, except for Fridays where we circle or something? I think if it continues to be this full-frontal I might need something like that."
+
+"I want to build some muscle... around going from an idea to having shipped a thing... that's something I'm quite looking for... I have a theory that would be good for me... like learning how to clean a new kitchen"
 
 - - -
 
@@ -237,7 +229,7 @@ Sophie recently shared some very wise advice a prolific mathematician gave her.
 
 **a thought I had this morning**
 
-*I think we could embed this voice note in the post, ship it all as the "first day's research output", and then admit our failure-to-ship according to day 1's rules to Harri and hope he has it in him to be egregiously disapointed in us despite how much he loves us.*
+*I think we could embed exerpts from this voice note in the post, ship it all as the first day's research output, and then admit our failure-to-ship according to day 1's rules to Harri and hope he has it in him to be egregiously disapointed in us despite how much he loves us. I think that could work well actually.*
 
 - - -
 

@@ -1,3 +1,4 @@
+⏮️ [previous](https://sophie-jarred.researchlog.dev/ship-december/day-1)&nbsp;&nbsp;&nbsp;🏡 [home](https://sophie-jarred.researchlog.dev/)&nbsp;&nbsp;&nbsp;⏭️ [next](https://sophie-jarred.researchlog.dev/ship-december/day-3)
 
 [Jarred 9am]
 
@@ -9,7 +10,7 @@ I was eating breakfast just now and wondering to myself the obvious question.
 
 "What to ship today?"
 
-It's a great relief to have this question be obvious and for it to come to me, rather than my having to go fetch it. On the downside I did wake up at 2am last night for around an hour with this question on my mind. Anyway.
+It's a great relief to have this question find me without any effort on my behalf, rather than my having to go hunting for a sense of urgency about the say. On the downside I did wake up for an hour or so at 2am last night stressed about what we might ship today. Anyway.
 
 "What to ship today?"
 
@@ -35,9 +36,9 @@ I need a song to play this section out.
 
 Ok!
 
-We have an AI librarian at [/talk-to-the-log](https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log).
+We have an AI librarian up and running at at [/talk-to-the-log](https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log).
 
-It lacks the polish to be useful I think, but it does work.
+It lacks the polish to be useful just yet I think, but it does work.
 
 I wonder if I can embed it here...
 
@@ -87,3 +88,5 @@ And it's sort of worse that it "looks like" it's proper. Like a sales person who
 That reminds me, I need to extend this airbnb. Also it's lunch time and I'm starving.
 
 okokokok, by the spirit of the rules I say we have shipped, and this afternoon we'll see about shipping something that actually feels satisfying.
+
+⏮️ [previous](https://sophie-jarred.researchlog.dev/ship-december/day-1)&nbsp;&nbsp;&nbsp;🏡 [home](https://sophie-jarred.researchlog.dev/)&nbsp;&nbsp;&nbsp;⏭️ [next](https://sophie-jarred.researchlog.dev/ship-december/day-3)
