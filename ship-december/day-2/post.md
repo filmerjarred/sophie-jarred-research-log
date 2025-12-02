@@ -98,8 +98,23 @@ Right, we're back.
 
 There was an issue with the voice cutting in and out and cracking. That's fixed in [/talk-to-the-log-2](https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log-2).
 
+---
+
+[ Jarred 4pm]
+
 I might try to give it something so that I can save notes to self, and then see what it's like to chat with it while I make dinner... oh! And maybe also a tool to put words up on the screen?
 
+> please copy talk-to-the-log-2 to talk-to-the-log-3. also i just made a file firebase.js and dumped a
+firestore api key in there, can you flesh that out to make a simple "save and retrieve note" function (just saves a text note to the firestore collection). the database permissions are open for testing don't worry abvout auth for now that api key should work.
 
+> ok now let's add two tools to the realtime voice agent in talk-to-the-log-3. one tool to save a note as dictated by the user to the firebase. and another tool which will display some text (usually parts of the research log) on the screen in a relateively fullscreen modal using cardo font.
+
+---
+
+[ Jarred 5pm ]
+
+It works! [/talk-to-the-log-3](https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log-3).
+
+I used it while cooking dinner to pull up relevant sections of yesterdays log and makes notes. Tooka bit to get into and it can be jank, but it was fun.
 
 ⏮️ [previous](https://sophie-jarred.researchlog.dev/ship-december/day-1)&nbsp;&nbsp;&nbsp;🏡 [home](https://sophie-jarred.researchlog.dev/)&nbsp;&nbsp;&nbsp;⏭️ [next](https://sophie-jarred.researchlog.dev/ship-december/day-3)

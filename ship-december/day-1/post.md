@@ -199,38 +199,8 @@ Sophie recently shared some very wise advice a prolific mathematician gave her.
 
 - - -
 
-*[ Jarred 6pm ]* Ok, I'm done. The post is a bit manic but I think that's ok. Are you ok to publish it?
+*[ Jarred 6pm ]* Ok, I'm done. The post is a bit high concept but I think that's ok. Are you ok to publish it?
 
 *[ Sophie 6pm ]* Leave it with me 👍️
-
-- - -
-
-*[Sophie 10pm]*
-
-**exerpts from a voice note from a night walk**
-
-"I did not send out the blog post on purpose. Because I have followed the spirit of aliveness and it has led me here."
-
-"I just I looked within myself and I discovered that I do not care about the part about the writing of the blog posts, even the research logs."
-
-"If it's not something I'm willing to die for, then it should feel like driving a bus."
-
-"I feel so proud of myself for saying I would do something and then not."
-
-"Learning what you actually did [today], and like, maybe trying to add something myself. That's the skill that I want to build this month."
-
-"Maybe we ship something every work day in December, except for Fridays where we circle or something? I think if it continues to be this full-frontal I might need something like that."
-
-"I want to build some muscle... around going from an idea to having shipped a thing... that's something I'm quite looking for... I have a theory that would be good for me... like learning how to clean a new kitchen"
-
-- - -
-
-*[Jarred 6.30am the following day]*
-
-**a thought I had this morning**
-
-*I think we could embed exerpts from this voice note in the post, ship it all as the first day's research output, and then admit our failure-to-ship according to day 1's rules to Harri and hope he has it in him to be egregiously disapointed in us despite how much he loves us. I think that could work well actually.*
-
-- - -
 
 🏡 [home](https://sophie-jarred.researchlog.dev/)&nbsp;&nbsp;&nbsp;⏭️ [next](https://sophie-jarred.researchlog.dev/ship-december/day-2)
