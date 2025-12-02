@@ -2,7 +2,7 @@
 
 *The kingdom of heaven is the notion that we are able to generate order and also that we can accept and extend grace.*
 
-### some preamble
+- - -
 
 *[ Jarred 6am ]*
 
@@ -46,7 +46,8 @@ A: :O YES. Can I see?\!?
 
 - - -
 
-[ Jarred 9am ]
+*[ Jarred 9am ]*
+
 Ok. Here is a potential plan for today.
 
 We could make a webpage which implements a simple design pattern. The design pattern is this:
@@ -69,7 +70,23 @@ We could make a webpage which implements a simple design pattern. The design pat
 
 - - -
 
+*[ Jarred 1pm ]*
+
+**the rules for today**
+
+1. These rules will evolve. Maybe in the future they will only evolve via addition only and never subtraction or modification.
+
+2. We must publish a blog post over 500 words every workday.
+
+3. We must ship a publically available and usable piece of software every day.
+
+4. If we miss one day, then we admit our failure to Harri and he is egregiously disappointed in us. Or we aren't allowed to wear a coat the next day. If we miss two days in a row, then the project is over.
+
+- - -
+
 *[ Jarred 7am ]*
+
+**an aside regarding bones**
 
 I have a bone that I would like to gnaw this month. It's about penetration into deep knots… it's about progress. 
 
@@ -129,20 +146,79 @@ We shipped a minimum viable version of the following system:
 
 - - -
 
-[ Sophie 2pm ] I'm nervous that I feel like I can't write in a blog post.
+*[ Sophie 2pm ]* I'm nervous that I feel like I can't write in a blog post.
 
 - - -
 
+**an exchange**
+
+*[ Jarred 6am ]* The kingdom of heaven is the notion that we are able to generate order and also that we can accept and extend grace.
+
+*[ Sophie 4pm ]* I don't get this opening line.
+
+*[ Jarred 4pm ]* I have a weakness for starting essays with a cryptic bit of poetry which sort of underlies the whole thing.
+
+*[ Jarred 6.30pm to himself ]* What does it mean?
+
+*[ Jarred 6.30pm to himself ]* It's like... the place for humanity that I belive is possible that I have hope in... it's possible because we have this faculty for recognising and generating clarity and order. Like our external world can in fact improve, we can improve it and make it kinder to inhabit. Some Christians I know might call this rightousness. But a capacity and sense for rightousness tends to react with the human prepensity for shame and collapse. If you create a kind between actions or a way of being (rightousness) and outcomes then it can stand to reason that bad outcomes, mess, etc can be attributed to character flaw, which then creates more problems. So there's this balance like... you need recognition and striving for order and you also need to constantly be inviting ones self and others into to a state of grace... anyway.
+
 - - -
 
-### A brief aside on toddlers and aeroplanes
+*[ Sophie 2pm ]*
+
+**🔥 A place for things to land**
+
+I'm writing a math thesis with my friend and collegaue David Jaz Myers. It's meant to be a tight-end-to-end story. David is blessed (and cursed) with having SO MANY GOOD IDEAS. And so whenever he has a good idea that doesn't fit into the tight end-to-end story, I tell him "put it in the secret Part 2". The secret part 2 is a bunch of chapters along the lines of "Imagine this tight end-to-end story but with this cool additional feature!". And so I think we also need a section of each blog post that's like a secret part II. 
+
+Project idea: I want to have tag for markdown where i can view two authors in different fonts
+
+*[Jarred 6.30am the next day] 👆️ This is in fact the whole project.*
+
+- - -
+
 
 *[ Jarred 6pm ]*
 
-Sophie told me something a very wise mathematician said to her.
+**A brief aside on toddlers and aeroplanes**
 
-"Imagine you were teleported into a 747 jet areoplane and you now must fly it. You might imagine you start quite carefully testing things out, especially with the big blaring red things. Imagine now the same thing situation occurs to a small child. You might imagine they would just pressing every button and pulling every lever, especially the big red ones. If you want to do good math research, be more like the toddler."
+Sophie recently shared some very wise advice a prolific mathematician gave her.
+
+"Imagine you were teleported into a 747 jet areoplane and you must now fly it. You might imagine you start quite carefully testing things out, especially with the big blaring red things. Imagine now the same thing situation occurs to a small child. You might imagine they would just pressing every button and pulling every lever, especially the big red ones. If you want to do good math research, be more like the toddler."
+
+- - -
+
+*[ Jarred 6pm ]* Ok, I'm done. The post is a bit manic but I think that's ok. Are you ok to publish it?
+
+*[ Sophie 6pm ]* Leave it with me 👍️
+
+- - -
+
+*[Sophie 10pm]*
+
+<audio controls>
+  <source src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/jarred-1.acc" type="audio/mp4">
+  <source src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/sophie.m4a" type="audio/mp4">
+</audio>
 
 
+"I did not send out the blog post on purpose. Because I have followed the spirit of aliveness and it has led me here."
+
+"I just I looked within myself and I discovered that I do not care about the part about the writing of the blog posts, even the research logs."
+
+"If it's not something I'm willing to die for, then it should feel like driving a bus."
+
+"I feel so proud of myself for saying I would do something and then not"
+
+"Learning what you actually did [today], and like, maybe trying to add something myself. That's the skill that I want to build this month."
+
+"Maybe we ship something every work day in December, except for Fridays where we circle or something? I think if it continues to be this full frontal I might need something like that."
+
+- - -
+
+*[Jarred 6.30am the following day]*
+
+I think we could embed this voice note in the post, ship it all post as the first day's output, and then admit our failure to follow day 1's rules to Harri and hope he has it in him to be egregiously disapointed in us despite how much he loves us.
+
+- - -
 
 🏡 [home](https://sophie-jarred.researchlog.dev/)&nbsp;&nbsp;&nbsp;⏭️ [next](https://sophie-jarred.researchlog.dev/ship-december/day-2)
