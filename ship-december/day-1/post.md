@@ -1,5 +1,6 @@
 🏡 [home](https://sophie-jarred.researchlog.dev/)&nbsp;&nbsp;&nbsp;⏭️ [next](https://sophie-jarred.researchlog.dev/ship-december/day-2)
 
+\
 *The kingdom of heaven is the notion that we are able to generate order and also that we can accept and extend grace.*
 
 - - -
