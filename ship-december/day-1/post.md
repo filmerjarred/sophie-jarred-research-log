@@ -11,7 +11,7 @@
 
 It's the 1st of December 2025.
 
-It's 6.30am for me in Hamilton Canada. Sophie is asleep as for her it's currently 3.30am in Berkley.
+It's 6.30am for me in Hamilton Canada. Sophie is asleep as for her it's currently 3.30am in Berkeley.
 
 I (we?) have the intention to ship some software today. Before I begin I'm trying to remember why (perhaps inadvisable).
 
@@ -81,7 +81,7 @@ We could make a webpage which implements a simple design pattern. The design pat
 
 I got more excited about Sophie's idea than I was about my plan for a recording webpage.
 
-One definition of a system 4 is a system which let's life and information flow amoung people without getting too tangled.
+One definition of a system 4 is a system which let's life and information flow among people without getting too tangled.
 
 - - -
 
@@ -93,7 +93,7 @@ One definition of a system 4 is a system which let's life and information flow a
 
 2. We must publish a blog post over 500 words every workday.
 
-3. We must ship a publically available and usable piece of software every day.
+3. We must ship a publicly available and usable piece of software every day.
 
 4. If we miss one day, then we admit our failure to Harri and he is egregiously disappointed in us. Or we aren't allowed to wear a coat the next day. If we miss two days in a row, then the project is over.
 
@@ -172,7 +172,7 @@ We shipped a minimum viable version of the following system:
 
 *[ Jarred 6.30pm to himself ]* What does it mean?
 
-*[ Jarred 6.30pm to himself ]* It's like... there is a place for humanity that I belive is possible... that I have hope about... it's possible for this place to exist because this faculty for recognising and generating clarity and order exists. Like our external world can in-fact improve, we can improve it and make it kinder to inhabit. That's real. Some Christians I know might call this capacity "rightousness", "justice" or "integrity". Rightousness as a focus alone can react with the human prepensity for shame and collapse. If you create a link between actions and a way of being (rightousness) and good desierable outcomes then it can stand to reason that bad outcomes, mess, etc can be attributed to character flaw. Shame and lived experience that I am not good enough creates disorder. This becomes quite a tangle. For the Kingdom to feel reachable then I need both recognition and striving for order and I also need to constantly be inviting myself and accepting invitations and offering invitations into a state of grace... anyway.
+*[ Jarred 6.30pm to himself ]* It's like... there is a place for humanity that I belive is possible... that I have hope about... it's possible for this place to exist because this faculty for recognising and generating clarity and order exists. Like our external world can in-fact improve, we can improve it and make it kinder to inhabit. That's real. Some Christians I know might call this capacity "righteousness", "justice" or "integrity". Righteousness as a focus alone can react with the human propensity for shame and collapse. If you create a link between actions and a way of being (righteousness) and good desirable outcomes then it can stand to reason that bad outcomes, mess, etc can be attributed to character flaw. Shame and lived experience that I am not good enough creates disorder. This becomes quite a tangle. For the Kingdom to feel reachable then I need both recognition and striving for order and I also need to constantly be inviting myself and accepting invitations and offering invitations into a state of grace... anyway.
 
 - - -
 
@@ -180,7 +180,7 @@ We shipped a minimum viable version of the following system:
 
 **🔥 A place for things to land**
 
-I'm writing a math thesis with my friend and collegaue David Jaz Myers. It's meant to be a tight-end-to-end story. David is blessed (and cursed) with having SO MANY GOOD IDEAS. And so whenever he has a good idea that doesn't fit into the tight end-to-end story, I tell him "put it in the secret Part 2". The secret part 2 is a bunch of chapters along the lines of "Imagine this tight end-to-end story but with this cool additional feature!". And so I think we also need a section of each blog post that's like a secret part II. 
+I'm writing a math thesis with my friend and colleague David Jaz Myers. It's meant to be a tight-end-to-end story. David is blessed (and cursed) with having SO MANY GOOD IDEAS. And so whenever he has a good idea that doesn't fit into the tight end-to-end story, I tell him "put it in the secret Part 2". The secret part 2 is a bunch of chapters along the lines of "Imagine this tight end-to-end story but with this cool additional feature!". And so I think we also need a section of each blog post that's like a secret part II. 
 
 Project idea: I want to have tag for markdown where i can view two authors in different fonts
 
@@ -195,7 +195,7 @@ Project idea: I want to have tag for markdown where i can view two authors in di
 
 Sophie recently shared some very wise advice a prolific mathematician gave her.
 
-"Imagine you were teleported into a 747 jet areoplane and you must now fly it. You might imagine you start quite carefully testing things out, especially with the big blaring red things. Imagine now the same thing situation occurs to a small child. You might imagine they would just pressing every button and pulling every lever, especially the big red ones. If you want to do good math research, be more like the toddler."
+"Imagine you were teleported into a 747 jet aeroplane and you must now fly it. You might imagine you start quite carefully testing things out, especially with the big blaring red things. Imagine now the same thing situation occurs to a small child. You might imagine they would just pressing every button and pulling every lever, especially the big red ones. If you want to do good math research, be more like the toddler."
 
 - - -
 

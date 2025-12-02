@@ -10,7 +10,7 @@ I was eating breakfast just now and wondering to myself the obvious question.
 
 "What to ship today?"
 
-It's a great relief to have this question find me without any effort on my behalf, rather than my having to go hunting for a sense of urgency about the say. On the downside I did wake up for an hour or so at 2am last night stressed about what we might ship today. Anyway.
+It's a great relief to have this question find me without any effort on my behalf, rather than my having to go hunting for a sense of urgency about the day. On the downside I did wake up for an hour or so at 2am last night stressed about what we might ship today. Anyway.
 
 "What to ship today?"
 
@@ -18,7 +18,7 @@ I pondered this for a bit.
 
 "I could add a side-bar with the different days to the research log?"
 
-"I could do some fanaling such that there's a margin with all our scratch notes beside the log? And you could text a telegram channel to add to it."
+"I could do some finagling such that there's a margin with all our scratch notes beside the log? And you could text a telegram channel to add to it."
 
 None of it felt quite right, so I asked "what was that bone I wanted to gnaw this month?"
 
@@ -105,9 +105,9 @@ There was an issue with the voice cutting in and out and cracking. That's fixed 
 I might try to give it something so that I can save notes to self, and then see what it's like to chat with it while I make dinner... oh! And maybe also a tool to put words up on the screen?
 
 > please copy talk-to-the-log-2 to talk-to-the-log-3. also i just made a file firebase.js and dumped a
-firestore api key in there, can you flesh that out to make a simple "save and retrieve note" function (just saves a text note to the firestore collection). the database permissions are open for testing don't worry abvout auth for now that api key should work.
+firestore api key in there, can you flesh that out to make a simple "save and retrieve note" function (just saves a text note to the firestore collection). the database permissions are open for testing don't worry about auth for now that api key should work.
 
-> ok now let's add two tools to the realtime voice agent in talk-to-the-log-3. one tool to save a note as dictated by the user to the firebase. and another tool which will display some text (usually parts of the research log) on the screen in a relateively fullscreen modal using cardo font.
+> ok now let's add two tools to the realtime voice agent in talk-to-the-log-3. one tool to save a note as dictated by the user to the firebase. and another tool which will display some text (usually parts of the research log) on the screen in a relatively fullscreen modal using cardo font.
 
 ---
 
@@ -115,6 +115,6 @@ firestore api key in there, can you flesh that out to make a simple "save and re
 
 It works! [/talk-to-the-log-3](https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log-3).
 
-I used it while cooking dinner to pull up relevant sections of yesterdays log and makes notes. Tooka bit to get into and it can be jank, but it was fun.
+I used it while cooking dinner to pull up relevant sections of yesterday's log and makes notes. Took a bit to get into and it can be jank, but it was fun.
 
 ⏮️ [previous](https://sophie-jarred.researchlog.dev/ship-december/day-1)&nbsp;&nbsp;&nbsp;🏡 [home](https://sophie-jarred.researchlog.dev/)&nbsp;&nbsp;&nbsp;⏭️ [next](https://sophie-jarred.researchlog.dev/ship-december/day-3)
