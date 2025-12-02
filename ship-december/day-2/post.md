@@ -31,3 +31,8 @@ I need a song to play this section out.
 
 - - -
 
+Ok!
+
+We have an AI librarian at [/talk-to-the-log](https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log).
+
+It's not very ergonomic, but it does work.
