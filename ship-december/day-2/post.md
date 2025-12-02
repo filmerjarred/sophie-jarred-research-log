@@ -43,15 +43,17 @@ I wonder if I can embed it here...
 
 <div id="embed-container">
   <div id="iframe-view" style="display: none;">
+    <button onclick="showScreenshot()" style="margin-bottom: 10px; padding: 8px 16px; cursor: pointer; background: #666; color: white; border: none; border-radius: 4px;">← Back to screenshot</button>
+    <br>
     <iframe id="live-embed" src="" width="100%" height="600" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
     <br>
-    <button onclick="showScreenshot()" style="margin-top: 10px; padding: 8px 16px; cursor: pointer; background: #666; color: white; border: none; border-radius: 4px;">← Back to screenshot</button>
+   I can!
   </div>
+
   <div id="screenshot-view">
-    <img src="image.png" alt="screenshot of talk-to-the-log" style="max-width: 100%; border: 1px solid #ccc; border-radius: 8px;">
-    <!-- <img src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-2/image.png" alt="screenshot of talk-to-the-log" style="max-width: 100%; border: 1px solid #ccc; border-radius: 8px;"> -->
+    <button onclick="showEmbed()" style="margin-bottom: 10px; padding: 8px 16px; cursor: pointer; background: #4a9eff; color: white; border: none; border-radius: 4px;">Try it live ▶</button>
     <br>
-    <button onclick="showEmbed()" style="margin-top: 10px; padding: 8px 16px; cursor: pointer; background: #4a9eff; color: white; border: none; border-radius: 4px;">Try it live ▶</button>
+    <img src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-2/image.png" alt="screenshot of talk-to-the-log" style="max-width: 100%; border: 1px solid #ccc; border-radius: 8px;">
   </div>
 </div>
 
@@ -72,4 +74,16 @@ function showScreenshot() {
 }
 </script>
 
-I can!
+- - -
+
+Am I shipped for today? Am I done?
+
+I suppose I'd just need to email this post to our audience.
+
+It feels a little cheap somehow... the thing that's been shipped isn't proper yet.
+
+And it's sort of worse that it "looks like" it's proper. Like a sales person who acts like they've answered my question but they haven't.
+
+That reminds me, I need to extend this airbnb. Also it's lunch time and I'm starving.
+
+okokokok, by the spirit of the rules I say we have shipped, and this afternoon we'll see about shipping something that actually feels satisfying.
