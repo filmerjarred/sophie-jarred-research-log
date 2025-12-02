@@ -224,7 +224,7 @@ Sophie recently shared some very wise advice a prolific mathematician gave her.
 
 "If it's not something I'm willing to die for, then it should feel like driving a bus."
 
-"I feel so proud of myself for saying I would do something and then not"
+"I feel so proud of myself for saying I would do something and then not."
 
 "Learning what you actually did [today], and like, maybe trying to add something myself. That's the skill that I want to build this month."
 
