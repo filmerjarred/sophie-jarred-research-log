@@ -8,11 +8,13 @@
 
 **what's going on?**
 
-I have the intention to ship some software today. Before I begin I'm trying to remember why exactly (inadvisable).
-
-Sophie and I have a harebrained research scheme. We were inspired by Inkhaven to commit ourselves to ship a working piece of software every workday in the month of December. I’m toying with calling it Ship December but she has yet to sign off on this. “December” would be a formidable name for a ship I think.
+It's the 1st of December 2025.
 
 It's 6.30am for me in Hamilton Canada. Sophie is asleep as for her it's currently 3.30am in Berkley.
+
+I (we?) have the intention to ship some software today. Before I begin I'm trying to remember why (perhaps inadvisable).
+
+Sophie and I have a harebrained research scheme. We were inspired by Inkhaven to commit ourselves to ship a working piece of software every workday in the month of December. I’m toying with calling it Ship December but she has yet to sign off on this. “December” would be a formidable name for a ship I think.
 
 As far as a plan goes all we have at this time is some text messages saying “let’s do it.”
 
@@ -212,8 +214,7 @@ Sophie recently shared some very wise advice a prolific mathematician gave her.
 **a voice note from a night walk**
 
 <audio controls>
-  <source src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/jarred-1.acc" type="audio/mp4">
-  <source src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/sophie.m4a" type="audio/mp4">
+  <source src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/sophie-1.m4a" type="audio/mp4">
 </audio>
 
 
