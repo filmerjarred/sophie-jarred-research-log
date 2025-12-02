@@ -6,6 +6,8 @@
 
 *[ Jarred 6am ]*
 
+**what's going on?**
+
 I have the intention to ship some software today. Before I begin I'm trying to remember why exactly (inadvisable).
 
 Sophie and I have a harebrained research scheme. We were inspired by Inkhaven to commit ourselves to ship a working piece of software every workday in the month of December. I’m toying with calling it Ship December but she has yet to sign off on this. “December” would be a formidable name for a ship I think.
@@ -32,6 +34,8 @@ Hopefully Sophie can answer these and more when she wakes up.
 
 *[ Sophie 12pm ]*
 
+**FAQ (F=1)**
+
 I am awake\!
 
 Q: What counts as having successfully shipped?\
@@ -50,6 +54,8 @@ A: :O YES. Can I see?\!?
 
 *[ Jarred 9am ]*
 
+**a plan**
+
 Ok. Here is a potential plan for today.
 
 We could make a webpage which implements a simple design pattern. The design pattern is this:
@@ -66,9 +72,15 @@ We could make a webpage which implements a simple design pattern. The design pat
 
 *[ Sophie 10am ]*
 
+**an exchange**
+
 ![alt text](https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/image.png)
 
-![alt text](https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/image-3.png)
+![alt text](https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/image-2.png)
+
+I got more excited about Sophie's idea than I was about my plan for a recording webpage.
+
+One definition of a system 4 is a system which let's life and information flow amoung people without getting too tangled.
 
 - - -
 
@@ -88,7 +100,7 @@ We could make a webpage which implements a simple design pattern. The design pat
 
 *[ Jarred 7am ]*
 
-**an aside regarding bones**
+**an aside regarding bones and the gnawing thereof**
 
 I have a bone that I would like to gnaw this month. It's about penetration into deep knots… it's about progress. 
 
@@ -136,7 +148,7 @@ This can be somewhat tangling.
 
 *[ Sophie 4pm ]*
 
-We shipped!
+**We shipped!**
 
 We shipped a minimum viable version of the following system:
 
@@ -152,7 +164,7 @@ We shipped a minimum viable version of the following system:
 
 - - -
 
-**an exchange**
+**another exchange**
 
 *[ Jarred 6am ]* The kingdom of heaven is the notion that we are able to generate order and also that we can accept and extend grace.
 
@@ -197,6 +209,8 @@ Sophie recently shared some very wise advice a prolific mathematician gave her.
 
 *[Sophie 10pm]*
 
+**a voice note from a night walk**
+
 <audio controls>
   <source src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/jarred-1.acc" type="audio/mp4">
   <source src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-1/sophie.m4a" type="audio/mp4">
@@ -219,7 +233,9 @@ Sophie recently shared some very wise advice a prolific mathematician gave her.
 
 *[Jarred 6.30am the following day]*
 
-I think we could embed this voice note in the post, ship it all post as the first day's output, and then admit our failure to follow day 1's rules to Harri and hope he has it in him to be egregiously disapointed in us despite how much he loves us.
+**a thought I had this morning**
+
+*I think we could embed this voice note in the post, ship it all as the "first day's research output", and then admit our failure-to-ship according to day 1's rules to Harri and hope he has it in him to be egregiously disapointed in us despite how much he loves us.*
 
 - - -
 
