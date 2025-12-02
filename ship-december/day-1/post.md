@@ -6,21 +6,23 @@
 
 *[ Jarred 6am ]*
 
-I have the intention to ship some software today. Inadvisedly, before I begin I'm trying to remember why exactly.
+I have the intention to ship some software today. Before I begin I'm trying to remember why exactly (inadvisable).
 
-Sophie and I have a harebrained research scheme. We were inspired by Inkhaven to commit ourselves to ship a working piece of software every workday in the month of December. I’m toying with calling it Ship December but she has yet to sign off. “December” would be a formidable name for a ship I think.
+Sophie and I have a harebrained research scheme. We were inspired by Inkhaven to commit ourselves to ship a working piece of software every workday in the month of December. I’m toying with calling it Ship December but she has yet to sign off on this. “December” would be a formidable name for a ship I think.
 
 It's 6.30am for me in Hamilton Canada. Sophie is asleep as for her it's currently 3.30am in Berkley.
 
-As far as a plan goes, all we have at this time is some text messages saying “let’s do it.”
+As far as a plan goes all we have at this time is some text messages saying “let’s do it.”
 
 Some questions which reasonably present themselves at this juncture:
+
+* What will we ship today?
 
 * What counts as having successfully shipped?
 
 * What happens if we fail to ship?
 
-* Is it okay that I (Jarred) have already written a minor essay about bones (below) in which I use a lot of “I” statements and not “We” statements?
+* Is it okay that I (Jarred) have written a minor essay about gnawing bones (below) in which I use a lot of “I” statements and not “We” statements?
 
 * Is it okay that I’ve just jumped ahead and written a caffeinated provisional plan in which we ship a webpage which records a message to a google doc?
 
@@ -32,16 +34,16 @@ Hopefully Sophie can answer these and more when she wakes up.
 
 I am awake\!
 
-Q: What counts as having successfully shipped?
+Q: What counts as having successfully shipped?\
 A: First we say some words about an idea. Then later we can click some buttons on our phones and/or laptops and then a related reliably cool thing related happens on the screen. The cool thing needs to be available to others to use over the public internet.
 
-Q: What happens if we fail to ship?  
+Q: What happens if we fail to ship?\
 A: If we miss one day, then we admit our failure to Harri and he is egregiously disappointed in us. Or we aren't allowed to wear a coat the next day. If we miss two days in a row, then the project is over.
 
-Q: Is it okay that I (Jarred) have already written a minor essay about bones (below) in which I use a lot of “I” statements and not “We” statements?
+Q: Is it okay that I (Jarred) have written a minor essay about gnawing bones (below) in which I use a lot of “I” statements and not “We” statements?\
 A: This question is in fact the whole project.
 
-Q: Is it okay that I’ve just jumped ahead and written a caffeinated provisional plan in which we ship a webpage which records a message to a google doc?
+Q: Is it okay that I’ve just jumped ahead and written a caffeinated provisional plan in which we ship a webpage which records a message to a google doc?\
 A: :O YES. Can I see?\!?
 
 - - -
