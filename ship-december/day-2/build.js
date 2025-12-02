@@ -41,6 +41,6 @@ ${content}
 
 const markdown = readFileSync(join(__dirname, 'post.md'), 'utf-8');
 const htmlContent = marked(markdown);
-const fullHtml = wrapHtml(htmlContent, 'Day 1');
+const fullHtml = wrapHtml(htmlContent, 'Day 2');
 writeFileSync(join(__dirname, 'index.html'), fullHtml);
 console.log('Built: ship-december/day-1/index.html');

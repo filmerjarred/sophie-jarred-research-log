@@ -31,6 +31,8 @@ I need a song to play this section out.
 
 - - -
 
+[ Jarred 10am ]
+
 Ok!
 
 We have an AI librarian at [/talk-to-the-log](https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log).
@@ -57,7 +59,11 @@ I wonder if I can embed it here...
 function showEmbed() {
   document.getElementById('screenshot-view').style.display = 'none';
   document.getElementById('iframe-view').style.display = 'block';
-  document.getElementById('live-embed').src = 'https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log';
+  // Forward API key from parent URL to iframe
+  const params = new URLSearchParams(window.location.search);
+  const keyParam = params.get('k');
+  const iframeSrc = 'https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log' + (keyParam ? '?k=' + encodeURIComponent(keyParam) : '');
+  document.getElementById('live-embed').src = iframeSrc;
 }
 function showScreenshot() {
   document.getElementById('iframe-view').style.display = 'none';
@@ -66,4 +72,4 @@ function showScreenshot() {
 }
 </script>
 
-
+I can!
