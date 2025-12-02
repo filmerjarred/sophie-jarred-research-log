@@ -35,4 +35,35 @@ Ok!
 
 We have an AI librarian at [/talk-to-the-log](https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log).
 
-It's not very ergonomic, but it does work.
+It lacks the polish to be useful I think, but it does work.
+
+I wonder if I can embed it here...
+
+<div id="embed-container">
+  <div id="iframe-view" style="display: none;">
+    <iframe id="live-embed" src="" width="100%" height="600" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+    <br>
+    <button onclick="showScreenshot()" style="margin-top: 10px; padding: 8px 16px; cursor: pointer; background: #666; color: white; border: none; border-radius: 4px;">← Back to screenshot</button>
+  </div>
+  <div id="screenshot-view">
+    <img src="image.png" alt="screenshot of talk-to-the-log" style="max-width: 100%; border: 1px solid #ccc; border-radius: 8px;">
+    <!-- <img src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-2/image.png" alt="screenshot of talk-to-the-log" style="max-width: 100%; border: 1px solid #ccc; border-radius: 8px;"> -->
+    <br>
+    <button onclick="showEmbed()" style="margin-top: 10px; padding: 8px 16px; cursor: pointer; background: #4a9eff; color: white; border: none; border-radius: 4px;">Try it live ▶</button>
+  </div>
+</div>
+
+<script>
+function showEmbed() {
+  document.getElementById('screenshot-view').style.display = 'none';
+  document.getElementById('iframe-view').style.display = 'block';
+  document.getElementById('live-embed').src = 'https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log';
+}
+function showScreenshot() {
+  document.getElementById('iframe-view').style.display = 'none';
+  document.getElementById('screenshot-view').style.display = 'block';
+  document.getElementById('live-embed').src = '';
+}
+</script>
+
+

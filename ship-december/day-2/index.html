@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Day 1</title>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+   <style>
+      body {
+         font-family: 'Cardo', Georgia, serif;
+         line-height: 1.6;
+         max-width: 800px;
+         margin: 0 auto;
+         padding: 2rem;
+      }
+      h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; }
+      h1 { border-bottom: 2px solid #eee; padding-bottom: 0.3em; }
+      a { color: #0066cc; }
+      code { background: #f4f4f4; padding: 0.2em 0.4em; border-radius: 3px; }
+      pre { background: #f4f4f4; padding: 1em; overflow-x: auto; border-radius: 5px; }
+      pre code { background: none; padding: 0; }
+      img { max-width: 100%; height: auto; }
+      hr { border: none; border-top: 1px solid #a1a1a1; margin: 2em 0; }
+   </style>
+</head>
+<body>
+<p>[Jarred 9am]</p>
+<p>Good morning!</p>
+<p>It&#39;s Day 2 of Ship December.</p>
+<p>I was eating breakfast just now and wondering to myself the obvious question.</p>
+<p>&quot;What to ship today?&quot;</p>
+<p>It&#39;s a great relief to have this question be obvious and for it to come to me, rather than my having to go fetch it. On the downside I did wake up at 2am last night for around an hour with this question on my mind. Anyway.</p>
+<p>&quot;What to ship today?&quot;</p>
+<p>I pondered this for a bit.</p>
+<p>&quot;I could add a side-bar with the different days to the research log?&quot;</p>
+<p>&quot;I could do some fanaling such that there&#39;s a margin with all our scratch notes beside the log? And you could text a telegram channel to add to it.&quot;</p>
+<p>None of it felt quite right, so I asked &quot;what was that bone I wanted to gnaw this month?&quot;</p>
+<p>The thought then occurred to me, <em>it would be cool if I could say &quot;please read aloud the segment from yesterday&#39;s research log about gnawing bones&quot;</em> and an AI would repeat it to me. So we&#39;re going to do that!</p>
+<p>If there&#39;s time I might riff a little more on why this feels relevant, but my prudence is suggesting I get shipping out of the way first, as if we fail to ship today the project is sunk and that would be very sad.</p>
+<p>I need a song to play this section out.</p>
+<p>🎶 Looking for Knives, DYAN 🎶</p>
+<hr>
+<p>Ok!</p>
+<p>We have an AI librarian at <a href="https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log">/talk-to-the-log</a>.</p>
+<p>It lacks the polish to be useful I think, but it does work.</p>
+<p>I wonder if I can embed it here...</p>
+<div id="embed-container">
+  <div id="iframe-view" style="display: none;">
+    <iframe id="live-embed" src="" width="100%" height="600" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+    <br>
+    <button onclick="showScreenshot()" style="margin-top: 10px; padding: 8px 16px; cursor: pointer; background: #666; color: white; border: none; border-radius: 4px;">← Back to screenshot</button>
+  </div>
+  <div id="screenshot-view">
+    <img src="image.png" alt="screenshot of talk-to-the-log" style="max-width: 100%; border: 1px solid #ccc; border-radius: 8px;">
+    <!-- <img src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-2/image.png" alt="screenshot of talk-to-the-log" style="max-width: 100%; border: 1px solid #ccc; border-radius: 8px;"> -->
+    <br>
+    <button onclick="showEmbed()" style="margin-top: 10px; padding: 8px 16px; cursor: pointer; background: #4a9eff; color: white; border: none; border-radius: 4px;">Try it live ▶</button>
+  </div>
+</div>
+
+<script>
+function showEmbed() {
+  document.getElementById('screenshot-view').style.display = 'none';
+  document.getElementById('iframe-view').style.display = 'block';
+  document.getElementById('live-embed').src = 'https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log';
+}
+function showScreenshot() {
+  document.getElementById('iframe-view').style.display = 'none';
+  document.getElementById('screenshot-view').style.display = 'block';
+  document.getElementById('live-embed').src = '';
+}
+</script>
+
+
+
+</body>
+</html>

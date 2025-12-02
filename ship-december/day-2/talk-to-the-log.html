@@ -198,6 +198,10 @@
 
     <div class="status" id="status">Initializing...</div>
 
+    <div style="margin-top: 1rem;">
+        <button id="setKeyBtn" style="padding: 0.5rem 1rem; background: #555; color: #ccc; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">Set API Key</button>
+    </div>
+
     <div class="transcript" id="transcript">
         <h2>Transcript</h2>
         <div id="messages">
@@ -206,8 +210,55 @@
     </div>
 
     <script>
-        const OPENAI_API_KEY = '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';
         const REALTIME_API_URL = 'wss://api.openai.com/v1/realtime?model=gpt-realtime';
+        const STORAGE_KEY = 'openai_api_key';
+
+        // Check for key in URL query string (base64 encoded as 'k' param)
+        function getKeyFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const encoded = params.get('k');
+            if (encoded) {
+                try {
+                    return atob(encoded);
+                } catch (e) {
+                    console.warn('Invalid base64 key in URL');
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        // Get API key - priority: localStorage > URL
+        function getApiKey() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) return stored;
+
+            const urlKey = getKeyFromUrl();
+            if (urlKey) {
+                // Save URL key to localStorage for future use
+                localStorage.setItem(STORAGE_KEY, urlKey);
+                // Clean the URL so the key isn't visible/shareable
+                window.history.replaceState({}, '', window.location.pathname);
+                return urlKey;
+            }
+            return null;
+        }
+
+        // Prompt user for API key
+        function promptForKey() {
+            return new Promise((resolve) => {
+                const key = prompt('Enter your OpenAI API key:\n\n(It will be saved in your browser\'s local storage)');
+                if (key && key.trim()) {
+                    const trimmed = key.trim();
+                    localStorage.setItem(STORAGE_KEY, trimmed);
+                    resolve(trimmed);
+                } else {
+                    resolve(null);
+                }
+            });
+        }
+
+        let OPENAI_API_KEY = getApiKey();
 
         const micSelect = document.getElementById('micSelect');
         const speakerSelect = document.getElementById('speakerSelect');
@@ -287,7 +338,11 @@
                 }
 
                 talkBtn.disabled = false;
-                setStatus('Ready. Start voice or type a message to connect.', 'connected');
+                if (OPENAI_API_KEY) {
+                    setStatus('Ready. Start voice or type a message to connect.', 'connected');
+                } else {
+                    setStatus('Ready. You\'ll be prompted for an API key when you start.', '');
+                }
             } catch (err) {
                 setStatus('Error loading devices: ' + err.message, 'error');
             }
@@ -420,6 +475,14 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
 
         async function startVoice() {
             try {
+                // Check for API key, prompt if missing
+                if (!OPENAI_API_KEY) {
+                    OPENAI_API_KEY = await promptForKey();
+                    if (!OPENAI_API_KEY) {
+                        setStatus('API key required to connect', 'error');
+                        return;
+                    }
+                }
                 await connectWebSocket();
 
                 mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -491,6 +554,14 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
             if (!text) return;
 
             try {
+                // Check for API key, prompt if missing
+                if (!OPENAI_API_KEY) {
+                    OPENAI_API_KEY = await promptForKey();
+                    if (!OPENAI_API_KEY) {
+                        setStatus('API key required to connect', 'error');
+                        return;
+                    }
+                }
                 await connectWebSocket();
 
                 addMessage('user', text, 'text');
@@ -625,6 +696,14 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
         textInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 sendTextMessage();
+            }
+        });
+
+        document.getElementById('setKeyBtn').addEventListener('click', async () => {
+            const newKey = await promptForKey();
+            if (newKey) {
+                OPENAI_API_KEY = newKey;
+                setStatus('API key saved.', 'connected');
             }
         });
 
