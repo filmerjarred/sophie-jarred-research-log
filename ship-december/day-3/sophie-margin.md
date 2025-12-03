@@ -29,7 +29,6 @@
     thought experiment
         Jarred starts working on the experiment "everything is a card"
         Sophie starts working on building forester from scratch
-
     Jarred has blanket permission to send quotes that sophie said and quotes from sophie-margin to our list of subscribers
 
     we're two people
@@ -78,3 +77,42 @@
         start ideating about forester replacement
 
 
+11:14 let's get an MVP of 
+
+    What is the minimum viable forester do?
+        
+        Plain text + ordinary latex -> HTML
+        
+        I'm in a markdown file in VScode and when I hit a hotkey it "zooms in" and I see that line and everything indented underneath it
+
+        make a little window that i embed in the post that i write typst in and it compiles to html
+            Muck around with typst
+
+
+    Big brain idea
+        It's like roam research
+        where when you're editing (or reading)
+        you can see (via toggling) everything "underneath" what you're writing
+        And also you can click into "lower things" to exclude the larger thing
+
+        I want to write in some files some text and some latex
+        And I want those files to become blocks 
+
+        I want transclusions to be actual transclusions
+
+        blocks do not need to be transcluded into multiple places
+        it can be like a big file with indentations
+        BUT you should be able to "zoom in"
+
+    Jarred: The quickest path towards winning in my heart: 
+        opening codex
+        and saying "in build.js under day 3 I wanna make it such that any text between two dashes is in a different font"
+
+    "it's very typical"
+        to have a sense of something obvious and exciting
+        and unfortunately you have to start from the start
+        and exploring a bunch of different avenues and failing immediately
+
+        especially "I could try out the brand new hot thing that the kids are using
+        and it's dumb and it doesn't work but maybe it's me"
+        that's very typical
