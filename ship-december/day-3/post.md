@@ -218,22 +218,22 @@ I have no satisfying resolution to this tension at the moment other than intuiti
 
 - - -
 
-[ Jarred 11.15am ]
+*[ Jarred 11.15am ]*
 
 Ok, I fear this post has gotten a bit out of hand but I've alleviated my shipping anxiety for today. We have a side bar and you can access my claude-code transcript from it, even if it does make the post annoying to read.
 
 - - -
 
-[ Jarred 12.30am ]
+*[ Jarred 12.30am ]*
 
 ![alt text](image-11.png)
 
-⏭️ [next](/ship-december/day-4)
-
 - - - 
 
-[Sophie 10.31am PT / 1.31pm ET]
+*[Sophie 10.31am PT / 1.31pm ET]*
 
 I would like to add a new rule. The new rule is: 
 
 > Sophie has to fiddle with some code every work day. If she doesn't for two days in a row, then the project is over. 
+
+⏭️ [next](/ship-december/day-4)
