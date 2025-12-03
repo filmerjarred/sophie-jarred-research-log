@@ -99,6 +99,10 @@ function generateStyles() {
    return `
       * { box-sizing: border-box; }
 
+      html {
+         overflow-x: hidden;
+      }
+
       body {
          font-family: 'Cardo', Georgia, serif;
          line-height: 1.6;

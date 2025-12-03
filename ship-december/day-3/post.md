@@ -124,7 +124,9 @@ Ok
 
 > 🤖 please make the page not horizontally scrollable
 
-Okokok. 
+Okokok. Let's ship to production and ensure it works on my actual mobile at the live address rather than just on my PC.
+
+> 🤖 you also need to add overflow-x: hidden to the html tag not just the body
 
 
 

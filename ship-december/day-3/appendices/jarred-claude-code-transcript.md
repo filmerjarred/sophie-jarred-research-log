@@ -192,3 +192,5 @@ the save_transcript time is still in utc time. also can you remove the "---" and
 **[10:02am]** swiping left on the sidebar should also revert it to the original width
 
 **[10:03am]** please make the page not horizontally scrollable
+
+**[10:04am]** you also need to add that to the html tag
