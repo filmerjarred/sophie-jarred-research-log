@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talk to the Log</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #1a1a2e;
+            color: #eee;
+        }
+        h1 {
+            color: #fff;
+            border-bottom: 2px solid #444;
+            padding-bottom: 0.5em;
+        }
+        .device-select {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background: #2a2a4e;
+            color: #eee;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        .talk-btn {
+            flex: 1;
+            font-size: 1.2rem;
+            padding: 1rem;
+            background: #4a4ae8;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .talk-btn:hover {
+            background: #5a5af8;
+        }
+        .talk-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+        }
+        .talk-btn.active {
+            background: #e84a4a;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .text-input-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .text-input-container input {
+            flex: 1;
+        }
+        .send-btn {
+            padding: 0.5rem 1rem;
+            background: #4a4ae8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .send-btn:hover {
+            background: #5a5af8;
+        }
+        .send-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: #2a2a4e;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+        .status.error {
+            background: #4e2a2a;
+            color: #f88;
+        }
+        .status.connected {
+            background: #2a4e2a;
+            color: #8f8;
+        }
+        .transcript {
+            margin-top: 1.5rem;
+            background: #12121f;
+            border-radius: 12px;
+            padding: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .transcript h2 {
+            margin: 0 0 1rem 0;
+            font-size: 1rem;
+            color: #888;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+        }
+        .message {
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+        .message.user {
+            background: #2a3a5e;
+            margin-left: 2rem;
+        }
+        .message.assistant {
+            background: #3a2a5e;
+            margin-right: 2rem;
+        }
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.3rem;
+            font-size: 0.75rem;
+            color: #888;
+        }
+        .message-role {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .message-role.user { color: #6af; }
+        .message-role.assistant { color: #a6f; }
+        .message-medium {
+            background: #333;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+        .message-medium.voice { background: #3a4a3a; color: #8f8; }
+        .message-medium.text { background: #4a4a3a; color: #ff8; }
+        .message-content {
+            color: #ddd;
+        }
+        .empty-transcript {
+            color: #555;
+            font-style: italic;
+            text-align: center;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Talk to the Log</h1>
+
+    <div class="device-select">
+        <label for="micSelect">Microphone</label>
+        <select id="micSelect">
+            <option value="">Loading...</option>
+        </select>
+    </div>
+
+    <div class="device-select">
+        <label for="speakerSelect">Speaker</label>
+        <select id="speakerSelect">
+            <option value="">Loading...</option>
+        </select>
+    </div>
+
+    <div class="controls">
+        <button class="talk-btn" id="talkBtn" disabled>🎤 Start Voice</button>
+    </div>
+
+    <div class="text-input-container">
+        <input type="text" id="textInput" placeholder="Type a message..." disabled>
+        <button class="send-btn" id="sendBtn" disabled>Send</button>
+    </div>
+
+    <div class="status" id="status">Initializing...</div>
+
+    <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <button id="setKeyBtn" style="padding: 0.5rem 1rem; background: #555; color: #ccc; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">Set API Key</button>
+        <button id="clearKeyBtn" style="padding: 0.5rem 1rem; background: #555; color: #ccc; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">Clear Key</button>
+        <button id="copyUrlBtn" style="padding: 0.5rem 1rem; background: #555; color: #ccc; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">Copy Share URL</button>
+    </div>
+
+    <div class="transcript" id="transcript">
+        <h2>Transcript</h2>
+        <div id="messages">
+            <div class="empty-transcript">Messages will appear here...</div>
+        </div>
+    </div>
+
+    <script>
+        const REALTIME_API_URL = 'wss://api.openai.com/v1/realtime?model=gpt-realtime';
+        const STORAGE_KEY = 'openai_api_key';
+        // Base64 encoded API key (decode with atob)
+        const EMBEDDED_KEY = 'c2stcHJvai12WnF2X2FaYWRoQ0hUMGp6Ym5ZRWcwNzIyUmR0cWdpV3IzQkk2MVFnUzZwc25NLVJtWThBcldUTU1NS0xTeXlrRlNxRWozWnhtclQzQmxia0ZKYjZ0UzVpNVJsbHpQZ2JERjdEVWhKeXRPUDhSTG9xVnAxUVhxM0Y0eWQzWWpqSTR1WFBpUXI5TDJTSm5hOVBCZEczWnE5azFaSUE=';
+
+        // Get API key - priority: localStorage > embedded
+        function getApiKey() {
+            // const stored = localStorage.getItem(STORAGE_KEY);
+            // if (stored) return stored;
+
+            // Use embedded key as fallback
+            if (EMBEDDED_KEY) {
+                try {
+                    return atob(EMBEDDED_KEY);
+                } catch (e) {
+                    console.warn('Invalid embedded key');
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        // Prompt user for API key
+        function promptForKey() {
+            return new Promise((resolve) => {
+                const key = prompt('Enter your OpenAI API key:\n\n(It will be saved in your browser\'s local storage)');
+                if (key && key.trim()) {
+                    const trimmed = key.trim();
+                    localStorage.setItem(STORAGE_KEY, trimmed);
+                    resolve(trimmed);
+                } else {
+                    resolve(null);
+                }
+            });
+        }
+
+        let OPENAI_API_KEY = getApiKey();
+
+        const micSelect = document.getElementById('micSelect');
+        const speakerSelect = document.getElementById('speakerSelect');
+        const talkBtn = document.getElementById('talkBtn');
+        const textInput = document.getElementById('textInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const statusEl = document.getElementById('status');
+        const messagesEl = document.getElementById('messages');
+
+        let ws = null;
+        let mediaStream = null;
+        let audioContext = null;
+        let captureContext = null;
+        let isConversationActive = false;
+        let isVoiceActive = false;
+
+        function setStatus(message, type = '') {
+            statusEl.textContent = message;
+            statusEl.className = 'status ' + type;
+        }
+
+        function addMessage(role, content, medium) {
+            // Remove empty state if present
+            const emptyState = messagesEl.querySelector('.empty-transcript');
+            if (emptyState) emptyState.remove();
+
+            const messageEl = document.createElement('div');
+            messageEl.className = `message ${role}`;
+            messageEl.innerHTML = `
+                <div class="message-header">
+                    <span class="message-role ${role}">${role === 'user' ? 'You' : 'Assistant'}</span>
+                    <span class="message-medium ${medium}">${medium}</span>
+                </div>
+                <div class="message-content">${escapeHtml(content)}</div>
+            `;
+            messagesEl.appendChild(messageEl);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function loadDevices() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+
+                const mics = devices.filter(d => d.kind === 'audioinput');
+                const speakers = devices.filter(d => d.kind === 'audiooutput');
+
+                const savedMic = localStorage.getItem('selectedMic');
+                const savedSpeaker = localStorage.getItem('selectedSpeaker');
+
+                micSelect.innerHTML = '';
+                mics.forEach((mic, i) => {
+                    const option = document.createElement('option');
+                    option.value = mic.deviceId;
+                    option.textContent = mic.label || `Microphone ${i + 1}`;
+                    micSelect.appendChild(option);
+                });
+
+                speakerSelect.innerHTML = '';
+                speakers.forEach((speaker, i) => {
+                    const option = document.createElement('option');
+                    option.value = speaker.deviceId;
+                    option.textContent = speaker.label || `Speaker ${i + 1}`;
+                    speakerSelect.appendChild(option);
+                });
+
+                if (savedMic && mics.some(m => m.deviceId === savedMic)) {
+                    micSelect.value = savedMic;
+                }
+                if (savedSpeaker && speakers.some(s => s.deviceId === savedSpeaker)) {
+                    speakerSelect.value = savedSpeaker;
+                }
+
+                talkBtn.disabled = false;
+                if (OPENAI_API_KEY) {
+                    setStatus('Ready. Start voice or type a message to connect.', 'connected');
+                } else {
+                    setStatus('Ready. You\'ll be prompted for an API key when you start.', '');
+                }
+            } catch (err) {
+                setStatus('Error loading devices: ' + err.message, 'error');
+            }
+        }
+
+        micSelect.addEventListener('change', () => {
+            localStorage.setItem('selectedMic', micSelect.value);
+        });
+
+        speakerSelect.addEventListener('change', () => {
+            localStorage.setItem('selectedSpeaker', speakerSelect.value);
+        });
+
+        async function connectWebSocket() {
+            if (ws && ws.readyState === WebSocket.OPEN) return true;
+
+            return new Promise((resolve, reject) => {
+                setStatus('Connecting to OpenAI Realtime API...', '');
+
+                ws = new WebSocket(REALTIME_API_URL, [
+                    'realtime',
+                    `openai-insecure-api-key.${OPENAI_API_KEY}`
+                ]);
+
+                ws.onopen = () => {
+                    setStatus('Connected!', 'connected');
+
+                    ws.send(JSON.stringify({
+                        type: 'session.update',
+                        session: {
+                           type: "realtime",
+                           output_modalities: ["audio"],
+                           audio: {
+                              input: {
+                                 format: {
+                                    type: "audio/pcm",
+                                    rate: 24000,
+                                 },
+                                 transcription: {
+                                    model: "gpt-4o-transcribe"
+                                 },
+                                 turn_detection: {
+                                    type: "semantic_vad"
+                                 }
+                              },
+                              output: {
+                                 format: {
+                                    type: "audio/pcm",
+                                    rate: 24000,
+                                 },
+                                 voice: "marin",
+                              },
+                           },
+                                                   
+                            instructions: `Please always use English.
+You are embeded within a research log
+Your task is to act as the helpful librarian of this research log
+The main content of the research log is stored in "daily posts" and you can access these posts via provided mcp tools in order to answer the user's questions. 
+The first post was on "Monday December 1st 2025". If the user wants "yesterday's post" then you will need to figure out what today is and then count backwards to the right day number. The posts are generally broken up into sections by linebreaks and bolded titles.`,
+                            tools: [
+                                {
+                                    type: 'function',
+                                    name: 'fetch_day',
+                                    description: 'Fetches the research log post for a given day number. Returns the markdown content of that day\'s post.',
+                                    parameters: {
+                                        type: 'object',
+                                        properties: {
+                                            day_number: {
+                                                type: 'integer',
+                                                description: 'The day number to fetch (e.g., 1 for day-1, 2 for day-2)'
+                                            }
+                                        },
+                                        required: ['day_number']
+                                    }
+                                }
+                            ]
+                        }
+                    }));
+
+                    isConversationActive = true;
+                    textInput.disabled = false;
+                    sendBtn.disabled = false;
+                    resolve(true);
+                };
+
+                ws.onmessage = async (event) => {
+                    const data = JSON.parse(event.data);
+                  //   console.log(data)
+
+                    // Updated event names per latest API docs (2025)
+                    if (data.type === 'response.output_audio.delta') {
+                        playAudioDelta(data.delta);
+                    } else if (data.type === 'error') {
+                        setStatus('Error: ' + data.error.message, 'error');
+                    } else if (data.type === 'input_audio_buffer.speech_started') {
+                        setStatus('Listening...', 'connected');
+                    } else if (data.type === 'conversation.item.input_audio_transcription.completed') {
+                        addMessage('user', data.transcript, 'voice');
+                    } else if (data.type === 'response.output_audio_transcript.done') {
+                        addMessage('assistant', data.transcript, 'voice');
+                        setStatus('Connected - voice active', 'connected');
+                    } else if (data.type === 'response.output_text.done') {
+                        addMessage('assistant', data.text, 'text');
+                        setStatus('Connected', 'connected');
+                    } else if (data.type === 'response.function_call_arguments.done') {
+                        // Handle tool calls
+                        await handleToolCall(data);
+                    } else if (data.type === 'response.done') {
+                        // Only handle text responses here - audio transcripts are handled
+                        // by response.output_audio_transcript.done streaming events
+                        if (data.response?.output) {
+                            for (const item of data.response.output) {
+                                if (item.type === 'message' && item.content) {
+                                    for (const content of item.content) {
+                                        if (content.type === 'text' && content.text) {
+                                            addMessage('assistant', content.text, 'text');
+                                        }
+                                        // Don't handle output_audio here - already added via streaming
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
+                ws.onerror = (err) => {
+                    setStatus('WebSocket error', 'error');
+                    console.error('WebSocket error:', err);
+                    reject(err);
+                };
+
+                ws.onclose = () => {
+                    if (isConversationActive) {
+                        setStatus('Connection closed', '');
+                        stopAll();
+                    }
+                };
+            });
+        }
+
+        async function startVoice() {
+            try {
+                // Check for API key, prompt if missing
+                if (!OPENAI_API_KEY) {
+                    OPENAI_API_KEY = await promptForKey();
+                    if (!OPENAI_API_KEY) {
+                        setStatus('API key required to connect', 'error');
+                        return;
+                    }
+                }
+                await connectWebSocket();
+
+                mediaStream = await navigator.mediaDevices.getUserMedia({
+                    audio: {
+                        deviceId: micSelect.value ? { exact: micSelect.value } : undefined,
+                        sampleRate: 24000,
+                        channelCount: 1
+                    }
+                });
+
+                startAudioCapture();
+                isVoiceActive = true;
+                talkBtn.textContent = '⏹ Stop Voice';
+                talkBtn.classList.add('active');
+                setStatus('Connected - voice active. Speak now...', 'connected');
+
+            } catch (err) {
+                setStatus('Error: ' + err.message, 'error');
+                console.error(err);
+            }
+        }
+
+        function stopVoice() {
+            isVoiceActive = false;
+
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(track => track.stop());
+                mediaStream = null;
+            }
+
+            if (captureContext) {
+                captureContext.close();
+                captureContext = null;
+            }
+
+            talkBtn.textContent = '🎤 Start Voice';
+            talkBtn.classList.remove('active');
+
+            if (isConversationActive) {
+                setStatus('Connected - voice stopped. Type or start voice again.', 'connected');
+            }
+        }
+
+        function stopAll() {
+            isConversationActive = false;
+            stopVoice();
+
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+
+            if (audioContext) {
+                audioContext.close();
+                audioContext = null;
+            }
+
+            audioQueue = [];
+            isPlaying = false;
+            nextPlayTime = 0;
+
+            textInput.disabled = true;
+            sendBtn.disabled = true;
+            setStatus('Disconnected. Start voice or send a message to reconnect.', '');
+        }
+
+        async function sendTextMessage() {
+            const text = textInput.value.trim();
+            if (!text) return;
+
+            try {
+                // Check for API key, prompt if missing
+                if (!OPENAI_API_KEY) {
+                    OPENAI_API_KEY = await promptForKey();
+                    if (!OPENAI_API_KEY) {
+                        setStatus('API key required to connect', 'error');
+                        return;
+                    }
+                }
+                await connectWebSocket();
+
+                addMessage('user', text, 'text');
+                textInput.value = '';
+
+                ws.send(JSON.stringify({
+                    type: 'conversation.item.create',
+                    item: {
+                        type: 'message',
+                        role: 'user',
+                        content: [{
+                            type: 'input_text',
+                            text: text
+                        }]
+                    }
+                }));
+
+                ws.send(JSON.stringify({
+                    type: 'response.create',
+                }));
+
+            } catch (err) {
+                setStatus('Error sending message: ' + err.message, 'error');
+            }
+        }
+
+        let audioQueue = [];
+        let isPlaying = false;
+
+        async function playAudioDelta(base64Audio) {
+            if (!audioContext) {
+                audioContext = new AudioContext({ sampleRate: 24000 });
+
+                if (audioContext.setSinkId && speakerSelect.value) {
+                    try {
+                        await audioContext.setSinkId(speakerSelect.value);
+                    } catch (e) {
+                        console.warn('Could not set audio output device:', e);
+                    }
+                }
+            }
+
+            const binaryString = atob(base64Audio);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+
+            const pcm16 = new Int16Array(bytes.buffer);
+            const float32 = new Float32Array(pcm16.length);
+            for (let i = 0; i < pcm16.length; i++) {
+                float32[i] = pcm16[i] / 32768;
+            }
+
+            const audioBuffer = audioContext.createBuffer(1, float32.length, 24000);
+            audioBuffer.getChannelData(0).set(float32);
+
+            audioQueue.push(audioBuffer);
+
+            if (!isPlaying) {
+                playNextInQueue();
+            }
+        }
+
+        let nextPlayTime = 0;
+
+        function playNextInQueue() {
+            if (audioQueue.length === 0) {
+                isPlaying = false;
+                return;
+            }
+
+            isPlaying = true;
+            const buffer = audioQueue.shift();
+            const source = audioContext.createBufferSource();
+            source.buffer = buffer;
+            source.connect(audioContext.destination);
+
+            const now = audioContext.currentTime;
+            if (nextPlayTime < now) {
+                nextPlayTime = now;
+            }
+
+            source.start(nextPlayTime);
+            nextPlayTime += buffer.duration;
+
+            source.onended = () => {
+                playNextInQueue();
+            };
+        }
+
+        function startAudioCapture() {
+            captureContext = new AudioContext({ sampleRate: 24000 });
+            const source = captureContext.createMediaStreamSource(mediaStream);
+            const processor = captureContext.createScriptProcessor(4096, 1, 1);
+
+            source.connect(processor);
+            processor.connect(captureContext.destination);
+
+            processor.onaudioprocess = (e) => {
+                if (!ws || ws.readyState !== WebSocket.OPEN || !isVoiceActive) return;
+
+                const inputData = e.inputBuffer.getChannelData(0);
+                const pcm16 = new Int16Array(inputData.length);
+
+                for (let i = 0; i < inputData.length; i++) {
+                    pcm16[i] = Math.max(-32768, Math.min(32767, inputData[i] * 32768));
+                }
+
+                const base64 = btoa(String.fromCharCode(...new Uint8Array(pcm16.buffer)));
+
+                ws.send(JSON.stringify({
+                    type: 'input_audio_buffer.append',
+                    audio: base64
+                }));
+            };
+        }
+
+        talkBtn.addEventListener('click', () => {
+            if (isVoiceActive) {
+                stopVoice();
+            } else {
+                startVoice();
+            }
+        });
+
+        sendBtn.addEventListener('click', sendTextMessage);
+
+        textInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendTextMessage();
+            }
+        });
+
+        document.getElementById('setKeyBtn').addEventListener('click', async () => {
+            const newKey = await promptForKey();
+            if (newKey) {
+                OPENAI_API_KEY = newKey;
+                setStatus('API key saved.', 'connected');
+            }
+        });
+
+        document.getElementById('clearKeyBtn').addEventListener('click', () => {
+            localStorage.removeItem(STORAGE_KEY);
+            OPENAI_API_KEY = null;
+            setStatus('API key cleared.', '');
+        });
+
+        document.getElementById('copyUrlBtn').addEventListener('click', async () => {
+            if (!OPENAI_API_KEY) {
+                setStatus('No API key to share. Set one first.', 'error');
+                return;
+            }
+            const encoded = btoa(OPENAI_API_KEY);
+            const url = window.location.origin + window.location.pathname + '?k=' + encodeURIComponent(encoded);
+            try {
+                await navigator.clipboard.writeText(url);
+                setStatus('Share URL copied to clipboard!', 'connected');
+            } catch (err) {
+                setStatus('Failed to copy: ' + err.message, 'error');
+            }
+        });
+
+        // Tool implementation: fetch_day
+        async function fetchDay(dayNumber) {
+            const url = `https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-${dayNumber}/post.md`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    return { error: `Day ${dayNumber} not found (HTTP ${response.status})` };
+                }
+                const content = await response.text();
+                return { content };
+            } catch (err) {
+                return { error: `Failed to fetch day ${dayNumber}: ${err.message}` };
+            }
+        }
+
+        // Handle tool calls from the assistant
+        async function handleToolCall(data) {
+            const { name, arguments: argsString, call_id } = data;
+
+            console.log('Tool call received:', name, argsString, call_id);
+            setStatus(`Fetching data...`, 'connected');
+
+            let result;
+            try {
+                const args = JSON.parse(argsString);
+
+                if (name === 'fetch_day') {
+                    result = await fetchDay(args.day_number);
+                } else {
+                    result = { error: `Unknown tool: ${name}` };
+                }
+            } catch (err) {
+                result = { error: `Failed to execute tool: ${err.message}` };
+            }
+
+            // Send the tool result back
+            ws.send(JSON.stringify({
+                type: 'conversation.item.create',
+                item: {
+                    type: 'function_call_output',
+                    call_id: call_id,
+                    output: JSON.stringify(result)
+                }
+            }));
+
+            // Request the assistant to continue responding
+            ws.send(JSON.stringify({
+                type: 'response.create'
+            }));
+        }
+
+        async function init() {
+            try {
+                setStatus('Requesting microphone permission...', '');
+                await navigator.mediaDevices.getUserMedia({ audio: true });
+                await loadDevices();
+            } catch (err) {
+                setStatus('Microphone permission denied: ' + err.message, 'error');
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
