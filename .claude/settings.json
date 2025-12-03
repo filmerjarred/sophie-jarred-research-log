@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/home/claude/repos/sophie-jarred-research-log/hooks/save-transcript.sh"
+            "command": "/home/claude/repos/sophie-jarred-research-log/ship-december/day-3/save-transcript.sh"
           }
         ]
       }

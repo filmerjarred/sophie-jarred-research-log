@@ -3,18 +3,242 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Day 2</title>
+   <title>Day 3</title>
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
    <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
    <style>
+      * { box-sizing: border-box; }
+
       body {
          font-family: 'Cardo', Georgia, serif;
          line-height: 1.6;
-         max-width: 800px;
-         margin: 0 auto;
-         padding: 2rem;
+         margin: 0;
+         padding: 0;
+         display: flex;
+         overflow-x: hidden;
       }
+
+      /* Sidebar */
+      .sidebar {
+         width: 220px;
+         min-height: 100vh;
+         background: #fff;
+         border-right: 1px solid #e0e0e0;
+         position: fixed;
+         left: 0;
+         top: 0;
+         overflow-y: auto;
+         font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Mono", "Droid Sans Mono", "Source Code Pro", ui-monospace, monospace;
+         font-size: 1rem;
+      }
+
+      .sidebar-header {
+         padding: 1.5rem 1rem 1rem;
+         font-weight: 700;
+         font-size: 1.1rem;
+         border-bottom: 1px solid #e0e0e0;
+      }
+
+      .sidebar-item {
+         border-bottom: 1px solid #eee;
+      }
+
+      .sidebar-item-row {
+         display: flex;
+         align-items: stretch;
+      }
+
+      .day-link {
+         flex: 1;
+         padding: 0.75rem 1rem;
+         color: #000;
+         text-decoration: none;
+         display: block;
+      }
+
+      .day-link:hover {
+         background: #f5f5f5;
+      }
+
+      .sidebar-item.active .day-link {
+         font-weight: 700;
+      }
+
+      .chevron-container {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 40px;
+         border-left: 1px solid #eee;
+         cursor: pointer;
+         user-select: none;
+      }
+
+      .chevron-container:hover {
+         background: #f5f5f5;
+      }
+
+      .chevron {
+         font-size: 0.8rem;
+         color: #666;
+         transition: transform 0.2s ease;
+      }
+
+      .sidebar-item.expanded .chevron {
+         transform: rotate(180deg);
+      }
+
+      .appendices-tree {
+         display: none;
+         background: #fafafa;
+         border-top: 1px solid #eee;
+      }
+
+      .sidebar-item.expanded .appendices-tree {
+         display: block;
+      }
+
+      .appendix-item {
+         padding: 0.5rem 1rem 0.5rem 2rem;
+         font-size: 0.8rem;
+         cursor: pointer;
+         border-bottom: 1px solid #eee;
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+      }
+
+      .appendix-item:last-child {
+         border-bottom: none;
+      }
+
+      .appendix-item:hover {
+         background: #f0f0f0;
+      }
+
+      /* Main content */
+      .main-content {
+         margin-left: 220px;
+         flex: 1;
+         max-width: 800px;
+         padding: 2rem 2rem 2rem 3.5rem;
+      }
+
+      /* Modal */
+      .modal {
+         display: none;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0, 0, 0, 0.3);
+         z-index: 1000;
+         justify-content: center;
+         align-items: center;
+      }
+
+      .modal.open {
+         display: flex;
+      }
+
+      .modal-content {
+         background: #fff;
+         border: 1px solid #000;
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+         max-width: 800px;
+         width: 90%;
+         max-height: 80vh;
+         position: relative;
+         display: flex;
+         flex-direction: column;
+      }
+
+      .modal-close {
+         position: absolute;
+         top: 0.5rem;
+         right: 0.75rem;
+         background: none;
+         border: none;
+         font-size: 1.5rem;
+         cursor: pointer;
+         color: #000;
+         line-height: 1;
+      }
+
+      .modal-close:hover {
+         color: #666;
+      }
+
+      .modal-body {
+         padding: 2rem;
+         overflow-y: auto;
+         font-family: 'Cardo', Georgia, serif;
+         line-height: 1.6;
+      }
+
+      .modal-body pre {
+         background: #f4f4f4;
+         padding: 1em;
+         overflow-x: auto;
+         border-radius: 5px;
+      }
+
+      .modal-body code {
+         background: #f4f4f4;
+         padding: 0.2em 0.4em;
+         border-radius: 3px;
+      }
+
+      .modal-body pre code {
+         background: none;
+         padding: 0;
+      }
+
+      /* Responsive sidebar */
+      @media (max-width: 800px) {
+         .sidebar {
+            width: 125px;
+         }
+         .main-content {
+            margin-left: 125px;
+            padding: 1.5rem 1.5rem 1.5rem 2rem;
+         }
+         .appendix-item {
+            padding: 0.5rem 0.5rem 0.5rem 1rem;
+         }
+         .chevron-container {
+            width: 30px;
+         }
+      }
+
+      /* Sidebar expanded state (swipe to expand) */
+      .sidebar {
+         transition: width 0.3s ease;
+      }
+      .main-content {
+         transition: margin-left 0.3s ease, opacity 0.3s ease;
+      }
+      body.sidebar-expanded .sidebar {
+         width: 80vw;
+         z-index: 100;
+      }
+      body.sidebar-expanded .main-content {
+         margin-left: 80vw;
+         opacity: 0.3;
+         cursor: pointer;
+      }
+      @media (max-width: 800px) {
+         body.sidebar-expanded .sidebar {
+            width: 85vw;
+         }
+         body.sidebar-expanded .main-content {
+            margin-left: 85vw;
+         }
+      }
+
+      /* Post content styles */
       h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; }
       h1 { border-bottom: 2px solid #eee; padding-bottom: 0.3em; }
       a { color: #0066cc; }
@@ -23,72 +247,228 @@
       pre code { background: none; padding: 0; }
       img { max-width: 100%; height: auto; }
       hr { border: none; border-top: 1px solid #a1a1a1; margin: 2em 0; }
+      blockquote {
+         margin: 1.5em 0;
+         padding: 1em 1.5em;
+         background: #f9f9f9;
+         border-left: 4px solid #333;
+      }
+      blockquote p { margin: 0; }
    </style>
 </head>
 <body>
-<p>⏮️ <a href="https://sophie-jarred.researchlog.dev/ship-december/day-1">previous</a>&nbsp;&nbsp;&nbsp;🏡 <a href="https://sophie-jarred.researchlog.dev/">home</a>&nbsp;&nbsp;&nbsp;⏭️ <a href="https://sophie-jarred.researchlog.dev/ship-december/day-3">next</a></p>
-<p>[Jarred 9am]</p>
-<p>Good morning!</p>
-<p>It&#39;s Day 2 of Ship December.</p>
-<p>I was eating breakfast just now and wondering to myself the obvious question.</p>
-<p>&quot;What to ship today?&quot;</p>
-<p>It&#39;s a great relief to have this question find me without any effort on my behalf, rather than my having to go hunting for a sense of urgency about the say. On the downside I did wake up for an hour or so at 2am last night stressed about what we might ship today. Anyway.</p>
-<p>&quot;What to ship today?&quot;</p>
-<p>I pondered this for a bit.</p>
-<p>&quot;I could add a side-bar with the different days to the research log?&quot;</p>
-<p>&quot;I could do some fanaling such that there&#39;s a margin with all our scratch notes beside the log? And you could text a telegram channel to add to it.&quot;</p>
-<p>None of it felt quite right, so I asked &quot;what was that bone I wanted to gnaw this month?&quot;</p>
-<p>The thought then occurred to me, <em>it would be cool if I could say &quot;please read aloud the segment from yesterday&#39;s research log about gnawing bones&quot;</em> and an AI would repeat it to me. So we&#39;re going to do that!</p>
-<p>If there&#39;s time I might riff a little more on why this feels relevant, but my prudence is suggesting I get shipping out of the way first, as if we fail to ship today the project is sunk and that would be very sad.</p>
-<p>I need a song to play this section out.</p>
-<p>🎶 Looking for Knives, DYAN 🎶</p>
+   
+   <nav class="sidebar">
+      <div class="sidebar-header">Ship December</div>
+      
+      <div class="sidebar-item">
+         <div class="sidebar-item-row">
+            <a href="/ship-december/day-1" class="day-link">Day 1</a>
+            
+         </div>
+         
+      </div>
+      <div class="sidebar-item">
+         <div class="sidebar-item-row">
+            <a href="/ship-december/day-2" class="day-link">Day 2</a>
+            
+         </div>
+         
+      </div>
+      <div class="sidebar-item active expanded">
+         <div class="sidebar-item-row">
+            <a href="/ship-december/day-3" class="day-link">Day 3</a>
+            <div class="chevron-container"><span class="chevron">&#9662;</span></div>
+         </div>
+         <div class="appendices-tree"><div class="appendix-item" data-path="/ship-december/day-3/appendices/jarred-claude-code-transcript.md" data-name="jarred-claude-code-transcript.md">jarred-claude-code-transcript.md</div></div>
+      </div>
+   </nav>
+   <main class="main-content">
+      <p><em>[Jarred 8am]</em></p>
+<p>Good morning once again!</p>
+<p>It&#39;s Day 3 of Ship December.</p>
+<p>I forgot to make the time stamps on yesterdays posts italisised. This has injured me and also it&#39;s a comfort to know I can&#39;t change it.</p>
+<p>There&#39;s really somethign to be said for containers.</p>
+<p>Ok, where are we.</p>
+<p>Well, just now I copied and pasted <code>day-2</code> in the <code>ship-december</code> folder and then renamed <code>day-2 Copy</code> to <code>day-3</code>. I thought it could be neat if I could right click in my editor or run a command to do this in one step. Let&#39;s ask claude-code to to whip something up.</p>
+<blockquote>
+<p>🤖 can you make a folder in day-3 called &quot;vscode-extension&quot;. can you initialise a boiler-plate vscode extension in that folder. call the
+  extension ship-december. have it add a context menu command &quot;new day&quot; which duplicates the most recent folder in &quot;ship-december&quot; (say
+  &quot;day-2&quot; and makes it &quot;day-3&quot;).</p>
+</blockquote>
+<p>Yay!</p>
+<p><img src="image.png" alt="alt text"></p>
+<p>Ok, before then I was doodling in the kitchen with some tea about how I might relieve my shipping anxiety today as soon as possible.</p>
+<p><img src="image-1.png" alt="alt text"></p>
+<p>Here&#39;s the goal:</p>
+<ol>
+<li>Have a sidebar which can sit to the left of the posts</li>
+<li>The sidebar will display the different days of the research log</li>
+<li>The days can be unfolded to access research material we want to append to the day but not be in the main post (transcripts with various ai for instance)</li>
+</ol>
+<p>My current plan to achieve this is to use the git-tree api during our build step.</p>
+<p>Should I explain more about our nascent architecture and what&#39;s going on with our &quot;build step&quot;?</p>
+<p>It would be cool if the librarian (who has access to our code base) could be availed upon to explain to any curious reader.</p>
+<p>It would also be cool if we had some kind of comments system so readers could be like &quot;I&#39;m curious about this!&quot;</p>
+<p>I think for now I&#39;ll just so make it happen.</p>
+<p>Let&#39;s make a sidebar.</p>
+<blockquote>
+<p>🤖 in the build step (when build.js is run) I want to add a sidebar to the index.html</p>
+<p>the sidebar should be on the left, should look nice and minimalist, all black and white (or appropraite shades thereof)</p>
+<p>the sidebar should display the posts of the days of ship december &quot;day 1, day 2, etc&quot;.</p>
+<p>clicking an entry should go to it&#39;s url (i.e /ship-december/day-3)</p>
+<p>there should be a chevron dropdown to the right which is subtle demarkated.</p>
+<p>ok so i&#39;m thinking subtle greay lines to demarcate the days vertically and then also a line to seperate the chevron horizontally from the day title.</p>
+<p>clicking the chevron should expand the entry in the sidebar</p>
+<p>if there are appendices for that day, then they should appear in a tree when the item is expanded.</p>
+<p>days have appendices if there is an &quot;appendices&quot; folder in the day (i.e /ship-december/day-3/appendices). we can discover this just using the file system.</p>
+<p>when the appendix items are clicked they should be loaded in the main-content window where the post was.</p>
+<p>perhaps there should be an &quot;x&quot; in the upper right?</p>
+<p>maybe it should be a modal?</p>
+<p>let&#39;s make it a black text on white with a simple black border (maybe a subtle drop shadow) pop-up modal for now which will display the appendix item.</p>
+</blockquote>
 <hr>
-<p>[ Jarred 10am ]</p>
-<p>Ok!</p>
-<p>We have an AI librarian up and running at at <a href="https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log">/talk-to-the-log</a>.</p>
-<p>It lacks the polish to be useful just yet I think, but it does work.</p>
-<p>I wonder if I can embed it here...</p>
-<div id="embed-container">
-  <div id="iframe-view" style="display: none;">
-    <button onclick="showScreenshot()" style="margin-bottom: 10px; padding: 8px 16px; cursor: pointer; background: #666; color: white; border: none; border-radius: 4px;">← Back to screenshot</button>
-    <br>
-    <iframe id="live-embed" src="" width="100%" height="600" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
-    <br>
-   I can!
-  </div>
-
-  <div id="screenshot-view">
-    <button onclick="showEmbed()" style="margin-bottom: 10px; padding: 8px 16px; cursor: pointer; background: #4a9eff; color: white; border: none; border-radius: 4px;">Try it live ▶</button>
-    <br>
-    <img src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-2/image.png" alt="screenshot of talk-to-the-log" style="max-width: 100%; border: 1px solid #ccc; border-radius: 8px;">
-  </div>
-</div>
-
-<script>
-function showEmbed() {
-  document.getElementById('screenshot-view').style.display = 'none';
-  document.getElementById('iframe-view').style.display = 'block';
-  // Forward API key from parent URL to iframe
-  const params = new URLSearchParams(window.location.search);
-  const keyParam = params.get('k');
-  const iframeSrc = 'https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log' + (keyParam ? '?k=' + encodeURIComponent(keyParam) : '');
-  document.getElementById('live-embed').src = iframeSrc;
-}
-function showScreenshot() {
-  document.getElementById('iframe-view').style.display = 'none';
-  document.getElementById('screenshot-view').style.display = 'block';
-  document.getElementById('live-embed').src = '';
-}
-</script>
-
+<p><em>[ Jarred 9.30am ]</em></p>
+<p>yay!</p>
+<p><img src="image-2.png" alt="alt text"></p>
+<p>Where does that leave us?</p>
+<p>Going down a rabbit-hole trying to make the timestamps on my claude-code transcript accurately reflect the time apparently.</p>
 <hr>
-<p>Am I shipped for today? Am I done?</p>
-<p>I suppose I&#39;d just need to email this post to our audience.</p>
-<p>It feels a little cheap somehow... the thing that&#39;s been shipped isn&#39;t proper yet.</p>
-<p>And it&#39;s sort of worse that it &quot;looks like&quot; it&#39;s proper. Like a sales person who acts like they&#39;ve answered my question but they haven&#39;t.</p>
-<p>That reminds me, I need to extend this airbnb. Also it&#39;s lunch time and I&#39;m starving.</p>
-<p>okokokok, by the spirit of the rules I say we have shipped, and this afternoon we&#39;ll see about shipping something that actually feels satisfying.</p>
-<p>⏮️ <a href="https://sophie-jarred.researchlog.dev/ship-december/day-1">previous</a>&nbsp;&nbsp;&nbsp;🏡 <a href="https://sophie-jarred.researchlog.dev/">home</a>&nbsp;&nbsp;&nbsp;⏭️ <a href="https://sophie-jarred.researchlog.dev/ship-december/day-3">next</a></p>
+<p><em>Now</em> where does that leave us?</p>
+<p>I&#39;m meeting with Sophie in 3 hours. Do I have what I need to say we&#39;ve shipped?</p>
+<p>We have a sidebar now, and it displays whatever is in the <code>appendicies</code> folder in the repo.</p>
+<p>My spell-checker has just informed me that <code>appendicies</code> is spelt <code>appendices</code>. Hold on.</p>
+<p><img src="image-3.png" alt="alt text"></p>
+<hr>
+<p>We have a sidebar now, and it displays whatever is in the <code>appendices</code> folder in the repo.</p>
+<p>Can we call that done? Can we send it to all our friends and have it work on their phones?</p>
+<p>How does it look on mobile? Good question.</p>
+<p><img src="image-4.png" alt="alt text"></p>
+<p>😬 oh lord, not good at all. The sidebar is half the screen.</p>
+<blockquote>
+<p>🤖 if the screen is less than 800px wide can you bring the sidebar width to 125px and adjust the main content
+  and left margin appropraitely</p>
+</blockquote>
+<p>This is not an ideal level of detail and polish to be getting into when vibe-coding. 
+In my mind all this will have to be re-done anyway... or rather maybe better to say:</p>
+<ol>
+<li>if we&#39;re not going to throw this code away then</li>
+<li>it will have to be totally re-done with a human properly in the loop</li>
+</ol>
+<blockquote>
+<p>🤖 can you add this feature to day-3 index.html &quot;you can swipe right anywhere on the sidebar to have it take up
+  the majority of the screen, when tapping the main content it returns to normal&quot;</p>
+</blockquote>
+<p>Many have noticed at this point that vibe-coding can be quite addictive. There&#39;s always little adjustments that can be made which pop to mind, and the friction to acting it has become quite minimal.</p>
+<blockquote>
+<p>🤖 swiping left on the sidebar should also revert it to the original width</p>
+</blockquote>
+<p>Ok</p>
+<blockquote>
+<p>🤖 please make the page not horizontally scrollable</p>
+</blockquote>
+<p>Okokok. </p>
+<p>⏭️ <a href="/ship-december/day-4">next</a></p>
 
+   </main>
+   
+   <div id="appendix-modal" class="modal">
+      <div class="modal-content">
+         <button class="modal-close">&times;</button>
+         <div class="modal-body"></div>
+      </div>
+   </div>
+   
+   <script>
+      // Chevron toggle for appendices
+      document.querySelectorAll('.chevron-container').forEach(chevron => {
+         chevron.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const item = chevron.closest('.sidebar-item');
+            item.classList.toggle('expanded');
+         });
+      });
+
+      // Modal handling
+      const modal = document.getElementById('appendix-modal');
+      const modalBody = modal.querySelector('.modal-body');
+      const modalClose = modal.querySelector('.modal-close');
+
+      document.querySelectorAll('.appendix-item').forEach(item => {
+         item.addEventListener('click', async () => {
+            const path = item.dataset.path;
+            const name = item.dataset.name;
+
+            try {
+               const response = await fetch(path);
+               let content = await response.text();
+
+               // If markdown, render it
+               if (name.endsWith('.md')) {
+                  // Basic markdown rendering (or use marked if available)
+                  content = content
+                     .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                     .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                     .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                     .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+                     .replace(/\*(.*)\*/gim, '<em>$1</em>')
+                     .replace(/```([\s\S]*?)```/gim, '<pre><code>$1</code></pre>')
+                     .replace(/`([^`]+)`/gim, '<code>$1</code>')
+                     .replace(/\n/gim, '<br>');
+               } else {
+                  content = '<pre>' + content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+               }
+
+               modalBody.innerHTML = '<h2>' + name + '</h2>' + content;
+               modal.classList.add('open');
+            } catch (err) {
+               modalBody.innerHTML = '<p>Error loading file: ' + err.message + '</p>';
+               modal.classList.add('open');
+            }
+         });
+      });
+
+      modalClose.addEventListener('click', () => {
+         modal.classList.remove('open');
+      });
+
+      modal.addEventListener('click', (e) => {
+         if (e.target === modal) {
+            modal.classList.remove('open');
+         }
+      });
+
+      document.addEventListener('keydown', (e) => {
+         if (e.key === 'Escape') {
+            modal.classList.remove('open');
+         }
+      });
+
+      // Swipe to expand sidebar
+      const sidebar = document.querySelector('.sidebar');
+      const mainContent = document.querySelector('.main-content');
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      sidebar.addEventListener('touchstart', (e) => {
+         touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      sidebar.addEventListener('touchend', (e) => {
+         touchEndX = e.changedTouches[0].screenX;
+         if (touchEndX - touchStartX > 50) {
+            document.body.classList.add('sidebar-expanded');
+         } else if (touchStartX - touchEndX > 50) {
+            document.body.classList.remove('sidebar-expanded');
+         }
+      }, { passive: true });
+
+      mainContent.addEventListener('click', () => {
+         if (document.body.classList.contains('sidebar-expanded')) {
+            document.body.classList.remove('sidebar-expanded');
+         }
+      });
+   </script>
 </body>
 </html>

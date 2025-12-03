@@ -32,11 +32,11 @@
 <p>It&#39;s Day 2 of Ship December.</p>
 <p>I was eating breakfast just now and wondering to myself the obvious question.</p>
 <p>&quot;What to ship today?&quot;</p>
-<p>It&#39;s a great relief to have this question find me without any effort on my behalf, rather than my having to go hunting for a sense of urgency about the say. On the downside I did wake up for an hour or so at 2am last night stressed about what we might ship today. Anyway.</p>
+<p>It&#39;s a great relief to have this question find me without any effort on my behalf, rather than my having to go hunting for a sense of urgency about the day. On the downside I did wake up for an hour or so at 2am last night stressed about what we might ship today. Anyway.</p>
 <p>&quot;What to ship today?&quot;</p>
 <p>I pondered this for a bit.</p>
 <p>&quot;I could add a side-bar with the different days to the research log?&quot;</p>
-<p>&quot;I could do some fanaling such that there&#39;s a margin with all our scratch notes beside the log? And you could text a telegram channel to add to it.&quot;</p>
+<p>&quot;I could do some finagling such that there&#39;s a margin with all our scratch notes beside the log? And you could text a telegram channel to add to it.&quot;</p>
 <p>None of it felt quite right, so I asked &quot;what was that bone I wanted to gnaw this month?&quot;</p>
 <p>The thought then occurred to me, <em>it would be cool if I could say &quot;please read aloud the segment from yesterday&#39;s research log about gnawing bones&quot;</em> and an AI would repeat it to me. So we&#39;re going to do that!</p>
 <p>If there&#39;s time I might riff a little more on why this feels relevant, but my prudence is suggesting I get shipping out of the way first, as if we fail to ship today the project is sunk and that would be very sad.</p>
@@ -47,14 +47,13 @@
 <p>Ok!</p>
 <p>We have an AI librarian up and running at at <a href="https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log">/talk-to-the-log</a>.</p>
 <p>It lacks the polish to be useful just yet I think, but it does work.</p>
-<p>I wonder if I can embed it here...</p>
+<p>I wonder if I can embed it here live... I&#39;ll add a screenshot and a button which should load the demo up.</p>
 <div id="embed-container">
   <div id="iframe-view" style="display: none;">
     <button onclick="showScreenshot()" style="margin-bottom: 10px; padding: 8px 16px; cursor: pointer; background: #666; color: white; border: none; border-radius: 4px;">← Back to screenshot</button>
     <br>
     <iframe id="live-embed" src="" width="100%" height="600" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
     <br>
-   I can!
   </div>
 
   <div id="screenshot-view">
@@ -85,9 +84,28 @@ function showScreenshot() {
 <p>Am I shipped for today? Am I done?</p>
 <p>I suppose I&#39;d just need to email this post to our audience.</p>
 <p>It feels a little cheap somehow... the thing that&#39;s been shipped isn&#39;t proper yet.</p>
-<p>And it&#39;s sort of worse that it &quot;looks like&quot; it&#39;s proper. Like a sales person who acts like they&#39;ve answered my question but they haven&#39;t.</p>
-<p>That reminds me, I need to extend this airbnb. Also it&#39;s lunch time and I&#39;m starving.</p>
+<p>And it&#39;s sort of worse that it &quot;looks like&quot; it could be useful I think.</p>
+<p>That&#39;s a very pernicious feeling when I&#39;m interacting with a product that looks like it should work / should be useful but there are dumb things obviously wrong with it</p>
+<p>It is however lunch time, and I&#39;m starving.</p>
 <p>okokokok, by the spirit of the rules I say we have shipped, and this afternoon we&#39;ll see about shipping something that actually feels satisfying.</p>
+<hr>
+<p>[ Jarred 3pm ]</p>
+<p>Right, we&#39;re back.</p>
+<p>There was an issue with the voice cutting in and out and cracking. That&#39;s fixed in <a href="https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log-2">/talk-to-the-log-2</a>.</p>
+<hr>
+<p>[ Jarred 4pm]</p>
+<p>I might try to give it something so that I can save notes to self, and then see what it&#39;s like to chat with it while I make dinner... oh! And maybe also a tool to put words up on the screen?</p>
+<blockquote>
+<p>please copy talk-to-the-log-2 to talk-to-the-log-3. also i just made a file firebase.js and dumped a
+firestore api key in there, can you flesh that out to make a simple &quot;save and retrieve note&quot; function (just saves a text note to the firestore collection). the database permissions are open for testing don&#39;t worry about auth for now that api key should work.</p>
+</blockquote>
+<blockquote>
+<p>ok now let&#39;s add two tools to the realtime voice agent in talk-to-the-log-3. one tool to save a note as dictated by the user to the firebase. and another tool which will display some text (usually parts of the research log) on the screen in a relatively fullscreen modal using cardo font.</p>
+</blockquote>
+<hr>
+<p>[ Jarred 5pm ]</p>
+<p>It works! <a href="https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log-3">/talk-to-the-log-3</a>.</p>
+<p>I used it while cooking dinner to pull up relevant sections of yesterday&#39;s log and makes notes. Took a bit to get into and it can be jank, but it was fun.</p>
 <p>⏮️ <a href="https://sophie-jarred.researchlog.dev/ship-december/day-1">previous</a>&nbsp;&nbsp;&nbsp;🏡 <a href="https://sophie-jarred.researchlog.dev/">home</a>&nbsp;&nbsp;&nbsp;⏭️ <a href="https://sophie-jarred.researchlog.dev/ship-december/day-3">next</a></p>
 
 </body>

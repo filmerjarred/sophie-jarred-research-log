@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Talk to the Log</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -168,6 +171,51 @@
             text-align: center;
             padding: 2rem;
         }
+        /* Display modal styles */
+        .display-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .display-modal.visible {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .display-modal-content {
+            font-family: 'Cardo', serif;
+            font-size: 1.4rem;
+            line-height: 1.8;
+            color: #e8e4dc;
+            max-width: 800px;
+            padding: 4rem 3rem;
+            margin: 2rem;
+            white-space: pre-wrap;
+        }
+        .display-modal-close {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #888;
+            font-size: 1.5rem;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .display-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -211,6 +259,19 @@
         </div>
     </div>
 
+    <!-- Display Modal -->
+    <div class="display-modal" id="displayModal">
+        <button class="display-modal-close" id="closeModal">&times;</button>
+        <div class="display-modal-content" id="displayContent"></div>
+    </div>
+
+    <script type="module">
+        // Firebase imports
+        import { saveNote, getNotes } from './firebase.js';
+
+        // Make saveNote available globally for tool calls
+        window.saveNoteToFirebase = saveNote;
+    </script>
     <script>
         const REALTIME_API_URL = 'wss://api.openai.com/v1/realtime?model=gpt-realtime';
         const STORAGE_KEY = 'openai_api_key';
@@ -354,7 +415,8 @@
 
                 ws = new WebSocket(REALTIME_API_URL, [
                     'realtime',
-                    `openai-insecure-api-key.${OPENAI_API_KEY}`
+                    `openai-insecure-api-key.${OPENAI_API_KEY}`,
+                  //   'openai-beta.realtime-v1'
                 ]);
 
                 ws.onopen = () => {
@@ -366,29 +428,17 @@
                            type: "realtime",
                            output_modalities: ["audio"],
                            audio: {
-                              input: {
-                                 format: {
-                                    type: "audio/pcm",
-                                    rate: 24000,
-                                 },
-                                 transcription: {
-                                    model: "gpt-4o-transcribe"
-                                 },
-                                 turn_detection: {
-                                    type: "semantic_vad"
-                                 }
-                              },
+                              // input: {
                               output: {
-                                 format: {
-                                    type: "audio/pcm",
-                                    rate: 24000,
-                                 },
                                  voice: "marin",
                               },
+                           // },
                            },
                                                    
-                            instructions: `Please always use English.
-You are embeded within a research log
+                            instructions: `You are a realtime voice AI.
+Personality: warm, helpful. Please keep your tone and relatively consistient, don't vary it when reading aloud from sources.
+Language: mirror user; default English (US).
+You are embeded within a research log.
 Your task is to act as the helpful librarian of this research log
 The main content of the research log is stored in "daily posts" and you can access these posts via provided mcp tools in order to answer the user's questions. 
 The first post was on "Monday December 1st 2025". If the user wants "yesterday's post" then you will need to figure out what today is and then count backwards to the right day number. The posts are generally broken up into sections by linebreaks and bolded titles.`,
@@ -407,6 +457,36 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
                                         },
                                         required: ['day_number']
                                     }
+                                },
+                                {
+                                    type: 'function',
+                                    name: 'save_note',
+                                    description: 'Saves a note dictated by the user to the database. Use this when the user wants to save or record a note, thought, or memo.',
+                                    parameters: {
+                                        type: 'object',
+                                        properties: {
+                                            text: {
+                                                type: 'string',
+                                                description: 'The text content of the note to save'
+                                            }
+                                        },
+                                        required: ['text']
+                                    }
+                                },
+                                {
+                                    type: 'function',
+                                    name: 'display_text',
+                                    description: 'Displays text on the screen in a fullscreen modal with elegant typography. Use this to show the user excerpts from the research log or other important text that they want to read.',
+                                    parameters: {
+                                        type: 'object',
+                                        properties: {
+                                            text: {
+                                                type: 'string',
+                                                description: 'The text to display on screen'
+                                            }
+                                        },
+                                        required: ['text']
+                                    }
                                 }
                             ]
                         }
@@ -420,12 +500,14 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
 
                 ws.onmessage = async (event) => {
                     const data = JSON.parse(event.data);
-                  //   console.log(data)
+                    console.log(data)
 
                     // Updated event names per latest API docs (2025)
                     if (data.type === 'response.output_audio.delta') {
                         playAudioDelta(data.delta);
-                    } else if (data.type === 'error') {
+                    } if (data.type === 'response.audio.delta') {
+                        playAudioDelta(data.delta);
+                    }  else if (data.type === 'error') {
                         setStatus('Error: ' + data.error.message, 'error');
                     } else if (data.type === 'input_audio_buffer.speech_started') {
                         setStatus('Listening...', 'connected');
@@ -493,7 +575,7 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
                     }
                 });
 
-                startAudioCapture();
+                await startAudioCapture();
                 isVoiceActive = true;
                 talkBtn.textContent = '⏹ Stop Voice';
                 talkBtn.classList.add('active');
@@ -511,6 +593,11 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
             if (mediaStream) {
                 mediaStream.getTracks().forEach(track => track.stop());
                 mediaStream = null;
+            }
+
+            if (captureWorkletNode) {
+                captureWorkletNode.disconnect();
+                captureWorkletNode = null;
             }
 
             if (captureContext) {
@@ -535,14 +622,16 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
                 ws = null;
             }
 
+            if (audioWorkletNode) {
+                audioWorkletNode.port.postMessage({ clear: true });
+                audioWorkletNode.disconnect();
+                audioWorkletNode = null;
+            }
+
             if (audioContext) {
                 audioContext.close();
                 audioContext = null;
             }
-
-            audioQueue = [];
-            isPlaying = false;
-            nextPlayTime = 0;
 
             textInput.disabled = true;
             sendBtn.disabled = true;
@@ -588,21 +677,157 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
             }
         }
 
-        let audioQueue = [];
-        let isPlaying = false;
+        // AudioWorklet-based playback - exact copy of OpenAI's approach
+        let audioWorkletNode = null;
 
-        async function playAudioDelta(base64Audio) {
-            if (!audioContext) {
-                audioContext = new AudioContext({ sampleRate: 24000 });
+        // OpenAI's exact worklet code (de-minified)
+        const workletCode = `
+class ChunkQueue {
+    constructor(TypedArrayConstructor) {
+        this.chunks = [];
+        this.readIndex = 0;
+        this.readOffset = 0;
+        this.totalLength = 0;
+        this.TypedArrayConstructor = TypedArrayConstructor;
+    }
 
-                if (audioContext.setSinkId && speakerSelect.value) {
-                    try {
-                        await audioContext.setSinkId(speakerSelect.value);
-                    } catch (e) {
-                        console.warn('Could not set audio output device:', e);
-                    }
+    clear() {
+        this.chunks = [];
+        this.totalLength = 0;
+        this.readIndex = 0;
+        this.readOffset = 0;
+    }
+
+    enqueue(chunk) {
+        if (chunk.length !== 0) {
+            this.chunks.push(chunk);
+            this.totalLength += chunk.length;
+        }
+    }
+
+    dequeue(count) {
+        if (count <= 0) throw new Error("Invalid argument: 'count' must be a positive integer");
+        const result = new this.TypedArrayConstructor(count);
+        let written = 0;
+        while (written < count && !(this.readIndex >= this.chunks.length)) {
+            const chunk = this.chunks[this.readIndex];
+            const remaining = chunk.length - this.readOffset;
+            const toCopy = Math.min(remaining, count - written);
+            result.set(chunk.subarray(this.readOffset, this.readOffset + toCopy), written);
+            this.readOffset += toCopy;
+            written += toCopy;
+            if (this.readOffset >= chunk.length) {
+                this.readIndex += 1;
+                this.readOffset = 0;
+            }
+        }
+        this.totalLength -= written;
+        if (this.readIndex > 0) {
+            this.chunks.splice(0, this.readIndex);
+            this.readIndex = 0;
+        }
+        return result;
+    }
+
+    get length() {
+        return this.totalLength;
+    }
+}
+
+class AudioPlayerProcessor extends AudioWorkletProcessor {
+    constructor() {
+        super();
+        this.queue = new ChunkQueue(Float32Array);
+        this.state = "idle";
+        this.lastEmittedTime = 0;
+        this.currentTime = 0;
+
+        this.port.onmessage = (e) => {
+            if (e.data.audioData) {
+                if (this.queue.length === 0) {
+                    this.port.postMessage({ state: "playing" });
+                }
+                this.queue.enqueue(e.data.audioData);
+            }
+            if (e.data.play && this.state === "paused") {
+                if (this.queue.length === 0) {
+                    this.state = "idle";
+                    this.port.postMessage({ state: "idle" });
+                } else {
+                    this.state = "playing";
+                    this.port.postMessage({ state: "playing" });
                 }
             }
+            if (e.data.pause && this.state !== "paused") {
+                this.state = "paused";
+                this.port.postMessage({ state: "paused" });
+            }
+            if (e.data.clear && this.queue.length > 0) {
+                this.queue.clear();
+                this.currentTime = 0;
+                this.state = "idle";
+                this.port.postMessage({ state: "idle", currentTime: 0 });
+            }
+        };
+    }
+
+    process(inputs, outputs) {
+        const output = outputs[0][0];
+        if (this.state === "paused") return true;
+
+        if (this.queue.length > 0) {
+            const samples = this.queue.dequeue(output.length);
+            output.set(samples);
+            this.currentTime += samples.length / 24000;
+
+            if (this.state === "idle") {
+                this.state = "playing";
+                this.port.postMessage({ state: "playing", currentTime: this.currentTime });
+            } else if (this.queue.length === 0) {
+                this.state = "idle";
+                this.port.postMessage({ state: "idle", currentTime: 0 });
+                this.currentTime = 0;
+            } else if (this.currentTime - this.lastEmittedTime > 0.5) {
+                this.lastEmittedTime = this.currentTime;
+                this.port.postMessage({ currentTime: this.currentTime });
+            }
+        }
+        return true;
+    }
+}
+
+registerProcessor("audio-player", AudioPlayerProcessor);
+        `;
+
+        async function initAudioWorklet() {
+            if (audioWorkletNode) return;
+
+            audioContext = new AudioContext({ sampleRate: 24000 });
+            console.log('AudioContext actual sample rate:', audioContext.sampleRate);
+
+            if (audioContext.setSinkId && speakerSelect.value) {
+                try {
+                    await audioContext.setSinkId(speakerSelect.value);
+                } catch (e) {
+                    console.warn('Could not set audio output device:', e);
+                }
+            }
+
+            const blob = new Blob([workletCode], { type: 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            await audioContext.audioWorklet.addModule(url);
+            URL.revokeObjectURL(url);
+
+            audioWorkletNode = new AudioWorkletNode(audioContext, 'audio-player');
+            audioWorkletNode.connect(audioContext.destination);
+
+            audioWorkletNode.port.onmessage = (e) => {
+                console.log('Worklet state:', e.data);
+            };
+        }
+
+        async function playAudioDelta(base64Audio) {
+            await initAudioWorklet();
 
             const binaryString = atob(base64Audio);
             const bytes = new Uint8Array(binaryString.length);
@@ -616,61 +841,66 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
                 float32[i] = pcm16[i] / 32768;
             }
 
-            const audioBuffer = audioContext.createBuffer(1, float32.length, 24000);
-            audioBuffer.getChannelData(0).set(float32);
+            // Use 'audioData' key like OpenAI does
+            audioWorkletNode.port.postMessage({ audioData: float32 });
+        }
 
-            audioQueue.push(audioBuffer);
-
-            if (!isPlaying) {
-                playNextInQueue();
+        function clearAudioBuffer() {
+            if (audioWorkletNode) {
+                audioWorkletNode.port.postMessage({ clear: true });
             }
         }
 
-        let nextPlayTime = 0;
-
-        function playNextInQueue() {
-            if (audioQueue.length === 0) {
-                isPlaying = false;
-                return;
-            }
-
-            isPlaying = true;
-            const buffer = audioQueue.shift();
-            const source = audioContext.createBufferSource();
-            source.buffer = buffer;
-            source.connect(audioContext.destination);
-
-            const now = audioContext.currentTime;
-            if (nextPlayTime < now) {
-                nextPlayTime = now;
-            }
-
-            source.start(nextPlayTime);
-            nextPlayTime += buffer.duration;
-
-            source.onended = () => {
-                playNextInQueue();
-            };
-        }
-
-        function startAudioCapture() {
-            captureContext = new AudioContext({ sampleRate: 24000 });
-            const source = captureContext.createMediaStreamSource(mediaStream);
-            const processor = captureContext.createScriptProcessor(4096, 1, 1);
-
-            source.connect(processor);
-            processor.connect(captureContext.destination);
-
-            processor.onaudioprocess = (e) => {
-                if (!ws || ws.readyState !== WebSocket.OPEN || !isVoiceActive) return;
-
-                const inputData = e.inputBuffer.getChannelData(0);
-                const pcm16 = new Int16Array(inputData.length);
-
-                for (let i = 0; i < inputData.length; i++) {
-                    pcm16[i] = Math.max(-32768, Math.min(32767, inputData[i] * 32768));
+        // AudioWorklet for capture
+        const captureWorkletCode = `
+            class AudioCaptureProcessor extends AudioWorkletProcessor {
+                constructor() {
+                    super();
+                    this.bufferSize = 4096;
+                    this.buffer = new Float32Array(this.bufferSize);
+                    this.bufferIndex = 0;
                 }
 
+                process(inputs) {
+                    const input = inputs[0][0];
+                    if (!input) return true;
+
+                    for (let i = 0; i < input.length; i++) {
+                        this.buffer[this.bufferIndex++] = input[i];
+                        if (this.bufferIndex >= this.bufferSize) {
+                            // Convert to PCM16
+                            const pcm16 = new Int16Array(this.bufferSize);
+                            for (let j = 0; j < this.bufferSize; j++) {
+                                pcm16[j] = Math.max(-32768, Math.min(32767, this.buffer[j] * 32768));
+                            }
+                            this.port.postMessage({ audio: pcm16 }, [pcm16.buffer]);
+                            this.bufferIndex = 0;
+                        }
+                    }
+                    return true;
+                }
+            }
+            registerProcessor('audio-capture', AudioCaptureProcessor);
+        `;
+
+        let captureWorkletNode = null;
+
+        async function startAudioCapture() {
+            captureContext = new AudioContext({ sampleRate: 24000 });
+            console.log('Capture AudioContext actual sample rate:', captureContext.sampleRate);
+
+            const blob = new Blob([captureWorkletCode], { type: 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            await captureContext.audioWorklet.addModule(url);
+            URL.revokeObjectURL(url);
+
+            const source = captureContext.createMediaStreamSource(mediaStream);
+            captureWorkletNode = new AudioWorkletNode(captureContext, 'audio-capture');
+
+            captureWorkletNode.port.onmessage = (e) => {
+                if (!ws || ws.readyState !== WebSocket.OPEN || !isVoiceActive) return;
+
+                const pcm16 = e.data.audio;
                 const base64 = btoa(String.fromCharCode(...new Uint8Array(pcm16.buffer)));
 
                 ws.send(JSON.stringify({
@@ -678,6 +908,9 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
                     audio: base64
                 }));
             };
+
+            source.connect(captureWorkletNode);
+            captureWorkletNode.connect(captureContext.destination);
         }
 
         talkBtn.addEventListener('click', () => {
@@ -725,6 +958,28 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
             }
         });
 
+        // Display modal functions
+        const displayModal = document.getElementById('displayModal');
+        const displayContent = document.getElementById('displayContent');
+        const closeModalBtn = document.getElementById('closeModal');
+
+        function showDisplayModal(text) {
+            displayContent.textContent = text;
+            displayModal.classList.add('visible');
+        }
+
+        function hideDisplayModal() {
+            displayModal.classList.remove('visible');
+        }
+
+        closeModalBtn.addEventListener('click', hideDisplayModal);
+        displayModal.addEventListener('click', (e) => {
+            if (e.target === displayModal) hideDisplayModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') hideDisplayModal();
+        });
+
         // Tool implementation: fetch_day
         async function fetchDay(dayNumber) {
             const url = `https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-${dayNumber}/post.md`;
@@ -740,12 +995,33 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
             }
         }
 
+        // Tool implementation: save_note
+        async function saveNoteImpl(text) {
+            try {
+                // Use the globally exposed function from the module script
+                if (window.saveNoteToFirebase) {
+                    const noteId = await window.saveNoteToFirebase(text);
+                    return { success: true, noteId, message: `Note saved successfully` };
+                } else {
+                    return { error: 'Firebase not initialized' };
+                }
+            } catch (err) {
+                return { error: `Failed to save note: ${err.message}` };
+            }
+        }
+
+        // Tool implementation: display_text
+        function displayTextImpl(text) {
+            showDisplayModal(text);
+            return { success: true, message: 'Text is now displayed on screen' };
+        }
+
         // Handle tool calls from the assistant
         async function handleToolCall(data) {
             const { name, arguments: argsString, call_id } = data;
 
             console.log('Tool call received:', name, argsString, call_id);
-            setStatus(`Fetching data...`, 'connected');
+            setStatus(`Running tool: ${name}...`, 'connected');
 
             let result;
             try {
@@ -753,6 +1029,10 @@ The first post was on "Monday December 1st 2025". If the user wants "yesterday's
 
                 if (name === 'fetch_day') {
                     result = await fetchDay(args.day_number);
+                } else if (name === 'save_note') {
+                    result = await saveNoteImpl(args.text);
+                } else if (name === 'display_text') {
+                    result = displayTextImpl(args.text);
                 } else {
                     result = { error: `Unknown tool: ${name}` };
                 }

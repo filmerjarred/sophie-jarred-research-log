@@ -1,120 +1,131 @@
-⏮️ [previous](https://sophie-jarred.researchlog.dev/ship-december/day-1)&nbsp;&nbsp;&nbsp;🏡 [home](https://sophie-jarred.researchlog.dev/)&nbsp;&nbsp;&nbsp;⏭️ [next](https://sophie-jarred.researchlog.dev/ship-december/day-3)
+*[Jarred 8am]*
 
-[Jarred 9am]
+Good morning once again!
 
-Good morning!
+It's Day 3 of Ship December.
 
-It's Day 2 of Ship December.
+I forgot to make the time stamps on yesterdays posts italisised. This has injured me and also it's a comfort to know I can't change it.
 
-I was eating breakfast just now and wondering to myself the obvious question.
+There's really somethign to be said for containers.
 
-"What to ship today?"
+Ok, where are we.
 
-It's a great relief to have this question find me without any effort on my behalf, rather than my having to go hunting for a sense of urgency about the day. On the downside I did wake up for an hour or so at 2am last night stressed about what we might ship today. Anyway.
+Well, just now I copied and pasted `day-2` in the `ship-december` folder and then renamed `day-2 Copy` to `day-3`. I thought it could be neat if I could right click in my editor or run a command to do this in one step. Let's ask claude-code to to whip something up.
 
-"What to ship today?"
+> 🤖 can you make a folder in day-3 called "vscode-extension". can you initialise a boiler-plate vscode extension in that folder. call the
+  extension ship-december. have it add a context menu command "new day" which duplicates the most recent folder in "ship-december" (say
+  "day-2" and makes it "day-3").
 
-I pondered this for a bit.
+Yay!
 
-"I could add a side-bar with the different days to the research log?"
+![alt text](image.png)
 
-"I could do some finagling such that there's a margin with all our scratch notes beside the log? And you could text a telegram channel to add to it."
+Ok, before then I was doodling in the kitchen with some tea about how I might relieve my shipping anxiety today as soon as possible.
 
-None of it felt quite right, so I asked "what was that bone I wanted to gnaw this month?"
+![alt text](image-1.png)
 
-The thought then occurred to me, *it would be cool if I could say "please read aloud the segment from yesterday's research log about gnawing bones"* and an AI would repeat it to me. So we're going to do that!
+Here's the goal:
+   1. Have a sidebar which can sit to the left of the posts
+   2. The sidebar will display the different days of the research log
+   3. The days can be unfolded to access research material we want to append to the day but not be in the main post (transcripts with various ai for instance)
 
-If there's time I might riff a little more on why this feels relevant, but my prudence is suggesting I get shipping out of the way first, as if we fail to ship today the project is sunk and that would be very sad.
+My current plan to achieve this is to use the git-tree api during our build step.
 
-I need a song to play this section out.
+Should I explain more about our nascent architecture and what's going on with our "build step"?
 
-🎶 Looking for Knives, DYAN 🎶
+It would be cool if the librarian (who has access to our code base) could be availed upon to explain to any curious reader.
 
-- - -
+It would also be cool if we had some kind of comments system so readers could be like "I'm curious about this!"
 
-[ Jarred 10am ]
+I think for now I'll just so make it happen.
 
-Ok!
+Let's make a sidebar.
 
-We have an AI librarian up and running at at [/talk-to-the-log](https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log).
-
-It lacks the polish to be useful just yet I think, but it does work.
-
-I wonder if I can embed it here live... I'll add a screenshot and a button which should load the demo up.
-
-<div id="embed-container">
-  <div id="iframe-view" style="display: none;">
-    <button onclick="showScreenshot()" style="margin-bottom: 10px; padding: 8px 16px; cursor: pointer; background: #666; color: white; border: none; border-radius: 4px;">← Back to screenshot</button>
-    <br>
-    <iframe id="live-embed" src="" width="100%" height="600" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
-    <br>
-  </div>
-
-  <div id="screenshot-view">
-    <button onclick="showEmbed()" style="margin-bottom: 10px; padding: 8px 16px; cursor: pointer; background: #4a9eff; color: white; border: none; border-radius: 4px;">Try it live ▶</button>
-    <br>
-    <img src="https://raw.githubusercontent.com/filmerjarred/sophie-jarred-research-log/main/ship-december/day-2/image.png" alt="screenshot of talk-to-the-log" style="max-width: 100%; border: 1px solid #ccc; border-radius: 8px;">
-  </div>
-</div>
-
-<script>
-function showEmbed() {
-  document.getElementById('screenshot-view').style.display = 'none';
-  document.getElementById('iframe-view').style.display = 'block';
-  // Forward API key from parent URL to iframe
-  const params = new URLSearchParams(window.location.search);
-  const keyParam = params.get('k');
-  const iframeSrc = 'https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log' + (keyParam ? '?k=' + encodeURIComponent(keyParam) : '');
-  document.getElementById('live-embed').src = iframeSrc;
-}
-function showScreenshot() {
-  document.getElementById('iframe-view').style.display = 'none';
-  document.getElementById('screenshot-view').style.display = 'block';
-  document.getElementById('live-embed').src = '';
-}
-</script>
+> 🤖 in the build step (when build.js is run) I want to add a sidebar to the index.html
+>
+> the sidebar should be on the left, should look nice and minimalist, all black and white (or appropraite shades thereof)
+>
+> the sidebar should display the posts of the days of ship december "day 1, day 2, etc".
+>
+> clicking an entry should go to it's url (i.e /ship-december/day-3)
+>
+> there should be a chevron dropdown to the right which is subtle demarkated.
+>
+> ok so i'm thinking subtle greay lines to demarcate the days vertically and then also a line to seperate the chevron horizontally from the day title.
+>
+> clicking the chevron should expand the entry in the sidebar
+>
+> if there are appendices for that day, then they should appear in a tree when the item is expanded.
+>
+> days have appendices if there is an "appendices" folder in the day (i.e /ship-december/day-3/appendices). we can discover this just using the file system.
+>
+> when the appendix items are clicked they should be loaded in the main-content window where the post was.
+>
+> perhaps there should be an "x" in the upper right?
+>
+> maybe it should be a modal?
+>
+> let's make it a black text on white with a simple black border (maybe a subtle drop shadow) pop-up modal for now which will display the appendix item.
 
 - - -
 
-Am I shipped for today? Am I done?
+*[ Jarred 9.30am ]*
 
-I suppose I'd just need to email this post to our audience.
+yay!
 
-It feels a little cheap somehow... the thing that's been shipped isn't proper yet.
+![alt text](image-2.png)
 
-And it's sort of worse that it "looks like" it could be useful I think.
+Where does that leave us?
 
-That's a very pernicious feeling when I'm interacting with a product that looks like it should work / should be useful but there are dumb things obviously wrong with it
-
-It is however lunch time, and I'm starving.
-
-okokokok, by the spirit of the rules I say we have shipped, and this afternoon we'll see about shipping something that actually feels satisfying.
+Going down a rabbit-hole trying to make the timestamps on my claude-code transcript accurately reflect the time apparently.
 
 - - -
 
-[ Jarred 3pm ]
+*Now* where does that leave us?
 
-Right, we're back.
+I'm meeting with Sophie in 3 hours. Do I have what I need to say we've shipped?
 
-There was an issue with the voice cutting in and out and cracking. That's fixed in [/talk-to-the-log-2](https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log-2).
+We have a sidebar now, and it displays whatever is in the `appendicies` folder in the repo.
 
----
+My spell-checker has just informed me that `appendicies` is spelt `appendices`. Hold on.
 
-[ Jarred 4pm]
+![alt text](image-3.png)
 
-I might try to give it something so that I can save notes to self, and then see what it's like to chat with it while I make dinner... oh! And maybe also a tool to put words up on the screen?
+- - -
 
-> please copy talk-to-the-log-2 to talk-to-the-log-3. also i just made a file firebase.js and dumped a
-firestore api key in there, can you flesh that out to make a simple "save and retrieve note" function (just saves a text note to the firestore collection). the database permissions are open for testing don't worry about auth for now that api key should work.
 
-> ok now let's add two tools to the realtime voice agent in talk-to-the-log-3. one tool to save a note as dictated by the user to the firebase. and another tool which will display some text (usually parts of the research log) on the screen in a relatively fullscreen modal using cardo font.
+We have a sidebar now, and it displays whatever is in the `appendices` folder in the repo.
 
----
+Can we call that done? Can we send it to all our friends and have it work on their phones?
 
-[ Jarred 5pm ]
+How does it look on mobile? Good question.
 
-It works! [/talk-to-the-log-3](https://sophie-jarred.researchlog.dev/ship-december/day-2/talk-to-the-log-3).
+![alt text](image-4.png)
 
-I used it while cooking dinner to pull up relevant sections of yesterday's log and makes notes. Took a bit to get into and it can be jank, but it was fun.
+😬 oh lord, not good at all. The sidebar is half the screen.
 
-⏮️ [previous](https://sophie-jarred.researchlog.dev/ship-december/day-1)&nbsp;&nbsp;&nbsp;🏡 [home](https://sophie-jarred.researchlog.dev/)&nbsp;&nbsp;&nbsp;⏭️ [next](https://sophie-jarred.researchlog.dev/ship-december/day-3)
+> 🤖 if the screen is less than 800px wide can you bring the sidebar width to 125px and adjust the main content
+  and left margin appropraitely
+
+This is not an ideal level of detail and polish to be getting into when vibe-coding. 
+In my mind all this will have to be re-done anyway... or rather maybe better to say:
+
+1. if we're not going to throw this code away then
+2. it will have to be totally re-done with a human properly in the loop
+
+> 🤖 can you add this feature to day-3 index.html "you can swipe right anywhere on the sidebar to have it take up
+  the majority of the screen, when tapping the main content it returns to normal"
+
+Many have noticed at this point that vibe-coding can be quite addictive. There's always little adjustments that can be made which pop to mind, and the friction to acting it has become quite minimal.
+
+> 🤖 swiping left on the sidebar should also revert it to the original width
+
+Ok
+
+> 🤖 please make the page not horizontally scrollable
+
+Okokok. 
+
+
+
+⏭️ [next](/ship-december/day-4)

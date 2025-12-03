@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Ship December Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}/ship-december/day-3/vscode-extension"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/ship-december/day-3/vscode-extension/out/**/*.js"
+      ],
+      "preLaunchTask": "npm: watch - ship-december/day-3/vscode-extension"
+    }
+  ]
+}
