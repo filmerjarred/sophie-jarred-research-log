@@ -9,8 +9,27 @@ hook_input=$(cat)
 # Extract the prompt (current message) directly from hook input
 prompt=$(echo "$hook_input" | jq -r '.prompt')
 
+# Base directory
+REPO_DIR="/home/claude/repos/sophie-jarred-research-log"
+SHIP_DIR="$REPO_DIR/ship-december"
+
+# Find the latest day folder
+LATEST_DAY=$(ls -1d "$SHIP_DIR"/day-* 2>/dev/null | sort -V | tail -1)
+if [ -z "$LATEST_DAY" ]; then
+    exit 0
+fi
+
+# Load user from .env file, default to "user"
+USER_NAME="user"
+if [ -f "$REPO_DIR/.env" ]; then
+    ENV_USER=$(grep -E "^USER=" "$REPO_DIR/.env" | cut -d'=' -f2 | tr -d '"' | tr -d "'")
+    if [ -n "$ENV_USER" ]; then
+        USER_NAME="$ENV_USER"
+    fi
+fi
+
 # Define output file
-OUTPUT_FILE="/home/claude/repos/sophie-jarred-research-log/ship-december/day-3/appendices/jarred-claude-code-transcript.md"
+OUTPUT_FILE="$LATEST_DAY/appendices/${USER_NAME}-claude-code-transcript.md"
 
 # Create output directory if needed
 mkdir -p "$(dirname "$OUTPUT_FILE")"

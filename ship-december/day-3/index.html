@@ -284,7 +284,7 @@
             <a href="/ship-december/day-3" class="day-link">Day 3</a>
             <div class="chevron-container"><span class="chevron">&#9662;</span></div>
          </div>
-         <div class="appendices-tree"><div class="appendix-item" data-path="/ship-december/day-3/appendices/jarred-claude-code-transcript.md" data-name="jarred-claude-code-transcript.md">jarred-claude-code-transcript.md</div></div>
+         <div class="appendices-tree"><div class="appendix-item" data-path="/ship-december/day-3/appendices/jarred-claude-code-transcript.md" data-name="jarred-claude-code-transcript.md">jarred-claude-code-transcript.md</div><div class="appendix-item" data-path="/ship-december/day-3/appendices/jarred-margin.md" data-name="jarred-margin.md">jarred-margin.md</div></div>
       </div>
    </nav>
    <main class="main-content">
@@ -292,7 +292,7 @@
 <p>Good morning once again!</p>
 <p>It&#39;s Day 3 of Ship December.</p>
 <p>I forgot to make the time stamps on yesterdays posts italisised. This has injured me and also it&#39;s a comfort to know I can&#39;t change it.</p>
-<p>There&#39;s really somethign to be said for containers.</p>
+<p>There&#39;s really something to be said for containers.</p>
 <p>Ok, where are we.</p>
 <p>Well, just now I copied and pasted <code>day-2</code> in the <code>ship-december</code> folder and then renamed <code>day-2 Copy</code> to <code>day-3</code>. I thought it could be neat if I could right click in my editor or run a command to do this in one step. Let&#39;s ask claude-code to to whip something up.</p>
 <blockquote>
@@ -314,14 +314,13 @@
 <p>Should I explain more about our nascent architecture and what&#39;s going on with our &quot;build step&quot;?</p>
 <p>It would be cool if the librarian (who has access to our code base) could be availed upon to explain to any curious reader.</p>
 <p>It would also be cool if we had some kind of comments system so readers could be like &quot;I&#39;m curious about this!&quot;</p>
-<p>I think for now I&#39;ll just so make it happen.</p>
-<p>Let&#39;s make a sidebar.</p>
+<p>I think for now let&#39;s make a sidebar.</p>
 <blockquote>
 <p>🤖 in the build step (when build.js is run) I want to add a sidebar to the index.html</p>
 <p>the sidebar should be on the left, should look nice and minimalist, all black and white (or appropraite shades thereof)</p>
 <p>the sidebar should display the posts of the days of ship december &quot;day 1, day 2, etc&quot;.</p>
 <p>clicking an entry should go to it&#39;s url (i.e /ship-december/day-3)</p>
-<p>there should be a chevron dropdown to the right which is subtle demarkated.</p>
+<p>there should be a chevron dropdown to the right which is subtly demarcated.</p>
 <p>ok so i&#39;m thinking subtle greay lines to demarcate the days vertically and then also a line to seperate the chevron horizontally from the day title.</p>
 <p>clicking the chevron should expand the entry in the sidebar</p>
 <p>if there are appendices for that day, then they should appear in a tree when the item is expanded.</p>
@@ -340,15 +339,17 @@
 <hr>
 <p><em>Now</em> where does that leave us?</p>
 <p>I&#39;m meeting with Sophie in 3 hours. Do I have what I need to say we&#39;ve shipped?</p>
-<p>We have a sidebar now, and it displays whatever is in the <code>appendicies</code> folder in the repo.</p>
+<p>How will Sophie feel about me having already shipped something when she starts her workday? Will that be de-motivating? I guess we can talk about that this afternoon.</p>
+<p>Well, we have a sidebar now, and it displays whatever is in the <code>appendicies</code> folder in the repo.</p>
 <p>My spell-checker has just informed me that <code>appendicies</code> is spelt <code>appendices</code>. Hold on.</p>
 <p><img src="image-3.png" alt="alt text"></p>
 <hr>
-<p>We have a sidebar now, and it displays whatever is in the <code>appendices</code> folder in the repo.</p>
+<p>We have a sidebar now, and it displays whatever is in the <code>appendices</code> folder in the repo. I&#39;ve set up my claude-code transcript to automatically dump to a file in there for anyone curious and for my own reference. I think in the future we could also hook up any librarian transcripts. Also we could ensure the librarian has access to all appendices.</p>
+<p>It sure is easier to build when I don&#39;t have to worry about either security or scale.</p>
 <p>Can we call that done? Can we send it to all our friends and have it work on their phones?</p>
-<p>How does it look on mobile? Good question.</p>
+<p>How does it look on mobile? Good question Jarred.</p>
 <p><img src="image-4.png" alt="alt text"></p>
-<p>😬 oh lord, not good at all. The sidebar is half the screen.</p>
+<p>😬 oh lord, not good at all. The sidebar takes up half the screen on mobile.</p>
 <blockquote>
 <p>🤖 if the screen is less than 800px wide can you bring the sidebar width to 125px and adjust the main content
   and left margin appropraitely</p>
@@ -363,7 +364,7 @@ In my mind all this will have to be re-done anyway... or rather maybe better to 
 <p>🤖 can you add this feature to day-3 index.html &quot;you can swipe right anywhere on the sidebar to have it take up
   the majority of the screen, when tapping the main content it returns to normal&quot;</p>
 </blockquote>
-<p>Many have noticed at this point that vibe-coding can be quite addictive. There&#39;s always little adjustments that can be made which pop to mind, and the friction to acting it has become quite minimal.</p>
+<p>Many have noticed at this point that vibe-coding can be quite addictive. There&#39;s always little adjustments that can be made which pop to mind, and the friction to acting on it has become quite minimal.</p>
 <blockquote>
 <p>🤖 swiping left on the sidebar should also revert it to the original width</p>
 </blockquote>
@@ -375,6 +376,61 @@ In my mind all this will have to be re-done anyway... or rather maybe better to 
 <blockquote>
 <p>🤖 you also need to add overflow-x: hidden to the html tag not just the body</p>
 </blockquote>
+<p>Arg, stop it</p>
+<p><img src="image-5.png" alt="alt text"></p>
+<p>Yay! The sidebar really wants to be thinner... we could take &quot;Ship December&quot; and put it at the top rather than in the sidebar, and maybe make the days just 1, 2, 3 instead.... could also make swiping left on the sidebar again make it even thinner.</p>
+<hr>
+<p>Is this fun to read? Is it productive?</p>
+<p>Oh yeah, I&#39;m meant to be gnawing a bone. Is this my bone?</p>
+<p>Sophie and I had a meeting the other day with an advanced UX researcher named Peter.</p>
+<p>He said people under-invest in &quot;polish&quot; by a factor of at-least 10. Directionally / vibe-wise I tend to agree. Can I articulate why? I felt this way with <a href="https://docs.google.com/document/d/1ORaXKVYI7aIcn_r3OxJJd4_o0rdqi9CdoeQNAmO_77I/edit?tab=t.0">Dialectica</a>...</p>
+<p><del>For what we want to build to work it needs to feel like a miracle. (Justification needed)</del></p>
+<p><del>For tools to feel like a miracle...</del></p>
+<p>gah</p>
+<p><del>Ok so tools resolve tensions.</del></p>
+<p><del>For a tool to really work it needs to add less tension than it resolves. Ideally it adds no tension at all.</del></p>
+<p><del>Projects like Dialectica and Ship December are about trying a bunch of obvious things and discovering that most of th</del></p>
+<p>gah</p>
+<p>I often &quot;feel&quot; tools which seem obviously quite useful but that don&#39;t yet exist.</p>
+<p>One way of thinking about projects like Dialectica or Ship December is setting aside a quality block of time to actually pursue the obvious.</p>
+<p>This is Dialectica by the way: </p>
+<p><img src="image-9.png" alt="alt text"></p>
+<p>It&#39;s basically a system for pinning virtual nested index cards to a big shared virtual pin-board. I made it to enable <del>autistically</del> unusually in-depth conversations and I did it by evolving the design to follow my sense of the blaring obvious.</p>
+<p>Let me explain a bit about what Dialectica is.</p>
+<p>The above image might be a bit hard to make out, but it&#39;s a series of (basically) letters that my friend Liam wrote to me on digital index cards. They all have titles, and I&#39;ve expanded the middle one so you can see the text content. The titles are:</p>
+<p>&quot;Billionaires do incomprehensible damage&quot; &gt; &quot;The Dangers of Billionaire Philanthropy&quot; &gt; &quot;A weird little sidebar on Effective Altruism&quot;</p>
+<p>If I clicked that little &quot;&lt;&lt;&quot; icon you might be able to make out, all the cards to the right of the first one would fold up &quot;under it&quot;. The cards actually continue to the right for another 8 levels of nesting. The deepest one is &quot;Honestly I think you and Marx would really vibe on the subject of ownership&quot; (bold claim).</p>
+<p>Anyway, this is the screenshot I wanted to talk about.</p>
+<p><img src="image-10.png" alt="alt text"></p>
+<p>Deep into our long digression on Effective Altruism Liam make a card entitled &quot;In utilitarianism, justifying evil is the point&quot;.</p>
+<p>I&#39;m pretty sure it was at this point where I was like:</p>
+<p>&quot;<em>Obviously</em> I need to be able to split each paragraph into separate sentences to make it easier to read them slowly one at a time&quot;</p>
+<p>&quot;<em>Obviously</em> I need to be able to at a point-by-point level create paraphrases and then have my friend be able to mark them as resonant or dissonant&quot;</p>
+<p>etc</p>
+<p>Where was I going with this?</p>
+<p>I guess my point is that the obvious has a surprising amount of detail.</p>
+<p><em>Obviously</em> there should be a sidebar with the days on it where I can access supplementary research content, but how to deal with the width issues?</p>
+<p><em>Obviously</em> readers should be able to leave google-doc style voice and text comments that the AI can read... actually the voice comment one especially sounds pretty cool. I might do that this afternoon.</p>
+<p>Anyway, I guess there&#39;s some process of exploration around this. That is, how much polish is required to properly test the intuition that &quot;there&#39;s something obvious that wants to exist in that direction.&quot;</p>
+<p>The AI librarian from yesterday is a good example. There&#39;s an intuition around &quot;easy access to a voice enabled system which can access and read back to me things I&#39;ve written or notes to self&quot;. In order to actually test this though:</p>
+<ol>
+<li><p>Potentially the value only really shines one it&#39;s available as a mobile app rather than a webpage (or maybe an always listening device like a google home?)</p>
+</li>
+<li><p>Potentially it needs to be very reliably available for the fluency to start to develop</p>
+</li>
+<li><p>At the moment the AI assistant isn&#39;t super interruptible, so if I get bored of what I&#39;m listening to it&#39;s hard to stop this.</p>
+</li>
+<li><p><em>list goes on</em></p>
+</li>
+</ol>
+<p>The point of a research project is to rapidly prototype seemingly obvious things to build, and the seemingly obvious has a surprising amount of detail.</p>
+<p>I have no satisfying resolution to this tension at the moment other than intuition and not working alone I think.</p>
+<hr>
+<p>[ Jarred 11.15am ]</p>
+<p>Ok, I fear this post has gotten a bit out of hand but I&#39;ve alleviated my shipping anxiety for today. We have a side bar and you can access my claude-code transcript from it, even if it does make the post annoying to read.</p>
+<hr>
+<p>[ Jarred 12.30am ]</p>
+<p><img src="image-11.png" alt="alt text"></p>
 <p>⏭️ <a href="/ship-december/day-4">next</a></p>
 
    </main>

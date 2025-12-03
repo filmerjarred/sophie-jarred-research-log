@@ -194,3 +194,7 @@ the save_transcript time is still in utc time. also can you remove the "---" and
 **[10:03am]** please make the page not horizontally scrollable
 
 **[10:04am]** you also need to add that to the html tag
+
+**[11:59am]** in the "save-transcript.sh" can the path be "the latest day" the than hardcoded like "day-3" also can it read "user" from a .env file in the root and use "user" if not found instead of "jarred" and can you add .env to gitignore
+
+**[12:58pm]** test
