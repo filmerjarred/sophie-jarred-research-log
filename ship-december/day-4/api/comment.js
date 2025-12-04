@@ -2,17 +2,17 @@
 // Dev: uses fs to append locally
 // Production: uses GitHub API to commit
 
-const REPO_OWNER = 'filmerjarred'; 
+const REPO_OWNER = 'filmerjarred';
 const REPO_NAME = 'sophie-jarred-research-log';
 const BRANCH = 'main';
 
-// Dev mode: use fs
-async function handleDev(day, comment) {
-   const fs = await import('fs');
-   const path = `/home/claude/repos/sophie-jarred-research-log/ship-december/${day}/comments.md`;
-   fs.appendFileSync(path, '\n\n- - -\n\n' + comment);
-   return { status: 'ok', mode: 'dev' };
-}
+// // Dev mode: use fs
+// async function handleDev(day, comment) {
+//    const fs = await import('fs');
+//    const path = `/home/claude/repos/sophie-jarred-research-log/ship-december/${day}/comments.md`;
+//    fs.appendFileSync(path, '\n\n- - -\n\n' + comment);
+//    return { status: 'ok', mode: 'dev' };
+// }
 
 // Production: use GitHub API
 async function handleProd(day, comment, githubToken) {
@@ -94,7 +94,7 @@ export async function onRequest(context) {
       if (githubToken) {
          result = await handleProd(day, comment, githubToken);
       } else {
-         result = await handleDev(day, comment);
+         // result = await handleDev(day, comment);
       }
 
       return new Response(JSON.stringify(result), {
