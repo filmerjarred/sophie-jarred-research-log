@@ -121,3 +121,5 @@ can you add a different white hovering button but it's a microphone + an icon fo
 **[5:22pm]** can you put the comment button above the margin button, and only show the margin button if the name is "jarred" or "sophie" (case insensative)
 
 **[5:26pm]** actually can you re-swap the order
+
+**[5:34pm]** hmmm, https://sophie-jarred.researchlog.dev/ship-december/day-4/api/blob?file=1764887646292-jarred.webm 404 not found after latest live test

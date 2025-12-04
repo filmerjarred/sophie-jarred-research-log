@@ -4,12 +4,14 @@
 import * as day4Comment from './ship-december/day-4/api/comment.js';
 import * as day4VoiceComment from './ship-december/day-4/api/voice-comment.js';
 import * as day4VoiceMargin from './ship-december/day-4/api/voice-margin.js';
+import * as day4Blob from './ship-december/day-4/api/blob.js';
 import * as day4 from './ship-december/day-4/index.js';
 
 const apiRoutes = {
    '/ship-december/day-4/api/comment': day4Comment,
    '/ship-december/day-4/api/voice-comment': day4VoiceComment,
    '/ship-december/day-4/api/voice-margin': day4VoiceMargin,
+   '/ship-december/day-4/api/blob': day4Blob,
    '/ship-december/day-4/': day4,
 };
 
@@ -24,7 +26,7 @@ export default {
          return Response.redirect(url.toString(), 301);
       }
 
-      // Check for API routes
+      // Check for API routes (path without query string)
       if (apiRoutes[path]) {
          const handler = apiRoutes[path];
          if (handler.onRequest) {
