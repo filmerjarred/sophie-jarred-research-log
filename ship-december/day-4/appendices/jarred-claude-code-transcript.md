@@ -123,3 +123,7 @@ can you add a different white hovering button but it's a microphone + an icon fo
 **[5:26pm]** actually can you re-swap the order
 
 **[5:34pm]** hmmm, https://sophie-jarred.researchlog.dev/ship-december/day-4/api/blob?file=1764887646292-jarred.webm 404 not found after latest live test
+
+**[5:36pm]** can you have the transcription always be english
+
+**[5:37pm]** that works but duration is still bugged. let's just remove it for now

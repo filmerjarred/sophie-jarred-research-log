@@ -73,3 +73,9 @@ Ok, we have comments!
 I think that's enough to have count as shipped. It's not very exciting though.
 
 Personal voice notes into the margin and allowing readers to leave google-doc style voice notes that the librarian can read, now that's interesting. Might be good to call that a day tho. I've been in ship-mode all day since Monday.
+
+- - -
+
+*[ Jarred 5.30pm ]*
+
+Ok, that looks like it's working now. The duration is a bit bugged 😅 but I'd call that done for today.
