@@ -29,3 +29,9 @@ test comment
 *[ asdf day-4 1.50pm ]*
 
 asdf
+
+- - -
+
+*[ qwer day-4 1.52pm ]*
+
+qwer
