@@ -77,3 +77,5 @@ if the DEV env var isn't set then we should serve them using the github raw cont
 **[2:43pm]** "Make sure to prefix the module name with "node:" or update your compatibility_date to 2024-09-23 or later." also do we really need the url package?
 
 **[2:48pm]** "Uncaught Error: No such module "node:fs"."
+
+**[2:52pm]** can you add a rule to add a trailing slash in worker.js if it's missing (301 redirect)

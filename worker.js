@@ -14,6 +14,12 @@ export default {
       const url = new URL(request.url);
       const path = url.pathname;
 
+      // Add trailing slash if missing (except for files with extensions or API routes)
+      if (!path.endsWith('/') && !path.includes('.') && !path.includes('/api/')) {
+         url.pathname = path + '/';
+         return Response.redirect(url.toString(), 301);
+      }
+
       // Check for API routes
       if (apiRoutes[path]) {
          const handler = apiRoutes[path];
