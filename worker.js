@@ -1,10 +1,10 @@
 // worker.js - handles routes not covered by static assets
 
 // Import API handlers - add new ones here
-// import * as day4Comment from './ship-december/day-4/api/comment.js';
+import * as day4Comment from './ship-december/day-4/api/comment.js';
 
 const apiRoutes = {
-   // '/ship-december/day-4/api/comment': day4Comment,
+   '/ship-december/day-4/api/comment': day4Comment,
 };
 
 export default {

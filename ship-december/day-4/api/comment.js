@@ -2,7 +2,7 @@
 // Dev: uses fs to append locally
 // Production: uses GitHub API to commit
 
-const REPO_OWNER = 'filmerjarred';  // TODO: update this
+const REPO_OWNER = 'filmerjarred'; 
 const REPO_NAME = 'sophie-jarred-research-log';
 const BRANCH = 'main';
 
@@ -113,3 +113,5 @@ export async function onRequest(context) {
 // curl -X POST -k https://localhost:3000/ship-december/day-4/api/comment \
 //   -H "Content-Type: application/json" \
 //   -d '{"comment": "your comment here", "day": "day-4"}'
+
+// curl -X POST -k https://sophie-jarred.researchlog.dev/ship-december/day-4/api/comment -H "Content-Type: application/json" -d '{"comment": "your comment here", "day": "day-4"}'
