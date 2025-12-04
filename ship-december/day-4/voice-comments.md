@@ -47,3 +47,11 @@
 <audio controls src="/ship-december/day-4/api/blob?file=1764890495433-sandra.webm"></audio>
 
 **Transcript:** Okay, I would like to, when I send a new comment and I press pause or I press stop, then I would like to be immediately taken to the comment section where the voice notes are transcribed and I can immediately have this feeling of like, oh yeah, it's me and my friends leaving comments.
+
+- - -
+
+*[ Sandra day-4 11.22pm 0s ]*
+
+<audio controls src="/ship-december/day-4/api/blob?file=1764890548445-sandra.webm"></audio>
+
+**Transcript:** Can you make the font smaller in the sidebar when it says day one, day two, day three, when on mobile?
