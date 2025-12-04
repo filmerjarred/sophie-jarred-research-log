@@ -128,7 +128,7 @@ export async function onRequest(context) {
 
    try {
       const body = await request.json();
-      const { audio, name, day } = body;
+      const { audio, name, day, duration } = body;
 
       if (!audio || typeof audio !== 'string') {
          return new Response(JSON.stringify({ error: 'audio (base64) required' }), {
@@ -171,12 +171,11 @@ export async function onRequest(context) {
       const userName = name || 'Anonymous';
       const safeName = userName.toLowerCase().replace(/[^a-z]/g, '');
 
-      // Calculate audio duration from base64 size (rough estimate: ~12kbps for webm audio)
-      const audioBytes = audio.length * 0.75; // base64 to bytes
-      const estimatedSeconds = Math.round(audioBytes / 1500); // ~12kbps = 1500 bytes/sec
-      const durationStr = estimatedSeconds < 60
-         ? `${estimatedSeconds}s`
-         : `${Math.floor(estimatedSeconds / 60)}m${estimatedSeconds % 60}s`;
+      // Use client-provided duration (in seconds)
+      const durationSecs = duration || 0;
+      const durationStr = durationSecs < 60
+         ? `${durationSecs}s`
+         : `${Math.floor(durationSecs / 60)}m${durationSecs % 60}s`;
 
       // Generate unique blob filename
       const timestamp = Date.now();
@@ -191,10 +190,10 @@ export async function onRequest(context) {
          githubToken
       );
 
-      // Build the voice comment markdown with reference to blob
+      // Build the voice comment markdown with reference to blob via API proxy
       const voiceComment = `*[ ${userName} ${dayStr} ${timeStr} ${durationStr} ]*
 
-<audio controls src="/ship-december/${dayStr}/blobs/${blobFilename}"></audio>
+<audio controls src="/ship-december/${dayStr}/api/blob?file=${blobFilename}"></audio>
 
 **Transcript:** ${transcript}`;
 

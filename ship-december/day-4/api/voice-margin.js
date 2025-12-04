@@ -128,7 +128,7 @@ export async function onRequest(context) {
 
    try {
       const body = await request.json();
-      const { audio, name, day } = body;
+      const { audio, name, day, duration } = body;
 
       if (!audio || typeof audio !== 'string') {
          return new Response(JSON.stringify({ error: 'audio (base64) required' }), {
@@ -177,6 +177,12 @@ export async function onRequest(context) {
       // Normalize name to lowercase for file path (e.g., "Jarred" -> "jarred")
       const normalizedName = name.toLowerCase().replace(/[^a-z]/g, '');
 
+      // Use client-provided duration (in seconds)
+      const durationSecs = duration || 0;
+      const durationStr = durationSecs < 60
+         ? `${durationSecs}s`
+         : `${Math.floor(durationSecs / 60)}m${durationSecs % 60}s`;
+
       // Generate unique blob filename
       const timestamp = Date.now();
       const blobFilename = `${timestamp}-${normalizedName}.webm`;
@@ -190,10 +196,10 @@ export async function onRequest(context) {
          githubToken
       );
 
-      // Build the voice margin markdown with reference to blob
-      const voiceMargin = `### ${timeStr}
+      // Build the voice margin markdown with reference to blob via API proxy
+      const voiceMargin = `### ${timeStr} (${durationStr})
 
-<audio controls src="/ship-december/${dayStr}/blobs/${blobFilename}"></audio>
+<audio controls src="/ship-december/${dayStr}/api/blob?file=${blobFilename}"></audio>
 
 ${transcript}`;
 

@@ -111,3 +111,11 @@ can you add a different white hovering button but it's a microphone + an icon fo
 **[5:11pm]** let's discuss saving the blobs seperately... the audio data... can we save that as a blob in the repo under day-4/blobs and fetch those as needed? keep the transcript (for both margin and comments)
 
 **[5:13pm]** can you use the sticky note with a small microphone icon to incicate the margin, and the comment for the comment?
+
+**[5:17pm]** https://localhost:3000/ship-december/day-4/blobs/1764886598802-jarred.webm 404 (Not Found) (oh, it needs to look remotely I think)
+
+**[5:18pm]** the duration is super off
+
+**[5:21pm]** can we make the icons a bit bigger? (for the sticky and comment) also the floating red recording text obscures the margin button to stop
+
+**[5:22pm]** can you put the comment button above the margin button, and only show the margin button if the name is "jarred" or "sophie" (case insensative)

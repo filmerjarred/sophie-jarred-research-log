@@ -191,11 +191,11 @@ function generateFloatingButtonsHTML() {
 
    return `
    <div class="floating-buttons">
-      <button class="floating-btn" id="voice-margin-btn" title="Voice Margin Note">
-         ${marginIcon}
-      </button>
       <button class="floating-btn" id="voice-comment-btn" title="Voice Comment">
          ${commentIcon}
+      </button>
+      <button class="floating-btn" id="voice-margin-btn" title="Voice Margin Note" style="display: none;">
+         ${marginIcon}
       </button>
    </div>
    <div class="recording-status" id="recording-status">Recording...</div>`;
@@ -594,8 +594,8 @@ function generateStyles() {
       }
 
       .floating-btn svg {
-         width: 24px;
-         height: 24px;
+         width: 32px;
+         height: 32px;
          fill: #000;
       }
 
@@ -804,7 +804,7 @@ function generateStyles() {
       /* Recording status indicator */
       .recording-status {
          position: fixed;
-         bottom: 90px;
+         bottom: 150px;
          right: 20px;
          background: #ff4444;
          color: #fff;
@@ -1065,6 +1065,26 @@ function generateScript() {
             return localStorage.getItem('commentName');
          }
 
+         // Check if user is allowed to use margin (jarred or sophie)
+         function isMarginUser(name) {
+            if (!name) return false;
+            const lower = name.toLowerCase().trim();
+            return lower === 'jarred' || lower === 'sophie';
+         }
+
+         // Update margin button visibility based on user name
+         function updateMarginButtonVisibility() {
+            const name = getUserName();
+            if (isMarginUser(name)) {
+               voiceMarginBtn.style.display = 'flex';
+            } else {
+               voiceMarginBtn.style.display = 'none';
+            }
+         }
+
+         // Initial check for margin button visibility
+         updateMarginButtonVisibility();
+
          // Prompt for name if not set
          function ensureName(callback) {
             const name = getUserName();
@@ -1083,6 +1103,7 @@ function generateScript() {
             if (name) {
                localStorage.setItem('commentName', name);
                namePromptModal.classList.remove('open');
+               updateMarginButtonVisibility();
                if (pendingNameCallback) {
                   pendingNameCallback(name);
                   pendingNameCallback = null;
@@ -1178,13 +1199,35 @@ function generateScript() {
             }
          }
 
+         // Get actual audio duration from blob
+         async function getAudioDuration(blob) {
+            return new Promise((resolve) => {
+               const audio = document.createElement('audio');
+               audio.src = URL.createObjectURL(blob);
+               audio.addEventListener('loadedmetadata', () => {
+                  const duration = Math.round(audio.duration);
+                  URL.revokeObjectURL(audio.src);
+                  resolve(duration);
+               });
+               audio.addEventListener('error', () => {
+                  URL.revokeObjectURL(audio.src);
+                  resolve(0);
+               });
+            });
+         }
+
          // Upload recording to API
          async function uploadRecording(blob, type) {
             const name = getUserName() || 'Anonymous';
-            recordingStatus.textContent = 'Uploading...';
+            recordingStatus.textContent = 'Processing...';
             recordingStatus.classList.add('active');
 
             try {
+               // Get actual duration from the audio blob
+               const durationSecs = await getAudioDuration(blob);
+
+               recordingStatus.textContent = 'Uploading...';
+
                const reader = new FileReader();
                const base64 = await new Promise((resolve, reject) => {
                   reader.onloadend = () => resolve(reader.result.split(',')[1]);
@@ -1202,7 +1245,8 @@ function generateScript() {
                   body: JSON.stringify({
                      audio: base64,
                      name: name,
-                     day: 'day-4'
+                     day: 'day-4',
+                     duration: durationSecs
                   })
                });
 
