@@ -71,3 +71,5 @@ if the DEV env var isn't set then we should serve them using the github raw cont
 **[2:19pm]** in day-4, on mobile, can you make the sidebar 64 px, the day text middle aligned, and the "Ship December" title have an elipse on the overflow
 
 **[2:38pm]** can we add Add the "nodejs_compat" compatibility flag to your project.
+
+**[2:40pm]** can we add wiki-link support please such that the wiki-link in day4 post works in html for appendicy content (will open the modal)

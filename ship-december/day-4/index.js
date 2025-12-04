@@ -61,10 +61,32 @@ function mdToCards(content, filePath = '') {
    }).filter(Boolean);
 }
 
+// Convert wiki-links [[path]] to clickable links that open modal
+function processWikiLinks(html) {
+   // Match [[path]] or [[path|display text]]
+   return html.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (match, path, displayText) => {
+      // Normalize path - add .md if no extension, prefix with /ship-december/ if needed
+      let fullPath = path.trim();
+      if (!fullPath.includes('.')) {
+         fullPath += '.md';
+      }
+      if (!fullPath.startsWith('/')) {
+         fullPath = '/ship-december/' + fullPath;
+      }
+
+      // Get display text - use the filename without extension if not provided
+      const display = displayText || path.split('/').pop().replace(/\.md$/, '');
+      const name = fullPath.split('/').pop();
+
+      return `<a href="#" class="wiki-link" data-path="${fullPath}" data-name="${name}">${display}</a>`;
+   });
+}
+
 // Render cards to HTML
 function renderCards(cards, className = 'card') {
    return cards.map(card => {
-      const html = marked(card.content);
+      let html = marked(card.content);
+      html = processWikiLinks(html);
       const dataAttrs = [
          card.user ? `data-user="${card.user}"` : '',
          card.time ? `data-time="${card.time}"` : '',
@@ -385,6 +407,14 @@ function generateStyles() {
       h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; }
       h1 { border-bottom: 2px solid #eee; padding-bottom: 0.3em; }
       a { color: #0066cc; }
+      a.wiki-link {
+         color: #0066cc;
+         text-decoration: none;
+         border-bottom: 1px dashed #0066cc;
+      }
+      a.wiki-link:hover {
+         border-bottom-style: solid;
+      }
       code { background: #f4f4f4; padding: 0.2em 0.4em; border-radius: 3px; }
       pre { background: #f4f4f4; padding: 1em; overflow-x: auto; border-radius: 5px; }
       pre code { background: none; padding: 0; }
@@ -506,6 +536,41 @@ function generateScript() {
                // If markdown, render it
                if (name.endsWith('.md')) {
                   // Basic markdown rendering (or use marked if available)
+                  content = content
+                     .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                     .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                     .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                     .replace(/\\*\\*(.*)\\*\\*/gim, '<strong>$1</strong>')
+                     .replace(/\\*(.*)\\*/gim, '<em>$1</em>')
+                     .replace(/\`\`\`([\\s\\S]*?)\`\`\`/gim, '<pre><code>$1</code></pre>')
+                     .replace(/\`([^\`]+)\`/gim, '<code>$1</code>')
+                     .replace(/\\n/gim, '<br>');
+               } else {
+                  content = '<pre>' + content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+               }
+
+               modalBody.innerHTML = '<h2>' + name + '</h2>' + content;
+               modal.classList.add('open');
+            } catch (err) {
+               modalBody.innerHTML = '<p>Error loading file: ' + err.message + '</p>';
+               modal.classList.add('open');
+            }
+         });
+      });
+
+      // Wiki-link handling (opens modal just like appendix items)
+      document.querySelectorAll('.wiki-link').forEach(link => {
+         link.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const path = link.dataset.path;
+            const name = link.dataset.name;
+
+            try {
+               const response = await fetch(path);
+               let content = await response.text();
+
+               // If markdown, render it
+               if (name.endsWith('.md')) {
                   content = content
                      .replace(/^### (.*$)/gim, '<h3>$1</h3>')
                      .replace(/^## (.*$)/gim, '<h2>$1</h2>')

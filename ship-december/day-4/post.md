@@ -51,6 +51,12 @@ Some excepts if you don't feel like reading the whole thing:
 
 I sort of have a plan for something to ship. 
 
+![alt text](image.png)
+
+"what if comments felt like a group chat with friends?"
+
+Probably not going to get near that today, but it's an interesting thought.
+
 today's ideal features could be:
 
 1. Introduce cards as a primitive rather than just "posts"
