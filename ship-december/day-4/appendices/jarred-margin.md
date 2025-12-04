@@ -202,3 +202,85 @@ Let's do that, and then update day-4 to serve the post + comments.
 It should serve them using the file system if we're running on dev.
 
 if the DEV env var isn't set then we should serve them using the github raw content api.
+*[ Jarred 11.30am ]*
+
+Ok where are we now?
+
+- that idris post
+- a comment system
+- those notes i relayed to the librarian the other day. let's fetch those.
+
+Verbal notes from Dec 2nd:
+
+   - Dec 2nd 16:10 "Test note created for functionality check."
+
+   - Dec 2nd 16:33 "The 'bone' is about wanting to interact with ideas in a fluid, natural way—capturing thoughts effortlessly, like speaking aloud while cooking and having ideas saved or read back. It’s about untangling the messiness of remembering thoughts and making it easier to capture small personal insights in real time."
+
+   - Dec 2nd 16:34 "The tree manager: going back to that LLM tree manager and having headings and a mental topology of the..."
+
+   - Dec 2nd 16:35 "I find context management on my mind. Like how much is this costing? Has the research log tool been called multiple times? Some kind of context GUI would be good."
+
+   - Dec 2nd 16:37 "There is something interesting in the notion of the verbal whiteboard—a way to manage thoughts and context in real time."
+
+   - Dec 2nd 16:38 "There should also be a search tool that can search through all the research notes, not just pull up day one or day two. For example, if I want to say, "Tell me the story about the plane and the toddler," it should be able to find it."
+
+   - Dec 2nd 16:39 "Pulling up cards or sections rather than just notes would be helpful as well."
+
+   - Dec 2nd 16:40 "Tomorrow we could try to give Malcolm what he wants."
+
+   - Dec 2nd 16:41 "Saving all of the transcripts for research might be nice too."
+
+   - Dec 2nd 16:42 "Verbally being able to go back to or switch between conversation threads could be interesting, like moving between email chains."
+
+   - Dec 2nd 16:43 "It feels less cozy to be talking with an agent than to have a verbal tool on hand."
+
+   - Dec 2nd 16:45 "Verbal Zettelkasten."
+
+   - Dec 2nd 16:48 "Envisioning a system for verbal orientation—a tool that helps situate oneself in real time, chase down relevant threads, and clarify purpose. It's like an interactive verbal mind palace, Zettelkasten, and whiteboard combined. Includes a multiplayer aspect for sharing and collaborating. More than just managing ideas; it's about navigating meaning, direction, and relevance in a dynamic, interactive way."
+
+   - Dec 2nd 16:49 "Tomorrow could be about evolving these notes into cards which display on the screen, helping to visualize and organize ideas."
+
+   - Dec 2nd 16:50 "Not being interrupted is a big deal."
+
+   - Dec 2nd 16:51 "Harri wants us to build a post-rap forum. Verbal changing of things in the UI wants to be instant and responsive, maybe a ding."
+
+   - Dec 2nd 16:54 "Tomorrow could also be about having a sidebar, and the sidebars are all of the days. Under the days are the main post, the conversation logs, the texts, the Claude code logs, etc."
+
+that was a mistake, I started reading them a got a bit lost. also i was reading with my audience eyes on.
+
+"a verbal whiteboard"
+
+
+"Envisioning a system for verbal orientation — a tool that helps situate oneself in real time, chase down relevant threads, and clarify purpose. It's like an interactive verbal mind palace, Zettelkasten, and whiteboard combined. Includes a multiplayer aspect for sharing and collaborating. More than just managing ideas; it's about navigating meaning, direction, and relevance in a dynamic, interactive way."
+
+"Tomorrow could be about evolving these notes into cards which display on the screen, helping to visualize and organize ideas."
+
+cards
+
+where is the content split into cards and from where is it accessed?
+is the answer to both these questions "builder.js"?
+
+ah but the librarian needs to access them no?
+
+librarian <-> cf worker <-> git ?
+
+please build a js file which takes an md file and turns it into "cards"
+by default one markdown file is one card
+if the markdown file contains \n- - -\n then we split on that and that file contains multiple cards
+the first header a card contains is it's "title"
+a card also has the file it's from relative to the workspace root.
+please build a js file which takes an md file and outputs the cards json
+
+let's restructure build.js to turn post.md into "cards", and then to build the post based on the cards (which could come from any source, post.md or otherwise)
+
+cards have markdown content, and we will need to pass each to 'marked' to build them independently, and then we lay them out on the page
+
+ok, let's make a js file which "adds a card" to an md file, that is it appends "- - -" + some text with an optional user and time.
+
+can you add a white hovering button in the lower right-hand border of the page with a simple black and white microphone icon and black border.
+
+
+
+
+
+
