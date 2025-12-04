@@ -67,3 +67,5 @@ if the DEV env var isn't set then we should serve them using the github raw cont
 **[1:53pm]** rather than using the github raw content api can we use the content api powered by the personal access token
 
 **[1:54pm]** (which is in the env which powers api/comment
+
+**[2:19pm]** in day-4, on mobile, can you make the sidebar 64 px, the day text middle aligned, and the "Ship December" title have an elipse on the overflow

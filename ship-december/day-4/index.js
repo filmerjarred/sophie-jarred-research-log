@@ -328,17 +328,31 @@ function generateStyles() {
       /* Responsive sidebar */
       @media (max-width: 800px) {
          .sidebar {
-            width: 125px;
+            width: 64px;
+         }
+         .sidebar-header {
+            padding: 1rem 0.5rem;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+         }
+         .day-link {
+            padding: 0.75rem 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
          }
          .main-content {
-            margin-left: 125px;
+            margin-left: 64px;
             padding: 1.5rem 1.5rem 1.5rem 2rem;
          }
          .appendix-item {
-            padding: 0.5rem 0.5rem 0.5rem 1rem;
+            padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+            font-size: 0.7rem;
          }
          .chevron-container {
-            width: 30px;
+            width: 20px;
          }
       }
 
@@ -403,12 +417,9 @@ function generateStyles() {
       .comment {
          background: #f9f9f9;
          border-left: 3px solid #ccc;
-         padding: 0.75rem 1rem;
+         padding: 0.1rem 1rem;
          margin: 1rem 0;
          font-size: 0.95rem;
-      }
-      .comment p {
-         margin: 0;
       }
 
       /* Comment form */
@@ -677,7 +688,7 @@ export async function onRequest(context) {
    // Fetch comments dynamically from GitHub
    const commentsMd = await fetchFromGitHub('ship-december/day-4/comments.md', githubToken);
    let commentsHtml = '';
-   
+
    if (commentsMd) {
       const commentCards = mdToCards(commentsMd, 'ship-december/day-4/comments.md');
       if (commentCards.length > 0) {

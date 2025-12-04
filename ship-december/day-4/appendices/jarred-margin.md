@@ -1,9 +1,7 @@
 
-What do I mean by in the sea?
+Being in-the-sea feels related to some other terms my friends use. 
 
-Well, I'm in the sea when my inner world is tangled in some way and it feels not-nice. Perhaps specifically when the not-nice feeling isn't clearly attributable to a cause that I can resolve.
-
-This feels related to some other terms my friends use. "My face is in the soup" and "my head is in a burlap sack".
+"My face is in the soup" and "my head is in a burlap sack".
 
 I just wrote two paragraphs trying to explain IFS self whilst eating breakfast at the same time and now the waves are a little more boisterous.
 
@@ -19,14 +17,15 @@ This apartment has no broom nor dustpan. Only a vacuum cleaner.
 
 Ok, that's better than it was.
 
-I have socks on now.
+I have socks on to deal with a dirty floor.
 
 Where was I?
 
 I'm a little bit in the sea, and I have a mind to get warmer and or a bit more dry.
 
-1. Sophie and being a good collaborator
+What's in the froth?
 
+1. Sophie and whether I'm being a good collaborator
 2. Cards!?!?!?
 3. A whole bunch of notes I gave to the librarian the other day about verbal whiteboards and verbal zettelkasten
 4. Shipping
@@ -75,9 +74,9 @@ One difficulty with things is that it's very rare for people to do this, and ins
 
 One angle on my bone is that I want a system which helps me with this.
 
-I come across a golden leaf in an Idris Murdoch quote that's painful to just throw away but also there's no tree to put it on and it's somehow both very heavy and very fragile and I also need my hands to chop broccoli and buy a dustpan on amazon (whoops).
+I come across a golden leaf in an Idris Murdoch quote that's painful to just throw away but also there's no tree to put it on and it's somehow both very heavy and very fragile and I also need my hands to chop broccoli and buy a dustpan on amazon (whoops, I forgot).
 
-![alt text](image-13.png)
+![alt text](../image-13.png)
 
 I'm a little embarrassed that I shelled out for the one with the bamboo handle.
 
@@ -237,7 +236,6 @@ Verbal notes from Dec 2nd:
 that was a mistake, I started reading them a got a bit lost. also i was reading with my audience eyes on.
 
 "a verbal whiteboard"
-
 
 "Envisioning a system for verbal orientation — a tool that helps situate oneself in real time, chase down relevant threads, and clarify purpose. It's like an interactive verbal mind palace, Zettelkasten, and whiteboard combined. Includes a multiplayer aspect for sharing and collaborating. More than just managing ideas; it's about navigating meaning, direction, and relevance in a dynamic, interactive way."
 
