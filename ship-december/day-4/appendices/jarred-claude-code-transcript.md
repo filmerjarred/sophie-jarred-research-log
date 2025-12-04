@@ -119,3 +119,5 @@ can you add a different white hovering button but it's a microphone + an icon fo
 **[5:21pm]** can we make the icons a bit bigger? (for the sticky and comment) also the floating red recording text obscures the margin button to stop
 
 **[5:22pm]** can you put the comment button above the margin button, and only show the margin button if the name is "jarred" or "sophie" (case insensative)
+
+**[5:26pm]** actually can you re-swap the order

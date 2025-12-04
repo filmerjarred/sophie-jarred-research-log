@@ -191,11 +191,11 @@ function generateFloatingButtonsHTML() {
 
    return `
    <div class="floating-buttons">
-      <button class="floating-btn" id="voice-comment-btn" title="Voice Comment">
-         ${commentIcon}
-      </button>
       <button class="floating-btn" id="voice-margin-btn" title="Voice Margin Note" style="display: none;">
          ${marginIcon}
+      </button>
+      <button class="floating-btn" id="voice-comment-btn" title="Voice Comment">
+         ${commentIcon}
       </button>
    </div>
    <div class="recording-status" id="recording-status">Recording...</div>`;
