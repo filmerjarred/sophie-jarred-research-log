@@ -1,17 +1,40 @@
 import { marked } from 'marked';
-import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'fs';
-import { join, dirname, basename, relative } from 'path';
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const shipDecemberDir = join(__dirname, '..');
-const workspaceRoot = join(shipDecemberDir, '..');
 
-// Convert markdown file to cards
-function mdToCards(filePath) {
-   const content = readFileSync(filePath, 'utf-8');
-   const relativePath = relative(workspaceRoot, filePath);
+const REPO_OWNER = 'filmerjarred';
+const REPO_NAME = 'sophie-jarred-research-log';
+const BRANCH = 'main';
 
+async function fetchFromGitHub(filePath, githubToken) {
+   const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}?ref=${BRANCH}`;
+
+   const headers = {
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+      'User-Agent': 'ship-december'
+   };
+
+   if (githubToken) {
+      headers['Authorization'] = `Bearer ${githubToken}`;
+   }
+
+   const response = await fetch(url, { headers });
+   if (!response.ok) {
+      if (response.status === 404) return null;
+      throw new Error(`GitHub fetch failed: ${response.status}`);
+   }
+
+   const data = await response.json();
+   // Content is base64 encoded
+   return atob(data.content.replace(/\n/g, ''));
+}
+
+// Convert markdown content to cards
+function mdToCards(content, filePath = '') {
    // Split on \n- - -\n
    const sections = content.split(/\n- - -\n/);
 
@@ -33,7 +56,7 @@ function mdToCards(filePath) {
          user,
          time,
          content: trimmed,
-         file: relativePath
+         file: filePath
       };
    }).filter(Boolean);
 }
@@ -52,51 +75,18 @@ function renderCards(cards, className = 'card') {
    }).join(className === 'card' ? '\n<hr>\n' : '\n');
 }
 
-// Discover all days and their appendices
-function discoverDays() {
-   const days = [];
-   const entries = readdirSync(shipDecemberDir).filter(d => {
-      const dayPath = join(shipDecemberDir, d);
-      return statSync(dayPath).isDirectory() && d.startsWith('day-');
-   }).sort((a, b) => {
-      const numA = parseInt(a.replace('day-', ''));
-      const numB = parseInt(b.replace('day-', ''));
-      return numA - numB;
-   });
-
-   for (const day of entries) {
-      const dayPath = join(shipDecemberDir, day);
-      const dayNum = day.replace('day-', '');
-      const appendices = [];
-
-      // Check for appendices folder
-      const appendicesPath = join(dayPath, 'appendices');
-      const actualAppendicesPath = existsSync(appendicesPath) ? appendicesPath : null;
-
-      if (actualAppendicesPath) {
-         const files = readdirSync(actualAppendicesPath);
-         for (const file of files) {
-            const filePath = join(actualAppendicesPath, file);
-            if (statSync(filePath).isFile()) {
-               appendices.push({
-                  name: file,
-                  path: `/ship-december/${day}/${basename(actualAppendicesPath)}/${file}`
-               });
-            }
-         }
-      }
-
-      days.push({
-         folder: day,
-         num: dayNum,
-         title: `Day ${dayNum}`,
-         url: `/ship-december/${day}`,
-         appendices
-      });
+// Static days data (could be fetched dynamically if needed)
+const DAYS = [
+   { folder: 'day-1', num: '1', title: 'Day 1', url: '/ship-december/day-1', appendices: [] },
+   { folder: 'day-2', num: '2', title: 'Day 2', url: '/ship-december/day-2', appendices: [] },
+   { folder: 'day-3', num: '3', title: 'Day 3', url: '/ship-december/day-3', appendices: [] },
+   {
+      folder: 'day-4', num: '4', title: 'Day 4', url: '/ship-december/day-4', appendices: [
+         { name: 'jarred-claude-code-transcript.md', path: '/ship-december/day-4/appendices/jarred-claude-code-transcript.md' },
+         { name: 'jarred-margin.md', path: '/ship-december/day-4/appendices/jarred-margin.md' }
+      ]
    }
-
-   return days;
-}
+];
 
 function generateSidebarHTML(days, currentDay) {
    let sidebarItems = '';
@@ -420,6 +410,58 @@ function generateStyles() {
       .comment p {
          margin: 0;
       }
+
+      /* Comment form */
+      .comment-form {
+         margin-top: 2rem;
+         padding: 1.5rem;
+         background: #f9f9f9;
+         border: 1px solid #ddd;
+      }
+      .comment-form h3 {
+         margin: 0 0 1rem 0;
+         font-size: 1rem;
+         color: #333;
+      }
+      .comment-form input,
+      .comment-form textarea {
+         width: 100%;
+         padding: 0.5rem;
+         margin-bottom: 0.75rem;
+         border: 1px solid #ccc;
+         font-family: inherit;
+         font-size: 0.95rem;
+      }
+      .comment-form textarea {
+         min-height: 100px;
+         resize: vertical;
+      }
+      .comment-form button {
+         padding: 0.5rem 1.5rem;
+         background: #333;
+         color: #fff;
+         border: none;
+         cursor: pointer;
+         font-family: inherit;
+         font-size: 0.95rem;
+      }
+      .comment-form button:hover {
+         background: #555;
+      }
+      .comment-form button:disabled {
+         background: #999;
+         cursor: not-allowed;
+      }
+      .comment-form .form-status {
+         margin-top: 0.75rem;
+         font-size: 0.9rem;
+      }
+      .comment-form .form-status.error {
+         color: #c00;
+      }
+      .comment-form .form-status.success {
+         color: #060;
+      }
    `;
 }
 
@@ -515,6 +557,83 @@ function generateScript() {
             document.body.classList.remove('sidebar-expanded');
          }
       });
+
+      // Comment form handling
+      const commentForm = document.getElementById('comment-form');
+      if (commentForm) {
+         const nameInput = document.getElementById('comment-name');
+
+         // Load saved name from localStorage
+         const savedName = localStorage.getItem('commentName');
+         if (savedName) {
+            nameInput.value = savedName;
+         }
+
+         commentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const textInput = document.getElementById('comment-text');
+            const submitBtn = commentForm.querySelector('button[type="submit"]');
+            const statusDiv = document.getElementById('form-status');
+
+            const name = nameInput.value.trim() || 'Anonymous';
+
+            // Save name to localStorage
+            if (nameInput.value.trim()) {
+               localStorage.setItem('commentName', nameInput.value.trim());
+            }
+            const text = textInput.value.trim();
+
+            if (!text) {
+               statusDiv.textContent = 'Please enter a comment';
+               statusDiv.className = 'form-status error';
+               return;
+            }
+
+            // Compute day based on current date (December 2024)
+            const now = new Date();
+            const day = now.getDate();
+            const dayStr = 'day-' + day;
+
+            // Format time like "7.30am"
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12 || 12;
+            const timeStr = hours + '.' + String(minutes).padStart(2, '0') + ampm;
+
+            // Build the comment with metadata header
+            const fullComment = '*[ ' + name + ' ' + dayStr + ' ' + timeStr + ' ]*\\n\\n' + text;
+
+            submitBtn.disabled = true;
+            statusDiv.textContent = 'Submitting...';
+            statusDiv.className = 'form-status';
+
+            try {
+               const response = await fetch('/ship-december/day-4/api/comment', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ comment: fullComment, day: 'day-4' })
+               });
+
+               const result = await response.json();
+
+               if (response.ok) {
+                  statusDiv.textContent = 'Comment submitted! Refresh to see it.';
+                  statusDiv.className = 'form-status success';
+                  textInput.value = '';
+               } else {
+                  statusDiv.textContent = 'Error: ' + (result.error || 'Unknown error');
+                  statusDiv.className = 'form-status error';
+               }
+            } catch (err) {
+               statusDiv.textContent = 'Error: ' + err.message;
+               statusDiv.className = 'form-status error';
+            } finally {
+               submitBtn.disabled = false;
+            }
+         });
+      }
    </script>`;
 }
 
@@ -546,28 +665,49 @@ function wrapHtml(content, title, days, currentDay) {
 </html>`;
 }
 
-// Build this day
-const currentDay = 'day-4';
-const days = discoverDays();
+export async function onRequest(context) {
+   const currentDay = 'day-4';
+   const githubToken = context?.env?.GIT_API_TOKEN || process.env?.GIT_API_TOKEN;
 
-// Convert post.md to cards, then render
-const cards = mdToCards(join(__dirname, 'post.md'));
-let htmlContent = renderCards(cards);
+   // Read post.md from disk
+   const postMd = readFileSync(join(__dirname, 'post.md'), 'utf-8');
+   const cards = mdToCards(postMd, 'ship-december/day-4/post.md');
+   let htmlContent = renderCards(cards);
 
-// Add comments if comments.md exists
-const commentsPath = join(__dirname, 'comments.md');
-if (existsSync(commentsPath)) {
-   const commentCards = mdToCards(commentsPath);
-   if (commentCards.length > 0) {
-      const commentsHtml = renderCards(commentCards, 'comment');
-      htmlContent += `
-      <section class="comments-section">
-         <h2>Comments</h2>
-         ${commentsHtml}
-      </section>`;
+   // Fetch comments dynamically from GitHub
+   const commentsMd = await fetchFromGitHub('ship-december/day-4/comments.md', githubToken);
+   let commentsHtml = '';
+   
+   if (commentsMd) {
+      const commentCards = mdToCards(commentsMd, 'ship-december/day-4/comments.md');
+      if (commentCards.length > 0) {
+         commentsHtml = renderCards(commentCards, 'comment');
+      }
    }
-}
 
-const fullHtml = wrapHtml(htmlContent, 'Day 4', days, currentDay);
-writeFileSync(join(__dirname, 'index.html'), fullHtml);
-if (!process.env.QUIET) console.log('Built: ship-december/day-4/index.html');
+   // Comment form HTML
+   const commentFormHtml = `
+      <div class="comment-form">
+         <h3>Leave a comment</h3>
+         <form id="comment-form">
+            <input type="text" id="comment-name" placeholder="Your name (optional)" />
+            <textarea id="comment-text" placeholder="Your comment..."></textarea>
+            <button type="submit">Submit</button>
+            <div id="form-status" class="form-status"></div>
+         </form>
+      </div>
+   `;
+
+   htmlContent += `
+   <section class="comments-section">
+      <h2>Comments</h2>
+      ${commentsHtml}
+      ${commentFormHtml}
+   </section>`;
+
+   const fullHtml = wrapHtml(htmlContent, 'Day 4', DAYS, currentDay);
+
+   return new Response(fullHtml, {
+      headers: { 'Content-Type': 'text/html' }
+   });
+}

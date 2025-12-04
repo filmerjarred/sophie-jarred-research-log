@@ -190,18 +190,6 @@ Ok so how would this comment system work
 
 ---
 
-
-"Ok, let's make a refactor to the system"
-
-The worker needs to check if any of the days expose "index.js" in the root of the folder.
-
-If they do, then it executes index.js and serves the result as html.
-
-Let's do that, and then update day-4 to serve the post + comments.
-
-It should serve them using the file system if we're running on dev.
-
-if the DEV env var isn't set then we should serve them using the github raw content api.
 *[ Jarred 11.30am ]*
 
 Ok where are we now?
@@ -277,10 +265,23 @@ cards have markdown content, and we will need to pass each to 'marked' to build 
 
 ok, let's make a js file which "adds a card" to an md file, that is it appends "- - -" + some text with an optional user and time.
 
+---
+
 can you add a white hovering button in the lower right-hand border of the page with a simple black and white microphone icon and black border.
 
 
+---
 
+Ok, let's make a refactor to the system
 
+The worker needs to check if any of the days expose "index.js" in the root of the folder.
+
+If they do, then it executes index.js and serves the result as html.
+
+Let's do that, and then update day-4 to serve the post + comments.
+
+It should serve them using the file system if we're running on dev.
+
+if the DEV env var isn't set then we should serve them using the github raw content api.
 
 

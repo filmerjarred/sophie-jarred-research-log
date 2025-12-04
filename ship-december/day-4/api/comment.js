@@ -14,6 +14,8 @@ const BRANCH = 'main';
 //    return { status: 'ok', mode: 'dev' };
 // }
 
+// handleProd('day-4', 'test comment', '')
+
 // Production: use GitHub API
 async function handleProd(day, comment, githubToken) {
    const filePath = `ship-december/${day}/comments.md`;

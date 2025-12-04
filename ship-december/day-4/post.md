@@ -34,7 +34,7 @@ Of course!
 
 Ok so today's ideal features would be:
 
-0. Introduce cards as a primitive
+1. Introduce cards as a primitive
 2. Add tooling to add cards to margin using the librarian
-1. Make the librarian easier to access
-3. Add tooling to add cards to comments.md
+3. Make the librarian easier to access
+4. Add tooling to add cards to comments.md
