@@ -9,6 +9,18 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const shipDecemberDir = join(__dirname, 'ship-december');
 const PORT = 3000;
 
+// Load .env file
+const envPath = join(__dirname, '.env');
+if (existsSync(envPath)) {
+   const envContent = readFileSync(envPath, 'utf-8');
+   for (const line of envContent.split('\n')) {
+      const [key, ...valueParts] = line.split('=');
+      if (key && valueParts.length) {
+         process.env[key.trim()] = valueParts.join('=').trim();
+      }
+   }
+}
+
 // === Build watcher ===
 let buildTimeout = null;
 let building = false;
@@ -74,11 +86,71 @@ const mimeTypes = {
    '.woff2': 'font/woff2',
 };
 
+// API route cache (cleared on file changes)
+const apiCache = new Map();
+
+async function handleApiRoute(req, res, apiPath) {
+   try {
+      // Clear cache to always get fresh module in dev
+      const fullPath = join(__dirname, apiPath);
+      const fileUrl = `file://${fullPath}?t=${Date.now()}`;
+
+      const mod = await import(fileUrl);
+
+      // Collect request body
+      let body = '';
+      for await (const chunk of req) {
+         body += chunk;
+      }
+
+      // Create a request-like context
+      const context = {
+         request: {
+            method: req.method,
+            headers: Object.fromEntries(Object.entries(req.headers)),
+            url: req.url,
+            body,
+            json: () => JSON.parse(body || '{}')
+         }
+      };
+
+      const result = await mod.onRequest(context);
+
+      // Handle Response-like objects
+      if (result && typeof result.text === 'function') {
+         const text = await result.text();
+         const headers = {};
+         if (result.headers) {
+            result.headers.forEach((v, k) => headers[k] = v);
+         }
+         res.writeHead(result.status || 200, headers);
+         res.end(text);
+      } else {
+         res.writeHead(200, { 'Content-Type': 'application/json' });
+         res.end(JSON.stringify(result));
+      }
+   } catch (err) {
+      console.error('API error:', err);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: err.message }));
+   }
+}
+
 const server = createServer({
    key: readFileSync(join(__dirname, 'key.pem')),
    cert: readFileSync(join(__dirname, 'cert.pem')),
-}, (req, res) => {
+}, async (req, res) => {
    let url = req.url.split('?')[0];
+
+   // Check for API routes: /ship-december/day-X/api/name -> day-X/api/name.js
+   const apiMatch = url.match(/^\/ship-december\/(day-\d+)\/api\/(\w+)$/);
+   if (apiMatch) {
+      const apiPath = `ship-december/${apiMatch[1]}/api/${apiMatch[2]}.js`;
+      if (existsSync(join(__dirname, apiPath))) {
+         await handleApiRoute(req, res, apiPath);
+         return;
+      }
+   }
 
    // Redirect to trailing slash for directories
    if (!extname(url) && !url.endsWith('/')) {

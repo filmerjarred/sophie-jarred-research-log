@@ -1,10 +1,56 @@
 import { marked } from 'marked';
 import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'fs';
-import { join, dirname, basename } from 'path';
+import { join, dirname, basename, relative } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const shipDecemberDir = join(__dirname, '..');
+const workspaceRoot = join(shipDecemberDir, '..');
+
+// Convert markdown file to cards
+function mdToCards(filePath) {
+   const content = readFileSync(filePath, 'utf-8');
+   const relativePath = relative(workspaceRoot, filePath);
+
+   // Split on \n- - -\n
+   const sections = content.split(/\n- - -\n/);
+
+   return sections.map(section => {
+      const trimmed = section.trim();
+      if (!trimmed) return null;
+
+      // Find first header (# or ## or ### etc)
+      const headerMatch = trimmed.match(/^#{1,6}\s+(.+)$/m);
+      const title = headerMatch ? headerMatch[1].trim() : null;
+
+      // Find [ User time ] pattern - time is optional
+      const userMatch = trimmed.match(/\[([A-Za-z]+)(?:\s+([^\]]+))?\]/);
+      const user = userMatch ? userMatch[1] : null;
+      const time = userMatch && userMatch[2] ? userMatch[2].trim() : null;
+
+      return {
+         title,
+         user,
+         time,
+         content: trimmed,
+         file: relativePath
+      };
+   }).filter(Boolean);
+}
+
+// Render cards to HTML
+function renderCards(cards, className = 'card') {
+   return cards.map(card => {
+      const html = marked(card.content);
+      const dataAttrs = [
+         card.user ? `data-user="${card.user}"` : '',
+         card.time ? `data-time="${card.time}"` : '',
+         card.file ? `data-file="${card.file}"` : ''
+      ].filter(Boolean).join(' ');
+
+      return `<article class="${className}" ${dataAttrs}>${html}</article>`;
+   }).join(className === 'card' ? '\n<hr>\n' : '\n');
+}
 
 // Discover all days and their appendices
 function discoverDays() {
@@ -338,7 +384,7 @@ function generateStyles() {
       code { background: #f4f4f4; padding: 0.2em 0.4em; border-radius: 3px; }
       pre { background: #f4f4f4; padding: 1em; overflow-x: auto; border-radius: 5px; }
       pre code { background: none; padding: 0; }
-      img { max-width: 100%; height: auto; }
+      img { max-width: 100%; height: auto; border: 1px solid #ddd; }
       hr { border: none; border-top: 1px solid #a1a1a1; margin: 2em 0; }
       blockquote {
          margin: 1.5em 0;
@@ -347,6 +393,33 @@ function generateStyles() {
          border-left: 4px solid #333;
       }
       blockquote p { margin: 0; }
+
+      /* Cards */
+      .card {
+         margin-bottom: 0;
+      }
+
+      /* Comments */
+      .comments-section {
+         margin-top: 3rem;
+         padding-top: 2rem;
+         border-top: 2px solid #333;
+      }
+      .comments-section h2 {
+         margin-top: 0;
+         font-size: 1.2rem;
+         color: #666;
+      }
+      .comment {
+         background: #f9f9f9;
+         border-left: 3px solid #ccc;
+         padding: 0.75rem 1rem;
+         margin: 1rem 0;
+         font-size: 0.95rem;
+      }
+      .comment p {
+         margin: 0;
+      }
    `;
 }
 
@@ -474,10 +547,27 @@ function wrapHtml(content, title, days, currentDay) {
 }
 
 // Build this day
-const currentDay = 'day-3';
+const currentDay = 'day-4';
 const days = discoverDays();
-const markdown = readFileSync(join(__dirname, 'post.md'), 'utf-8');
-const htmlContent = marked(markdown);
-const fullHtml = wrapHtml(htmlContent, 'Day 3', days, currentDay);
+
+// Convert post.md to cards, then render
+const cards = mdToCards(join(__dirname, 'post.md'));
+let htmlContent = renderCards(cards);
+
+// Add comments if comments.md exists
+const commentsPath = join(__dirname, 'comments.md');
+if (existsSync(commentsPath)) {
+   const commentCards = mdToCards(commentsPath);
+   if (commentCards.length > 0) {
+      const commentsHtml = renderCards(commentCards, 'comment');
+      htmlContent += `
+      <section class="comments-section">
+         <h2>Comments</h2>
+         ${commentsHtml}
+      </section>`;
+   }
+}
+
+const fullHtml = wrapHtml(htmlContent, 'Day 4', days, currentDay);
 writeFileSync(join(__dirname, 'index.html'), fullHtml);
-if (!process.env.QUIET) console.log('Built: ship-december/day-3/index.html');
+if (!process.env.QUIET) console.log('Built: ship-december/day-4/index.html');
