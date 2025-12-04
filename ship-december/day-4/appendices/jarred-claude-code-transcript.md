@@ -75,3 +75,5 @@ if the DEV env var isn't set then we should serve them using the github raw cont
 **[2:40pm]** can we add wiki-link support please such that the wiki-link in day4 post works in html for appendicy content (will open the modal)
 
 **[2:43pm]** "Make sure to prefix the module name with "node:" or update your compatibility_date to 2024-09-23 or later." also do we really need the url package?
+
+**[2:48pm]** "Uncaught Error: No such module "node:fs"."

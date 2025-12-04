@@ -1,6 +1,4 @@
 import { marked } from 'marked';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 
 const REPO_OWNER = 'filmerjarred';
 const REPO_NAME = 'sophie-jarred-research-log';
@@ -742,9 +740,9 @@ export async function onRequest(context) {
    const currentDay = 'day-4';
    const githubToken = context?.env?.GIT_API_TOKEN || process.env?.GIT_API_TOKEN;
 
-   // Read post.md from disk
-   const postMd = readFileSync(join(import.meta.dirname, 'post.md'), 'utf-8');
-   const cards = mdToCards(postMd, 'ship-december/day-4/post.md');
+   // Fetch post.md from GitHub
+   const postMd = await fetchFromGitHub('ship-december/day-4/post.md', githubToken);
+   const cards = mdToCards(postMd || '', 'ship-december/day-4/post.md');
    let htmlContent = renderCards(cards);
 
    // Fetch comments dynamically from GitHub
