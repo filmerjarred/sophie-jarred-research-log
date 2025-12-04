@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Day 3</title>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+   <style>
+      * { box-sizing: border-box; }
+
+      html {
+         overflow-x: hidden;
+      }
+
+      body {
+         font-family: 'Cardo', Georgia, serif;
+         line-height: 1.6;
+         margin: 0;
+         padding: 0;
+         display: flex;
+         overflow-x: hidden;
+      }
+
+      /* Sidebar */
+      .sidebar {
+         width: 220px;
+         min-height: 100vh;
+         background: #fff;
+         border-right: 1px solid #e0e0e0;
+         position: fixed;
+         left: 0;
+         top: 0;
+         overflow-y: auto;
+         font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Mono", "Droid Sans Mono", "Source Code Pro", ui-monospace, monospace;
+         font-size: 1rem;
+      }
+
+      .sidebar-header {
+         padding: 1.5rem 1rem 1rem;
+         font-weight: 700;
+         font-size: 1.1rem;
+         border-bottom: 1px solid #e0e0e0;
+      }
+
+      .sidebar-item {
+         border-bottom: 1px solid #eee;
+      }
+
+      .sidebar-item-row {
+         display: flex;
+         align-items: stretch;
+      }
+
+      .day-link {
+         flex: 1;
+         padding: 0.75rem 1rem;
+         color: #000;
+         text-decoration: none;
+         display: block;
+      }
+
+      .day-link:hover {
+         background: #f5f5f5;
+      }
+
+      .sidebar-item.active .day-link {
+         font-weight: 700;
+      }
+
+      .chevron-container {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 40px;
+         border-left: 1px solid #eee;
+         cursor: pointer;
+         user-select: none;
+      }
+
+      .chevron-container:hover {
+         background: #f5f5f5;
+      }
+
+      .chevron {
+         font-size: 0.8rem;
+         color: #666;
+         transition: transform 0.2s ease;
+      }
+
+      .sidebar-item.expanded .chevron {
+         transform: rotate(180deg);
+      }
+
+      .appendices-tree {
+         display: none;
+         background: #fafafa;
+         border-top: 1px solid #eee;
+      }
+
+      .sidebar-item.expanded .appendices-tree {
+         display: block;
+      }
+
+      .appendix-item {
+         padding: 0.5rem 1rem 0.5rem 2rem;
+         font-size: 0.8rem;
+         cursor: pointer;
+         border-bottom: 1px solid #eee;
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+      }
+
+      .appendix-item:last-child {
+         border-bottom: none;
+      }
+
+      .appendix-item:hover {
+         background: #f0f0f0;
+      }
+
+      /* Main content */
+      .main-content {
+         margin-left: 220px;
+         flex: 1;
+         max-width: 800px;
+         padding: 2rem 2rem 2rem 3.5rem;
+      }
+
+      /* Modal */
+      .modal {
+         display: none;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0, 0, 0, 0.3);
+         z-index: 1000;
+         justify-content: center;
+         align-items: center;
+      }
+
+      .modal.open {
+         display: flex;
+      }
+
+      .modal-content {
+         background: #fff;
+         border: 1px solid #000;
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+         max-width: 800px;
+         width: 90%;
+         max-height: 80vh;
+         position: relative;
+         display: flex;
+         flex-direction: column;
+      }
+
+      .modal-close {
+         position: absolute;
+         top: 0.5rem;
+         right: 0.75rem;
+         background: none;
+         border: none;
+         font-size: 1.5rem;
+         cursor: pointer;
+         color: #000;
+         line-height: 1;
+      }
+
+      .modal-close:hover {
+         color: #666;
+      }
+
+      .modal-body {
+         padding: 2rem;
+         overflow-y: auto;
+         font-family: 'Cardo', Georgia, serif;
+         line-height: 1.6;
+      }
+
+      .modal-body pre {
+         background: #f4f4f4;
+         padding: 1em;
+         overflow-x: auto;
+         border-radius: 5px;
+      }
+
+      .modal-body code {
+         background: #f4f4f4;
+         padding: 0.2em 0.4em;
+         border-radius: 3px;
+      }
+
+      .modal-body pre code {
+         background: none;
+         padding: 0;
+      }
+
+      /* Responsive sidebar */
+      @media (max-width: 800px) {
+         .sidebar {
+            width: 125px;
+         }
+         .main-content {
+            margin-left: 125px;
+            padding: 1.5rem 1.5rem 1.5rem 2rem;
+         }
+         .appendix-item {
+            padding: 0.5rem 0.5rem 0.5rem 1rem;
+         }
+         .chevron-container {
+            width: 30px;
+         }
+      }
+
+      /* Sidebar expanded state (swipe to expand) */
+      .sidebar {
+         transition: width 0.3s ease;
+      }
+      .main-content {
+         transition: margin-left 0.3s ease, opacity 0.3s ease;
+      }
+      body.sidebar-expanded .sidebar {
+         width: 80vw;
+         z-index: 100;
+      }
+      body.sidebar-expanded .main-content {
+         margin-left: 80vw;
+         opacity: 0.3;
+         cursor: pointer;
+      }
+      @media (max-width: 800px) {
+         body.sidebar-expanded .sidebar {
+            width: 85vw;
+         }
+         body.sidebar-expanded .main-content {
+            margin-left: 85vw;
+         }
+      }
+
+      /* Post content styles */
+      h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; }
+      h1 { border-bottom: 2px solid #eee; padding-bottom: 0.3em; }
+      a { color: #0066cc; }
+      code { background: #f4f4f4; padding: 0.2em 0.4em; border-radius: 3px; }
+      pre { background: #f4f4f4; padding: 1em; overflow-x: auto; border-radius: 5px; }
+      pre code { background: none; padding: 0; }
+      img { max-width: 100%; height: auto; }
+      hr { border: none; border-top: 1px solid #a1a1a1; margin: 2em 0; }
+      blockquote {
+         margin: 1.5em 0;
+         padding: 1em 1.5em;
+         background: #f9f9f9;
+         border-left: 4px solid #333;
+      }
+      blockquote p { margin: 0; }
+   </style>
+</head>
+<body>
+   
+   <nav class="sidebar">
+      <div class="sidebar-header">Ship December</div>
+      
+      <div class="sidebar-item">
+         <div class="sidebar-item-row">
+            <a href="/ship-december/day-1" class="day-link">Day 1</a>
+            
+         </div>
+         
+      </div>
+      <div class="sidebar-item">
+         <div class="sidebar-item-row">
+            <a href="/ship-december/day-2" class="day-link">Day 2</a>
+            
+         </div>
+         
+      </div>
+      <div class="sidebar-item active expanded">
+         <div class="sidebar-item-row">
+            <a href="/ship-december/day-3" class="day-link">Day 3</a>
+            <div class="chevron-container"><span class="chevron">&#9662;</span></div>
+         </div>
+         <div class="appendices-tree"><div class="appendix-item" data-path="/ship-december/day-3/appendices/jarred-claude-code-transcript.md" data-name="jarred-claude-code-transcript.md">jarred-claude-code-transcript.md</div><div class="appendix-item" data-path="/ship-december/day-3/appendices/jarred-margin.md" data-name="jarred-margin.md">jarred-margin.md</div></div>
+      </div>
+   </nav>
+   <main class="main-content">
+      <p><em>[Jarred 8am]</em></p>
+<p>Good morning once again!</p>
+<p>It&#39;s Day 3 of Ship December.</p>
+<p>I forgot to make the time stamps on yesterdays posts italisised. This has injured me and also it&#39;s a comfort to know I can&#39;t change it.</p>
+<p>There&#39;s really something to be said for containers.</p>
+<p>Ok, where are we.</p>
+<p>Well, just now I copied and pasted <code>day-2</code> in the <code>ship-december</code> folder and then renamed <code>day-2 Copy</code> to <code>day-3</code>. I thought it could be neat if I could right click in my editor or run a command to do this in one step. Let&#39;s ask claude-code to to whip something up.</p>
+<blockquote>
+<p>🤖 can you make a folder in day-3 called &quot;vscode-extension&quot;. can you initialise a boiler-plate vscode extension in that folder. call the
+  extension ship-december. have it add a context menu command &quot;new day&quot; which duplicates the most recent folder in &quot;ship-december&quot; (say
+  &quot;day-2&quot; and makes it &quot;day-3&quot;).</p>
+</blockquote>
+<p>Yay!</p>
+<p><img src="image.png" alt="alt text"></p>
+<p>Ok, before then I was doodling in the kitchen with some tea about how I might relieve my shipping anxiety today as soon as possible.</p>
+<p><img src="image-1.png" alt="alt text"></p>
+<p>Here&#39;s the goal:</p>
+<ol>
+<li>Have a sidebar which can sit to the left of the posts</li>
+<li>The sidebar will display the different days of the research log</li>
+<li>The days can be unfolded to access research material we want to append to the day but not be in the main post (transcripts with various ai for instance)</li>
+</ol>
+<p>My current plan to achieve this is to use the git-tree api during our build step.</p>
+<p>Should I explain more about our nascent architecture and what&#39;s going on with our &quot;build step&quot;?</p>
+<p>It would be cool if the librarian (who has access to our code base) could be availed upon to explain to any curious reader.</p>
+<p>It would also be cool if we had some kind of comments system so readers could be like &quot;I&#39;m curious about this!&quot;</p>
+<p>I think for now let&#39;s make a sidebar.</p>
+<blockquote>
+<p>🤖 in the build step (when build.js is run) I want to add a sidebar to the index.html</p>
+<p>the sidebar should be on the left, should look nice and minimalist, all black and white (or appropraite shades thereof)</p>
+<p>the sidebar should display the posts of the days of ship december &quot;day 1, day 2, etc&quot;.</p>
+<p>clicking an entry should go to it&#39;s url (i.e /ship-december/day-3)</p>
+<p>there should be a chevron dropdown to the right which is subtly demarcated.</p>
+<p>ok so i&#39;m thinking subtle greay lines to demarcate the days vertically and then also a line to seperate the chevron horizontally from the day title.</p>
+<p>clicking the chevron should expand the entry in the sidebar</p>
+<p>if there are appendices for that day, then they should appear in a tree when the item is expanded.</p>
+<p>days have appendices if there is an &quot;appendices&quot; folder in the day (i.e /ship-december/day-3/appendices). we can discover this just using the file system.</p>
+<p>when the appendix items are clicked they should be loaded in the main-content window where the post was.</p>
+<p>perhaps there should be an &quot;x&quot; in the upper right?</p>
+<p>maybe it should be a modal?</p>
+<p>let&#39;s make it a black text on white with a simple black border (maybe a subtle drop shadow) pop-up modal for now which will display the appendix item.</p>
+</blockquote>
+<hr>
+<p><em>[ Jarred 9.30am ]</em></p>
+<p>yay!</p>
+<p><img src="image-2.png" alt="alt text"></p>
+<p>Where does that leave us?</p>
+<p>Going down a rabbit-hole trying to make the timestamps on my claude-code transcript accurately reflect the time apparently.</p>
+<hr>
+<p><em>Now</em> where does that leave us?</p>
+<p>I&#39;m meeting with Sophie in 3 hours. Do I have what I need to say we&#39;ve shipped?</p>
+<p>How will Sophie feel about me having already shipped something when she starts her workday? Will that be de-motivating? I guess we can talk about that this afternoon.</p>
+<p>Well, we have a sidebar now, and it displays whatever is in the <code>appendicies</code> folder in the repo.</p>
+<p>My spell-checker has just informed me that <code>appendicies</code> is spelt <code>appendices</code>. Hold on.</p>
+<p><img src="image-3.png" alt="alt text"></p>
+<hr>
+<p>We have a sidebar now, and it displays whatever is in the <code>appendices</code> folder in the repo. I&#39;ve set up my claude-code transcript to automatically dump to a file in there for anyone curious and for my own reference. I think in the future we could also hook up any librarian transcripts. Also we could ensure the librarian has access to all appendices.</p>
+<p>It sure is easier to build when I don&#39;t have to worry about either security or scale.</p>
+<p>Can we call that done? Can we send it to all our friends and have it work on their phones?</p>
+<p>How does it look on mobile? Good question Jarred.</p>
+<p><img src="image-4.png" alt="alt text"></p>
+<p>😬 oh lord, not good at all. The sidebar takes up half the screen on mobile.</p>
+<blockquote>
+<p>🤖 if the screen is less than 800px wide can you bring the sidebar width to 125px and adjust the main content
+  and left margin appropraitely</p>
+</blockquote>
+<p>This is not an ideal level of detail and polish to be getting into when vibe-coding. 
+In my mind all this will have to be re-done anyway... or rather maybe better to say:</p>
+<ol>
+<li>if we&#39;re not going to throw this code away then</li>
+<li>it will have to be totally re-done with a human properly in the loop</li>
+</ol>
+<blockquote>
+<p>🤖 can you add this feature to day-3 index.html &quot;you can swipe right anywhere on the sidebar to have it take up
+  the majority of the screen, when tapping the main content it returns to normal&quot;</p>
+</blockquote>
+<p>Many have noticed at this point that vibe-coding can be quite addictive. There&#39;s always little adjustments that can be made which pop to mind, and the friction to acting on it has become quite minimal.</p>
+<blockquote>
+<p>🤖 swiping left on the sidebar should also revert it to the original width</p>
+</blockquote>
+<p>Ok</p>
+<blockquote>
+<p>🤖 please make the page not horizontally scrollable</p>
+</blockquote>
+<p>Okokok. Let&#39;s ship to production and ensure it works on my actual mobile at the live address rather than just on my PC.</p>
+<blockquote>
+<p>🤖 you also need to add overflow-x: hidden to the html tag not just the body</p>
+</blockquote>
+<p>Arg, stop it</p>
+<p><img src="image-5.png" alt="alt text"></p>
+<p>Yay! The sidebar really wants to be thinner... we could take &quot;Ship December&quot; and put it at the top rather than in the sidebar, and maybe make the days just 1, 2, 3 instead.... could also make swiping left on the sidebar again make it even thinner.</p>
+<hr>
+<p>Is this fun to read? Is it productive?</p>
+<p>Oh yeah, I&#39;m meant to be gnawing a bone. Is this my bone?</p>
+<p>Sophie and I had a meeting the other day with an advanced UX researcher named Peter.</p>
+<p>He said people under-invest in &quot;polish&quot; by a factor of at-least 10. Directionally / vibe-wise I tend to agree. Can I articulate why? I felt this way with <a href="https://docs.google.com/document/d/1ORaXKVYI7aIcn_r3OxJJd4_o0rdqi9CdoeQNAmO_77I/edit?tab=t.0">Dialectica</a>...</p>
+<p><del>For what we want to build to work it needs to feel like a miracle. (Justification needed)</del></p>
+<p><del>For tools to feel like a miracle...</del></p>
+<p>gah</p>
+<p><del>Ok so tools resolve tensions.</del></p>
+<p><del>For a tool to really work it needs to add less tension than it resolves. Ideally it adds no tension at all.</del></p>
+<p><del>Projects like Dialectica and Ship December are about trying a bunch of obvious things and discovering that most of th</del></p>
+<p>gah</p>
+<p>I often &quot;feel&quot; tools which seem obviously quite useful but that don&#39;t yet exist.</p>
+<p>One way of thinking about projects like Dialectica or Ship December is setting aside a quality block of time to actually pursue the obvious.</p>
+<p>This is Dialectica by the way: </p>
+<p><img src="image-9.png" alt="alt text"></p>
+<p>It&#39;s basically a system for pinning virtual nested index cards to a big shared virtual pin-board. I made it to enable <del>autistically</del> unusually in-depth conversations and I did it by evolving the design to follow my sense of the blaring obvious.</p>
+<p>Let me explain a bit about what Dialectica is.</p>
+<p>The above image might be a bit hard to make out, but it&#39;s a series of (basically) letters that my friend Liam wrote to me on digital index cards. They all have titles, and I&#39;ve expanded the middle one so you can see the text content. The titles are:</p>
+<p>&quot;Billionaires do incomprehensible damage&quot; &gt; &quot;The Dangers of Billionaire Philanthropy&quot; &gt; &quot;A weird little sidebar on Effective Altruism&quot;</p>
+<p>If I clicked that little &quot;&lt;&lt;&quot; icon you might be able to make out, all the cards to the right of the first one would fold up &quot;under it&quot;. The cards actually continue to the right for another 8 levels of nesting. The deepest one is &quot;Honestly I think you and Marx would really vibe on the subject of ownership&quot; (bold claim).</p>
+<p>Anyway, this is the screenshot I wanted to talk about.</p>
+<p><img src="image-10.png" alt="alt text"></p>
+<p>Deep into our long digression on Effective Altruism Liam make a card entitled &quot;In utilitarianism, justifying evil is the point&quot;.</p>
+<p>I&#39;m pretty sure it was at this point where I was like:</p>
+<p>&quot;<em>Obviously</em> I need to be able to split each paragraph into separate sentences to make it easier to read them slowly one at a time&quot;</p>
+<p>&quot;<em>Obviously</em> I need to be able to at a point-by-point level create paraphrases and then have my friend be able to mark them as resonant or dissonant&quot;</p>
+<p>etc</p>
+<p>Where was I going with this?</p>
+<p>I guess my point is that the obvious has a surprising amount of detail.</p>
+<p><em>Obviously</em> there should be a sidebar with the days on it where I can access supplementary research content, but how to deal with the width issues?</p>
+<p><em>Obviously</em> readers should be able to leave google-doc style voice and text comments that the AI can read... actually the voice comment one especially sounds pretty cool. I might do that this afternoon.</p>
+<p>Anyway, I guess there&#39;s some process of exploration around this. That is, how much polish is required to properly test the intuition that &quot;there&#39;s something obvious that wants to exist in that direction.&quot;</p>
+<p>The AI librarian from yesterday is a good example. There&#39;s an intuition around &quot;easy access to a voice enabled system which can access and read back to me things I&#39;ve written or notes to self&quot;. In order to actually test this though:</p>
+<ol>
+<li><p>Potentially the value only really shines one it&#39;s available as a mobile app rather than a webpage (or maybe an always listening device like a google home?)</p>
+</li>
+<li><p>Potentially it needs to be very reliably available for the fluency to start to develop</p>
+</li>
+<li><p>At the moment the AI assistant isn&#39;t super interruptible, so if I get bored of what I&#39;m listening to it&#39;s hard to stop this.</p>
+</li>
+<li><p><em>list goes on</em></p>
+</li>
+</ol>
+<p>The point of a research project is to rapidly prototype seemingly obvious things to build, and the seemingly obvious has a surprising amount of detail.</p>
+<p>I have no satisfying resolution to this tension at the moment other than intuition and not working alone I think.</p>
+<hr>
+<p>[ Jarred 11.15am ]</p>
+<p>Ok, I fear this post has gotten a bit out of hand but I&#39;ve alleviated my shipping anxiety for today. We have a side bar and you can access my claude-code transcript from it, even if it does make the post annoying to read.</p>
+<hr>
+<p>[ Jarred 12.30am ]</p>
+<p><img src="image-11.png" alt="alt text"></p>
+<p>⏭️ <a href="/ship-december/day-4">next</a></p>
+<hr>
+<p>[Sophie 10.31am PT / 1.31pm ET]</p>
+<p>I would like to add a new rule. The new rule is: </p>
+<blockquote>
+<p>Sophie has to fiddle with some code every work day. If she doesn&#39;t for two days in a row, then the project is over. </p>
+</blockquote>
+
+   </main>
+   
+   <div id="appendix-modal" class="modal">
+      <div class="modal-content">
+         <button class="modal-close">&times;</button>
+         <div class="modal-body"></div>
+      </div>
+   </div>
+   
+   <script>
+      // Chevron toggle for appendices
+      document.querySelectorAll('.chevron-container').forEach(chevron => {
+         chevron.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const item = chevron.closest('.sidebar-item');
+            item.classList.toggle('expanded');
+         });
+      });
+
+      // Modal handling
+      const modal = document.getElementById('appendix-modal');
+      const modalBody = modal.querySelector('.modal-body');
+      const modalClose = modal.querySelector('.modal-close');
+
+      document.querySelectorAll('.appendix-item').forEach(item => {
+         item.addEventListener('click', async () => {
+            const path = item.dataset.path;
+            const name = item.dataset.name;
+
+            try {
+               const response = await fetch(path);
+               let content = await response.text();
+
+               // If markdown, render it
+               if (name.endsWith('.md')) {
+                  // Basic markdown rendering (or use marked if available)
+                  content = content
+                     .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                     .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                     .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                     .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+                     .replace(/\*(.*)\*/gim, '<em>$1</em>')
+                     .replace(/```([\s\S]*?)```/gim, '<pre><code>$1</code></pre>')
+                     .replace(/`([^`]+)`/gim, '<code>$1</code>')
+                     .replace(/\n/gim, '<br>');
+               } else {
+                  content = '<pre>' + content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+               }
+
+               modalBody.innerHTML = '<h2>' + name + '</h2>' + content;
+               modal.classList.add('open');
+            } catch (err) {
+               modalBody.innerHTML = '<p>Error loading file: ' + err.message + '</p>';
+               modal.classList.add('open');
+            }
+         });
+      });
+
+      modalClose.addEventListener('click', () => {
+         modal.classList.remove('open');
+      });
+
+      modal.addEventListener('click', (e) => {
+         if (e.target === modal) {
+            modal.classList.remove('open');
+         }
+      });
+
+      document.addEventListener('keydown', (e) => {
+         if (e.key === 'Escape') {
+            modal.classList.remove('open');
+         }
+      });
+
+      // Swipe to expand sidebar
+      const sidebar = document.querySelector('.sidebar');
+      const mainContent = document.querySelector('.main-content');
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      sidebar.addEventListener('touchstart', (e) => {
+         touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      sidebar.addEventListener('touchend', (e) => {
+         touchEndX = e.changedTouches[0].screenX;
+         if (touchEndX - touchStartX > 50) {
+            document.body.classList.add('sidebar-expanded');
+         } else if (touchStartX - touchEndX > 50) {
+            document.body.classList.remove('sidebar-expanded');
+         }
+      }, { passive: true });
+
+      mainContent.addEventListener('click', () => {
+         if (document.body.classList.contains('sidebar-expanded')) {
+            document.body.classList.remove('sidebar-expanded');
+         }
+      });
+   </script>
+</body>
+</html>
