@@ -1,9 +1,6 @@
 import { marked } from 'marked';
-import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 const REPO_OWNER = 'filmerjarred';
 const REPO_NAME = 'sophie-jarred-research-log';
@@ -746,7 +743,7 @@ export async function onRequest(context) {
    const githubToken = context?.env?.GIT_API_TOKEN || process.env?.GIT_API_TOKEN;
 
    // Read post.md from disk
-   const postMd = readFileSync(join(__dirname, 'post.md'), 'utf-8');
+   const postMd = readFileSync(join(import.meta.dirname, 'post.md'), 'utf-8');
    const cards = mdToCards(postMd, 'ship-december/day-4/post.md');
    let htmlContent = renderCards(cards);
 
