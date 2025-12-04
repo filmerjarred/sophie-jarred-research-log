@@ -31,3 +31,51 @@ cards have markdown content, and we will need to pass each to 'marked' to build 
 **[12:38pm]** is it visible? did you read .env?
 
 **[12:46pm]** ok so in the cloudflare webpage it say i can't add a secret to a project with only static assets. but there's a worker.js...
+
+**[1:17pm]** Ok, let's make a refactor to the system
+
+The worker needs to check if any of the days expose "index.js" in the root of the folder.
+
+If they do, then it executes index.js and serves the result as html.
+
+Let's do that, and then update day-4 to serve the post + comments.
+
+It should serve them using the file system if we're running on dev.
+
+if the DEV env var isn't set then we should serve them using the github raw content api.
+
+**[1:17pm]** proceed
+
+**[1:21pm]** see day-4 build.js?
+
+**[1:23pm]** I want to translate build.js into index.js. Rather than index.html being built at build time I want to build it dynamically. post.md won't change, but comments.md will which is why we need to build the html dynamically and use fetchFromGithub to get comments.md. so the functionality in build.js should go into index.js and then day 4 build.js is deleted.
+
+**[1:29pm]** can you update serve.js to use worker.js to do it's routing?
+
+**[1:29pm]** actually just update serve to respect index.js in day-4 please
+
+**[1:31pm]** can watch.js re-use serve.js
+
+**[1:31pm]** maybe let's just remove serve and add the index.js feature to watch and rename watch.js to dev.js
+
+**[1:43pm]** can index.js actually just read from post.md rather than embed it within itself?
+
+**[1:48pm]** can you add a comment form to the bottom of the page which hits /ship-december/day-4/api/comment with a post request with a comment. can it also ask for a name and prepend that to the comment in this style [ user day-x time ]. it will need to compute which day it is based on the current date (like day-31) etc.
+
+**[1:49pm]** can it save and populate the name in local storage
+
+**[1:53pm]** rather than using the github raw content api can we use the content api powered by the personal access token
+
+**[1:54pm]** (which is in the env which powers api/comment
+
+**[2:19pm]** in day-4, on mobile, can you make the sidebar 64 px, the day text middle aligned, and the "Ship December" title have an elipse on the overflow
+
+**[2:38pm]** can we add Add the "nodejs_compat" compatibility flag to your project.
+
+**[2:40pm]** can we add wiki-link support please such that the wiki-link in day4 post works in html for appendicy content (will open the modal)
+
+**[2:43pm]** "Make sure to prefix the module name with "node:" or update your compatibility_date to 2024-09-23 or later." also do we really need the url package?
+
+**[2:48pm]** "Uncaught Error: No such module "node:fs"."
+
+**[2:52pm]** can you add a rule to add a trailing slash in worker.js if it's missing (301 redirect)

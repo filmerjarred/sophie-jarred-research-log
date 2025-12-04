@@ -1,17 +1,35 @@
 import { marked } from 'marked';
-import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'fs';
-import { join, dirname, basename, relative } from 'path';
-import { fileURLToPath } from 'url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const shipDecemberDir = join(__dirname, '..');
-const workspaceRoot = join(shipDecemberDir, '..');
+const REPO_OWNER = 'filmerjarred';
+const REPO_NAME = 'sophie-jarred-research-log';
+const BRANCH = 'main';
 
-// Convert markdown file to cards
-function mdToCards(filePath) {
-   const content = readFileSync(filePath, 'utf-8');
-   const relativePath = relative(workspaceRoot, filePath);
+async function fetchFromGitHub(filePath, githubToken) {
+   const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}?ref=${BRANCH}`;
 
+   const headers = {
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+      'User-Agent': 'ship-december'
+   };
+
+   if (githubToken) {
+      headers['Authorization'] = `Bearer ${githubToken}`;
+   }
+
+   const response = await fetch(url, { headers });
+   if (!response.ok) {
+      if (response.status === 404) return null;
+      throw new Error(`GitHub fetch failed: ${response.status}`);
+   }
+
+   const data = await response.json();
+   // Content is base64 encoded
+   return atob(data.content.replace(/\n/g, ''));
+}
+
+// Convert markdown content to cards
+function mdToCards(content, filePath = '') {
    // Split on \n- - -\n
    const sections = content.split(/\n- - -\n/);
 
@@ -33,15 +51,37 @@ function mdToCards(filePath) {
          user,
          time,
          content: trimmed,
-         file: relativePath
+         file: filePath
       };
    }).filter(Boolean);
+}
+
+// Convert wiki-links [[path]] to clickable links that open modal
+function processWikiLinks(html) {
+   // Match [[path]] or [[path|display text]]
+   return html.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (match, path, displayText) => {
+      // Normalize path - add .md if no extension, prefix with /ship-december/ if needed
+      let fullPath = path.trim();
+      if (!fullPath.includes('.')) {
+         fullPath += '.md';
+      }
+      if (!fullPath.startsWith('/')) {
+         fullPath = '/ship-december/' + fullPath;
+      }
+
+      // Get display text - use the filename without extension if not provided
+      const display = displayText || path.split('/').pop().replace(/\.md$/, '');
+      const name = fullPath.split('/').pop();
+
+      return `<a href="#" class="wiki-link" data-path="${fullPath}" data-name="${name}">${display}</a>`;
+   });
 }
 
 // Render cards to HTML
 function renderCards(cards, className = 'card') {
    return cards.map(card => {
-      const html = marked(card.content);
+      let html = marked(card.content);
+      html = processWikiLinks(html);
       const dataAttrs = [
          card.user ? `data-user="${card.user}"` : '',
          card.time ? `data-time="${card.time}"` : '',
@@ -52,51 +92,18 @@ function renderCards(cards, className = 'card') {
    }).join(className === 'card' ? '\n<hr>\n' : '\n');
 }
 
-// Discover all days and their appendices
-function discoverDays() {
-   const days = [];
-   const entries = readdirSync(shipDecemberDir).filter(d => {
-      const dayPath = join(shipDecemberDir, d);
-      return statSync(dayPath).isDirectory() && d.startsWith('day-');
-   }).sort((a, b) => {
-      const numA = parseInt(a.replace('day-', ''));
-      const numB = parseInt(b.replace('day-', ''));
-      return numA - numB;
-   });
-
-   for (const day of entries) {
-      const dayPath = join(shipDecemberDir, day);
-      const dayNum = day.replace('day-', '');
-      const appendices = [];
-
-      // Check for appendices folder
-      const appendicesPath = join(dayPath, 'appendices');
-      const actualAppendicesPath = existsSync(appendicesPath) ? appendicesPath : null;
-
-      if (actualAppendicesPath) {
-         const files = readdirSync(actualAppendicesPath);
-         for (const file of files) {
-            const filePath = join(actualAppendicesPath, file);
-            if (statSync(filePath).isFile()) {
-               appendices.push({
-                  name: file,
-                  path: `/ship-december/${day}/${basename(actualAppendicesPath)}/${file}`
-               });
-            }
-         }
-      }
-
-      days.push({
-         folder: day,
-         num: dayNum,
-         title: `Day ${dayNum}`,
-         url: `/ship-december/${day}`,
-         appendices
-      });
+// Static days data (could be fetched dynamically if needed)
+const DAYS = [
+   { folder: 'day-1', num: '1', title: 'Day 1', url: '/ship-december/day-1', appendices: [] },
+   { folder: 'day-2', num: '2', title: 'Day 2', url: '/ship-december/day-2', appendices: [] },
+   { folder: 'day-3', num: '3', title: 'Day 3', url: '/ship-december/day-3', appendices: [] },
+   {
+      folder: 'day-4', num: '4', title: 'Day 4', url: '/ship-december/day-4', appendices: [
+         { name: 'jarred-claude-code-transcript.md', path: '/ship-december/day-4/appendices/jarred-claude-code-transcript.md' },
+         { name: 'jarred-margin.md', path: '/ship-december/day-4/appendices/jarred-margin.md' }
+      ]
    }
-
-   return days;
-}
+];
 
 function generateSidebarHTML(days, currentDay) {
    let sidebarItems = '';
@@ -338,17 +345,31 @@ function generateStyles() {
       /* Responsive sidebar */
       @media (max-width: 800px) {
          .sidebar {
-            width: 125px;
+            width: 64px;
+         }
+         .sidebar-header {
+            padding: 1rem 0.5rem;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+         }
+         .day-link {
+            padding: 0.75rem 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
          }
          .main-content {
-            margin-left: 125px;
+            margin-left: 64px;
             padding: 1.5rem 1.5rem 1.5rem 2rem;
          }
          .appendix-item {
-            padding: 0.5rem 0.5rem 0.5rem 1rem;
+            padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+            font-size: 0.7rem;
          }
          .chevron-container {
-            width: 30px;
+            width: 20px;
          }
       }
 
@@ -381,6 +402,14 @@ function generateStyles() {
       h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; }
       h1 { border-bottom: 2px solid #eee; padding-bottom: 0.3em; }
       a { color: #0066cc; }
+      a.wiki-link {
+         color: #0066cc;
+         text-decoration: none;
+         border-bottom: 1px dashed #0066cc;
+      }
+      a.wiki-link:hover {
+         border-bottom-style: solid;
+      }
       code { background: #f4f4f4; padding: 0.2em 0.4em; border-radius: 3px; }
       pre { background: #f4f4f4; padding: 1em; overflow-x: auto; border-radius: 5px; }
       pre code { background: none; padding: 0; }
@@ -413,12 +442,61 @@ function generateStyles() {
       .comment {
          background: #f9f9f9;
          border-left: 3px solid #ccc;
-         padding: 0.75rem 1rem;
+         padding: 0.1rem 1rem;
          margin: 1rem 0;
          font-size: 0.95rem;
       }
-      .comment p {
-         margin: 0;
+
+      /* Comment form */
+      .comment-form {
+         margin-top: 2rem;
+         padding: 1.5rem;
+         background: #f9f9f9;
+         border: 1px solid #ddd;
+      }
+      .comment-form h3 {
+         margin: 0 0 1rem 0;
+         font-size: 1rem;
+         color: #333;
+      }
+      .comment-form input,
+      .comment-form textarea {
+         width: 100%;
+         padding: 0.5rem;
+         margin-bottom: 0.75rem;
+         border: 1px solid #ccc;
+         font-family: inherit;
+         font-size: 0.95rem;
+      }
+      .comment-form textarea {
+         min-height: 100px;
+         resize: vertical;
+      }
+      .comment-form button {
+         padding: 0.5rem 1.5rem;
+         background: #333;
+         color: #fff;
+         border: none;
+         cursor: pointer;
+         font-family: inherit;
+         font-size: 0.95rem;
+      }
+      .comment-form button:hover {
+         background: #555;
+      }
+      .comment-form button:disabled {
+         background: #999;
+         cursor: not-allowed;
+      }
+      .comment-form .form-status {
+         margin-top: 0.75rem;
+         font-size: 0.9rem;
+      }
+      .comment-form .form-status.error {
+         color: #c00;
+      }
+      .comment-form .form-status.success {
+         color: #060;
       }
    `;
 }
@@ -453,6 +531,41 @@ function generateScript() {
                // If markdown, render it
                if (name.endsWith('.md')) {
                   // Basic markdown rendering (or use marked if available)
+                  content = content
+                     .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                     .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                     .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                     .replace(/\\*\\*(.*)\\*\\*/gim, '<strong>$1</strong>')
+                     .replace(/\\*(.*)\\*/gim, '<em>$1</em>')
+                     .replace(/\`\`\`([\\s\\S]*?)\`\`\`/gim, '<pre><code>$1</code></pre>')
+                     .replace(/\`([^\`]+)\`/gim, '<code>$1</code>')
+                     .replace(/\\n/gim, '<br>');
+               } else {
+                  content = '<pre>' + content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+               }
+
+               modalBody.innerHTML = '<h2>' + name + '</h2>' + content;
+               modal.classList.add('open');
+            } catch (err) {
+               modalBody.innerHTML = '<p>Error loading file: ' + err.message + '</p>';
+               modal.classList.add('open');
+            }
+         });
+      });
+
+      // Wiki-link handling (opens modal just like appendix items)
+      document.querySelectorAll('.wiki-link').forEach(link => {
+         link.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const path = link.dataset.path;
+            const name = link.dataset.name;
+
+            try {
+               const response = await fetch(path);
+               let content = await response.text();
+
+               // If markdown, render it
+               if (name.endsWith('.md')) {
                   content = content
                      .replace(/^### (.*$)/gim, '<h3>$1</h3>')
                      .replace(/^## (.*$)/gim, '<h2>$1</h2>')
@@ -515,6 +628,83 @@ function generateScript() {
             document.body.classList.remove('sidebar-expanded');
          }
       });
+
+      // Comment form handling
+      const commentForm = document.getElementById('comment-form');
+      if (commentForm) {
+         const nameInput = document.getElementById('comment-name');
+
+         // Load saved name from localStorage
+         const savedName = localStorage.getItem('commentName');
+         if (savedName) {
+            nameInput.value = savedName;
+         }
+
+         commentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const textInput = document.getElementById('comment-text');
+            const submitBtn = commentForm.querySelector('button[type="submit"]');
+            const statusDiv = document.getElementById('form-status');
+
+            const name = nameInput.value.trim() || 'Anonymous';
+
+            // Save name to localStorage
+            if (nameInput.value.trim()) {
+               localStorage.setItem('commentName', nameInput.value.trim());
+            }
+            const text = textInput.value.trim();
+
+            if (!text) {
+               statusDiv.textContent = 'Please enter a comment';
+               statusDiv.className = 'form-status error';
+               return;
+            }
+
+            // Compute day based on current date (December 2024)
+            const now = new Date();
+            const day = now.getDate();
+            const dayStr = 'day-' + day;
+
+            // Format time like "7.30am"
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12 || 12;
+            const timeStr = hours + '.' + String(minutes).padStart(2, '0') + ampm;
+
+            // Build the comment with metadata header
+            const fullComment = '*[ ' + name + ' ' + dayStr + ' ' + timeStr + ' ]*\\n\\n' + text;
+
+            submitBtn.disabled = true;
+            statusDiv.textContent = 'Submitting...';
+            statusDiv.className = 'form-status';
+
+            try {
+               const response = await fetch('/ship-december/day-4/api/comment', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ comment: fullComment, day: 'day-4' })
+               });
+
+               const result = await response.json();
+
+               if (response.ok) {
+                  statusDiv.textContent = 'Comment submitted! Refresh to see it.';
+                  statusDiv.className = 'form-status success';
+                  textInput.value = '';
+               } else {
+                  statusDiv.textContent = 'Error: ' + (result.error || 'Unknown error');
+                  statusDiv.className = 'form-status error';
+               }
+            } catch (err) {
+               statusDiv.textContent = 'Error: ' + err.message;
+               statusDiv.className = 'form-status error';
+            } finally {
+               submitBtn.disabled = false;
+            }
+         });
+      }
    </script>`;
 }
 
@@ -546,28 +736,49 @@ function wrapHtml(content, title, days, currentDay) {
 </html>`;
 }
 
-// Build this day
-const currentDay = 'day-4';
-const days = discoverDays();
+export async function onRequest(context) {
+   const currentDay = 'day-4';
+   const githubToken = context?.env?.GIT_API_TOKEN || process.env?.GIT_API_TOKEN;
 
-// Convert post.md to cards, then render
-const cards = mdToCards(join(__dirname, 'post.md'));
-let htmlContent = renderCards(cards);
+   // Fetch post.md from GitHub
+   const postMd = await fetchFromGitHub('ship-december/day-4/post.md', githubToken);
+   const cards = mdToCards(postMd || '', 'ship-december/day-4/post.md');
+   let htmlContent = renderCards(cards);
 
-// Add comments if comments.md exists
-const commentsPath = join(__dirname, 'comments.md');
-if (existsSync(commentsPath)) {
-   const commentCards = mdToCards(commentsPath);
-   if (commentCards.length > 0) {
-      const commentsHtml = renderCards(commentCards, 'comment');
-      htmlContent += `
-      <section class="comments-section">
-         <h2>Comments</h2>
-         ${commentsHtml}
-      </section>`;
+   // Fetch comments dynamically from GitHub
+   const commentsMd = await fetchFromGitHub('ship-december/day-4/comments.md', githubToken);
+   let commentsHtml = '';
+
+   if (commentsMd) {
+      const commentCards = mdToCards(commentsMd, 'ship-december/day-4/comments.md');
+      if (commentCards.length > 0) {
+         commentsHtml = renderCards(commentCards, 'comment');
+      }
    }
-}
 
-const fullHtml = wrapHtml(htmlContent, 'Day 4', days, currentDay);
-writeFileSync(join(__dirname, 'index.html'), fullHtml);
-if (!process.env.QUIET) console.log('Built: ship-december/day-4/index.html');
+   // Comment form HTML
+   const commentFormHtml = `
+      <div class="comment-form">
+         <h3>Leave a comment</h3>
+         <form id="comment-form">
+            <input type="text" id="comment-name" placeholder="Your name (optional)" />
+            <textarea id="comment-text" placeholder="Your comment..."></textarea>
+            <button type="submit">Submit</button>
+            <div id="form-status" class="form-status"></div>
+         </form>
+      </div>
+   `;
+
+   htmlContent += `
+   <section class="comments-section">
+      <h2>Comments</h2>
+      ${commentsHtml}
+      ${commentFormHtml}
+   </section>`;
+
+   const fullHtml = wrapHtml(htmlContent, 'Day 4', DAYS, currentDay);
+
+   return new Response(fullHtml, {
+      headers: { 'Content-Type': 'text/html' }
+   });
+}

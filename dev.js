@@ -162,7 +162,32 @@ const server = createServer({
       }
    }
 
+   // Check for index.js (Cloudflare Worker) in directory
    if (url.endsWith('/')) {
+      const dirPath = join(__dirname, url);
+      const indexJsPath = join(dirPath, 'index.js');
+
+      if (existsSync(indexJsPath)) {
+         try {
+            const fileUrl = `file://${indexJsPath}?t=${Date.now()}`;
+            const worker = await import(fileUrl);
+            if (worker.onRequest) {
+               const response = await worker.onRequest({ request: req });
+               const body = await response.text();
+               res.writeHead(response.status || 200, {
+                  'Content-Type': response.headers.get('Content-Type') || 'text/html'
+               });
+               res.end(body);
+               return;
+            }
+         } catch (err) {
+            console.error('Worker error:', err);
+            res.writeHead(500, { 'Content-Type': 'text/plain' });
+            res.end('500 Worker Error: ' + err.message);
+            return;
+         }
+      }
+
       url += 'index.html';
    }
 
