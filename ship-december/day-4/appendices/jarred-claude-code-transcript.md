@@ -69,3 +69,5 @@ if the DEV env var isn't set then we should serve them using the github raw cont
 **[1:54pm]** (which is in the env which powers api/comment
 
 **[2:19pm]** in day-4, on mobile, can you make the sidebar 64 px, the day text middle aligned, and the "Ship December" title have an elipse on the overflow
+
+**[2:38pm]** can we add Add the "nodejs_compat" compatibility flag to your project.
