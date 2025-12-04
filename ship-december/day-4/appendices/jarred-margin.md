@@ -277,10 +277,25 @@ cards have markdown content, and we will need to pass each to 'marked' to build 
 
 ok, let's make a js file which "adds a card" to an md file, that is it appends "- - -" + some text with an optional user and time.
 
-can you add a white hovering button in the lower right-hand border of the page with a simple black and white microphone icon and black border.
 
+---
 
+can you add a white hovering button in the lower right-hand border of the page with a simple black and white comment and microphone and a icon and black border.
 
+when tapping this microphone please start recording an audio message. the audio message should be saved to local storage, every 3s or so it should flush the audio buffer to local storage such that if the recording is interrupted things are saved.
 
+when the recording is finished it should upload the audio to the /voice-comment api.
+
+if it fails it should show a modal "upload failed, click to save" which will download it.
+
+we'll need to add a voice-comment api that mirrors the comment.js api but that obviously accepts audio. the api will need to use the open-ai transcription service to transcribe the audio.
+
+it should save it as markdown with a audio html element and a base64 blob, as well as the transcript. it should save it as a card in voice-comments.md.
+
+for both comment and voice-comment.js we need to detect if there's been a race condition and someone has committed to that file and we should retry 3 times (check the file out, append, and then submit).
+
+we should display the voice comments in a grey circle along with the first two initials of the user's name (ask in a popup the first time they go to record, use the same local storage entry as the comment name).
+
+can you add a different white hovering button but it's a microphone + an icon for "margin" and this one is voice-margin.js and it saves to the user's margin file.
 
 
