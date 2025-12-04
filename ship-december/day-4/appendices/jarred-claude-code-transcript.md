@@ -79,3 +79,35 @@ if the DEV env var isn't set then we should serve them using the github raw cont
 **[2:48pm]** "Uncaught Error: No such module "node:fs"."
 
 **[2:52pm]** can you add a rule to add a trailing slash in worker.js if it's missing (301 redirect)
+
+**[4:33pm]** we're in day 4\
+\
+can you add a white hovering button in the lower right-hand border of the page with a simple black and white comment and microphone and a icon and black border.
+
+when tapping this microphone please start recording an audio message. the audio message should be saved to local storage, every 3s or so it should flush the audio buffer to local storage such that if the recording is interrupted things are saved.
+
+when the recording is finished it should upload the audio to the /voice-comment api.
+
+if it fails it should show a modal "upload failed, click to save" which will download it.
+
+we'll need to add a voice-comment api that mirrors the comment.js api but that obviously accepts audio. the api will need to use the open-ai transcription service to transcribe the audio.
+
+it should save it as markdown with a audio html element and a base64 blob, as well as the transcript. it should save it as a card in voice-comments.md.
+
+for both comment and voice-comment.js we need to detect if there's been a race condition and someone has committed to that file and we should retry 3 times (check the file out, append, and then submit).
+
+we should display the voice comments in a grey circle along with the first two initials of the user's name (ask in a popup the first time they go to record, use the same local storage entry as the comment name).
+
+can you add a different white hovering button but it's a microphone + an icon for "margin" and this one is voice-margin.js and it saves to the user's margin file.
+
+**[5:01pm]** weird, "https://localhost:3000/ship-december/day-4/api/voice-comment" doesn't match the api regex 
+
+**[5:05pm]** clicking outside the audio play modal needs to close it
+
+**[5:07pm]** I don't think my user is getting correctly extracted from the card, it comes up as "AN" but it should be "JA"
+
+**[5:08pm]** can we also save the length in the card along with the transcription and show that next to the circle in the ui
+
+**[5:11pm]** let's discuss saving the blobs seperately... the audio data... can we save that as a blob in the repo under day-4/blobs and fetch those as needed? keep the transcript (for both margin and comments)
+
+**[5:13pm]** can you use the sticky note with a small microphone icon to incicate the margin, and the comment for the comment?

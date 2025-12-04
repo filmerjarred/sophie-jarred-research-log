@@ -41,8 +41,8 @@ function mdToCards(content, filePath = '') {
       const headerMatch = trimmed.match(/^#{1,6}\s+(.+)$/m);
       const title = headerMatch ? headerMatch[1].trim() : null;
 
-      // Find [ User time ] pattern - time is optional
-      const userMatch = trimmed.match(/\[([A-Za-z]+)(?:\s+([^\]]+))?\]/);
+      // Find *[ User time ]* pattern - time is optional (the asterisks make it italic in markdown)
+      const userMatch = trimmed.match(/\*\[\s*([A-Za-z]+)(?:\s+([^\]]+))?\s*\]\*/);
       const user = userMatch ? userMatch[1] : null;
       const time = userMatch && userMatch[2] ? userMatch[2].trim() : null;
 
@@ -145,7 +145,60 @@ function generateModalHTML() {
          <button class="modal-close">&times;</button>
          <div class="modal-body"></div>
       </div>
+   </div>
+
+   <!-- Voice comment detail modal -->
+   <div id="voice-detail-modal" class="voice-modal">
+      <div class="voice-modal-content">
+         <button class="voice-modal-close" onclick="document.getElementById('voice-detail-modal').classList.remove('open')">&times;</button>
+         <div class="voice-modal-body"></div>
+      </div>
+   </div>
+
+   <!-- Name prompt modal -->
+   <div id="name-prompt-modal" class="name-modal">
+      <div class="name-modal-content">
+         <h3>What's your name?</h3>
+         <input type="text" id="voice-name-input" placeholder="Your name" autofocus />
+         <button id="name-submit-btn">Start Recording</button>
+      </div>
+   </div>
+
+   <!-- Upload failed modal -->
+   <div id="upload-failed-modal" class="upload-failed-modal">
+      <div class="upload-failed-content">
+         <h3>Upload Failed</h3>
+         <p>Your recording couldn't be uploaded. Click below to download it.</p>
+         <button id="download-recording-btn">Download Recording</button>
+      </div>
    </div>`;
+}
+
+function generateFloatingButtonsHTML() {
+   // Comment icon (speech bubble with microphone)
+   const commentIcon = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm0 15.17L18.83 16H4V4h16v13.17z"/>
+      <path d="M12 11c.83 0 1.5-.67 1.5-1.5v-3c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v3c0 .83.67 1.5 1.5 1.5z"/>
+      <path d="M14.5 9.5c0 1.38-1.12 2.5-2.5 2.5s-2.5-1.12-2.5-2.5H8.5c0 1.74 1.26 3.18 2.9 3.47V14.5h1.2v-1.53c1.64-.29 2.9-1.73 2.9-3.47h-1z"/>
+   </svg>`;
+
+   // Margin icon (sticky note with microphone)
+   const marginIcon = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 3H4.99C3.89 3 3 3.9 3 5l.01 14c0 1.1.89 2 1.99 2h10l6-6V5c0-1.1-.9-2-2-2zm0 12l-5 5H5V5h14v10z"/>
+      <path d="M12 11c.83 0 1.5-.67 1.5-1.5v-3c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v3c0 .83.67 1.5 1.5 1.5z"/>
+      <path d="M14.5 9.5c0 1.38-1.12 2.5-2.5 2.5s-2.5-1.12-2.5-2.5H8.5c0 1.74 1.26 3.18 2.9 3.47V14.5h1.2v-1.53c1.64-.29 2.9-1.73 2.9-3.47h-1z"/>
+   </svg>`;
+
+   return `
+   <div class="floating-buttons">
+      <button class="floating-btn" id="voice-margin-btn" title="Voice Margin Note">
+         ${marginIcon}
+      </button>
+      <button class="floating-btn" id="voice-comment-btn" title="Voice Comment">
+         ${commentIcon}
+      </button>
+   </div>
+   <div class="recording-status" id="recording-status">Recording...</div>`;
 }
 
 function generateStyles() {
@@ -498,6 +551,273 @@ function generateStyles() {
       .comment-form .form-status.success {
          color: #060;
       }
+
+      /* Floating action buttons */
+      .floating-buttons {
+         position: fixed;
+         bottom: 20px;
+         right: 20px;
+         display: flex;
+         flex-direction: column;
+         gap: 12px;
+         z-index: 900;
+      }
+
+      .floating-btn {
+         width: 56px;
+         height: 56px;
+         border-radius: 50%;
+         background: #fff;
+         border: 2px solid #000;
+         cursor: pointer;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+         transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .floating-btn:hover {
+         transform: scale(1.05);
+         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      }
+
+      .floating-btn.recording {
+         background: #ff4444;
+         border-color: #cc0000;
+         animation: pulse 1s infinite;
+      }
+
+      @keyframes pulse {
+         0%, 100% { transform: scale(1); }
+         50% { transform: scale(1.1); }
+      }
+
+      .floating-btn svg {
+         width: 24px;
+         height: 24px;
+         fill: #000;
+      }
+
+      .floating-btn.recording svg {
+         fill: #fff;
+      }
+
+      /* Voice comments display */
+      .voice-comments-section {
+         margin-top: 2rem;
+         padding: 1rem 0;
+      }
+
+      .voice-comments-section h3 {
+         font-size: 1rem;
+         color: #666;
+         margin-bottom: 1rem;
+      }
+
+      .voice-comments-list {
+         display: flex;
+         flex-wrap: wrap;
+         gap: 12px;
+      }
+
+      .voice-comment-bubble {
+         width: 48px;
+         height: 48px;
+         border-radius: 50%;
+         background: #888;
+         color: #fff;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         font-weight: 700;
+         font-size: 14px;
+         cursor: pointer;
+         transition: transform 0.2s, background 0.2s;
+      }
+
+      .voice-comment-bubble:hover {
+         transform: scale(1.1);
+         background: #666;
+      }
+
+      .voice-comment-item {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         gap: 4px;
+      }
+
+      .voice-duration {
+         font-size: 11px;
+         color: #666;
+         font-family: "SF Mono", "Monaco", monospace;
+      }
+
+      /* Voice comment modal */
+      .voice-modal {
+         display: none;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0, 0, 0, 0.5);
+         z-index: 1100;
+         justify-content: center;
+         align-items: center;
+      }
+
+      .voice-modal.open {
+         display: flex;
+      }
+
+      .voice-modal-content {
+         background: #fff;
+         border: 1px solid #000;
+         padding: 2rem;
+         max-width: 500px;
+         width: 90%;
+         max-height: 80vh;
+         overflow-y: auto;
+      }
+
+      .voice-modal-close {
+         position: absolute;
+         top: 0.5rem;
+         right: 0.75rem;
+         background: none;
+         border: none;
+         font-size: 1.5rem;
+         cursor: pointer;
+      }
+
+      .voice-modal audio {
+         width: 100%;
+         margin: 1rem 0;
+      }
+
+      .voice-modal .transcript {
+         background: #f5f5f5;
+         padding: 1rem;
+         border-left: 3px solid #888;
+         font-style: italic;
+      }
+
+      /* Name prompt modal */
+      .name-modal {
+         display: none;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0, 0, 0, 0.5);
+         z-index: 1200;
+         justify-content: center;
+         align-items: center;
+      }
+
+      .name-modal.open {
+         display: flex;
+      }
+
+      .name-modal-content {
+         background: #fff;
+         border: 1px solid #000;
+         padding: 2rem;
+         max-width: 400px;
+         width: 90%;
+      }
+
+      .name-modal-content h3 {
+         margin: 0 0 1rem 0;
+      }
+
+      .name-modal-content input {
+         width: 100%;
+         padding: 0.75rem;
+         border: 1px solid #ccc;
+         font-size: 1rem;
+         margin-bottom: 1rem;
+      }
+
+      .name-modal-content button {
+         padding: 0.5rem 1.5rem;
+         background: #333;
+         color: #fff;
+         border: none;
+         cursor: pointer;
+         font-size: 1rem;
+      }
+
+      .name-modal-content button:hover {
+         background: #555;
+      }
+
+      /* Upload failed modal */
+      .upload-failed-modal {
+         display: none;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0, 0, 0, 0.5);
+         z-index: 1200;
+         justify-content: center;
+         align-items: center;
+      }
+
+      .upload-failed-modal.open {
+         display: flex;
+      }
+
+      .upload-failed-content {
+         background: #fff;
+         border: 1px solid #c00;
+         padding: 2rem;
+         max-width: 400px;
+         width: 90%;
+         text-align: center;
+      }
+
+      .upload-failed-content h3 {
+         margin: 0 0 1rem 0;
+         color: #c00;
+      }
+
+      .upload-failed-content button {
+         padding: 0.75rem 2rem;
+         background: #333;
+         color: #fff;
+         border: none;
+         cursor: pointer;
+         font-size: 1rem;
+         margin-top: 1rem;
+      }
+
+      .upload-failed-content button:hover {
+         background: #555;
+      }
+
+      /* Recording status indicator */
+      .recording-status {
+         position: fixed;
+         bottom: 90px;
+         right: 20px;
+         background: #ff4444;
+         color: #fff;
+         padding: 0.5rem 1rem;
+         border-radius: 20px;
+         font-size: 0.85rem;
+         display: none;
+         z-index: 900;
+      }
+
+      .recording-status.active {
+         display: block;
+      }
    `;
 }
 
@@ -705,12 +1025,328 @@ function generateScript() {
             }
          });
       }
+
+      // ========================================
+      // Voice Recording System
+      // ========================================
+      (function() {
+         const STORAGE_KEY = 'voiceRecordingBuffer';
+         const FLUSH_INTERVAL = 3000; // 3 seconds
+
+         let mediaRecorder = null;
+         let audioChunks = [];
+         let isRecording = false;
+         let recordingType = null; // 'comment' or 'margin'
+         let flushIntervalId = null;
+         let pendingNameCallback = null;
+         let failedAudioBlob = null;
+
+         const voiceCommentBtn = document.getElementById('voice-comment-btn');
+         const voiceMarginBtn = document.getElementById('voice-margin-btn');
+         const recordingStatus = document.getElementById('recording-status');
+         const namePromptModal = document.getElementById('name-prompt-modal');
+         const nameInput = document.getElementById('voice-name-input');
+         const nameSubmitBtn = document.getElementById('name-submit-btn');
+         const uploadFailedModal = document.getElementById('upload-failed-modal');
+         const downloadRecordingBtn = document.getElementById('download-recording-btn');
+
+         // Get initials from name
+         function getInitials(name) {
+            if (!name) return '??';
+            const parts = name.trim().split(/\\s+/);
+            if (parts.length === 1) {
+               return parts[0].substring(0, 2).toUpperCase();
+            }
+            return (parts[0][0] + parts[1][0]).toUpperCase();
+         }
+
+         // Check if user has a name set
+         function getUserName() {
+            return localStorage.getItem('commentName');
+         }
+
+         // Prompt for name if not set
+         function ensureName(callback) {
+            const name = getUserName();
+            if (name) {
+               callback(name);
+            } else {
+               pendingNameCallback = callback;
+               namePromptModal.classList.add('open');
+               nameInput.focus();
+            }
+         }
+
+         // Handle name submission
+         nameSubmitBtn.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (name) {
+               localStorage.setItem('commentName', name);
+               namePromptModal.classList.remove('open');
+               if (pendingNameCallback) {
+                  pendingNameCallback(name);
+                  pendingNameCallback = null;
+               }
+            }
+         });
+
+         nameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+               nameSubmitBtn.click();
+            }
+         });
+
+         // Flush audio buffer to localStorage
+         function flushToLocalStorage() {
+            if (audioChunks.length === 0) return;
+
+            try {
+               const blob = new Blob(audioChunks, { type: 'audio/webm' });
+               const reader = new FileReader();
+               reader.onloadend = () => {
+                  const base64 = reader.result.split(',')[1];
+                  const saved = {
+                     audio: base64,
+                     timestamp: Date.now(),
+                     type: recordingType
+                  };
+                  localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+               };
+               reader.readAsDataURL(blob);
+            } catch (e) {
+               console.error('Failed to flush to localStorage:', e);
+            }
+         }
+
+         // Start recording
+         async function startRecording(type) {
+            if (isRecording) {
+               stopRecording();
+               return;
+            }
+
+            try {
+               const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+               mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+               audioChunks = [];
+               recordingType = type;
+
+               mediaRecorder.ondataavailable = (e) => {
+                  if (e.data.size > 0) {
+                     audioChunks.push(e.data);
+                  }
+               };
+
+               mediaRecorder.onstop = async () => {
+                  clearInterval(flushIntervalId);
+                  stream.getTracks().forEach(track => track.stop());
+
+                  const blob = new Blob(audioChunks, { type: 'audio/webm' });
+                  await uploadRecording(blob, recordingType);
+
+                  // Clear localStorage buffer
+                  localStorage.removeItem(STORAGE_KEY);
+               };
+
+               mediaRecorder.start(1000); // Collect data every second
+               isRecording = true;
+
+               // Update UI
+               const btn = type === 'comment' ? voiceCommentBtn : voiceMarginBtn;
+               btn.classList.add('recording');
+               recordingStatus.classList.add('active');
+               recordingStatus.textContent = type === 'comment' ? 'Recording comment...' : 'Recording margin note...';
+
+               // Start periodic flush to localStorage
+               flushIntervalId = setInterval(flushToLocalStorage, FLUSH_INTERVAL);
+
+            } catch (err) {
+               console.error('Failed to start recording:', err);
+               alert('Could not access microphone. Please allow microphone access.');
+            }
+         }
+
+         // Stop recording
+         function stopRecording() {
+            if (mediaRecorder && isRecording) {
+               mediaRecorder.stop();
+               isRecording = false;
+
+               voiceCommentBtn.classList.remove('recording');
+               voiceMarginBtn.classList.remove('recording');
+               recordingStatus.classList.remove('active');
+            }
+         }
+
+         // Upload recording to API
+         async function uploadRecording(blob, type) {
+            const name = getUserName() || 'Anonymous';
+            recordingStatus.textContent = 'Uploading...';
+            recordingStatus.classList.add('active');
+
+            try {
+               const reader = new FileReader();
+               const base64 = await new Promise((resolve, reject) => {
+                  reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                  reader.onerror = reject;
+                  reader.readAsDataURL(blob);
+               });
+
+               const endpoint = type === 'comment'
+                  ? '/ship-december/day-4/api/voice-comment'
+                  : '/ship-december/day-4/api/voice-margin';
+
+               const response = await fetch(endpoint, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                     audio: base64,
+                     name: name,
+                     day: 'day-4'
+                  })
+               });
+
+               const result = await response.json();
+
+               if (response.ok) {
+                  recordingStatus.textContent = 'Uploaded! Refresh to see it.';
+                  setTimeout(() => {
+                     recordingStatus.classList.remove('active');
+                  }, 3000);
+               } else {
+                  throw new Error(result.error || 'Upload failed');
+               }
+
+            } catch (err) {
+               console.error('Upload failed:', err);
+               recordingStatus.classList.remove('active');
+               failedAudioBlob = blob;
+               uploadFailedModal.classList.add('open');
+            }
+         }
+
+         // Download failed recording
+         downloadRecordingBtn.addEventListener('click', () => {
+            if (failedAudioBlob) {
+               const url = URL.createObjectURL(failedAudioBlob);
+               const a = document.createElement('a');
+               a.href = url;
+               a.download = 'voice-recording-' + Date.now() + '.webm';
+               document.body.appendChild(a);
+               a.click();
+               document.body.removeChild(a);
+               URL.revokeObjectURL(url);
+               uploadFailedModal.classList.remove('open');
+               failedAudioBlob = null;
+            }
+         });
+
+         // Close upload failed modal on background click
+         uploadFailedModal.addEventListener('click', (e) => {
+            if (e.target === uploadFailedModal) {
+               uploadFailedModal.classList.remove('open');
+            }
+         });
+
+         // Close name modal on background click
+         namePromptModal.addEventListener('click', (e) => {
+            if (e.target === namePromptModal) {
+               namePromptModal.classList.remove('open');
+               pendingNameCallback = null;
+            }
+         });
+
+         // Voice comment button handler
+         voiceCommentBtn.addEventListener('click', () => {
+            if (isRecording && recordingType === 'comment') {
+               stopRecording();
+            } else if (!isRecording) {
+               ensureName(() => startRecording('comment'));
+            }
+         });
+
+         // Voice margin button handler
+         voiceMarginBtn.addEventListener('click', () => {
+            if (isRecording && recordingType === 'margin') {
+               stopRecording();
+            } else if (!isRecording) {
+               ensureName(() => startRecording('margin'));
+            }
+         });
+
+         // Check for and recover interrupted recordings
+         const savedRecording = localStorage.getItem(STORAGE_KEY);
+         if (savedRecording) {
+            try {
+               const saved = JSON.parse(savedRecording);
+               // If recording is recent (< 1 hour old), offer to recover
+               if (Date.now() - saved.timestamp < 3600000) {
+                  const recover = confirm('Found an interrupted recording. Would you like to upload it?');
+                  if (recover) {
+                     const audioData = atob(saved.audio);
+                     const bytes = new Uint8Array(audioData.length);
+                     for (let i = 0; i < audioData.length; i++) {
+                        bytes[i] = audioData.charCodeAt(i);
+                     }
+                     const blob = new Blob([bytes], { type: 'audio/webm' });
+                     uploadRecording(blob, saved.type || 'comment');
+                  } else {
+                     localStorage.removeItem(STORAGE_KEY);
+                  }
+               } else {
+                  localStorage.removeItem(STORAGE_KEY);
+               }
+            } catch (e) {
+               localStorage.removeItem(STORAGE_KEY);
+            }
+         }
+
+         // Handle voice comment bubbles (for displaying existing voice comments)
+         const voiceDetailModal = document.getElementById('voice-detail-modal');
+
+         document.querySelectorAll('.voice-comment-bubble').forEach(bubble => {
+            bubble.addEventListener('click', () => {
+               const audioSrc = bubble.dataset.audio;
+               const transcript = bubble.dataset.transcript;
+               const user = bubble.dataset.user;
+               const time = bubble.dataset.time;
+
+               const body = voiceDetailModal.querySelector('.voice-modal-body');
+
+               body.innerHTML = \`
+                  <h3>\${user} - \${time}</h3>
+                  <audio controls src="\${audioSrc}"></audio>
+                  <div class="transcript">
+                     <strong>Transcript:</strong><br>
+                     \${transcript}
+                  </div>
+               \`;
+
+               voiceDetailModal.classList.add('open');
+            });
+         });
+
+         // Close voice detail modal on background click
+         voiceDetailModal.addEventListener('click', (e) => {
+            if (e.target === voiceDetailModal) {
+               voiceDetailModal.classList.remove('open');
+            }
+         });
+
+         // Close voice detail modal on Escape key
+         document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && voiceDetailModal.classList.contains('open')) {
+               voiceDetailModal.classList.remove('open');
+            }
+         });
+      })();
    </script>`;
 }
 
 function wrapHtml(content, title, days, currentDay) {
    const sidebar = generateSidebarHTML(days, currentDay);
    const modal = generateModalHTML();
+   const floatingButtons = generateFloatingButtonsHTML();
    const styles = generateStyles();
    const script = generateScript();
 
@@ -731,6 +1367,7 @@ function wrapHtml(content, title, days, currentDay) {
       ${content}
    </main>
    ${modal}
+   ${floatingButtons}
    ${script}
 </body>
 </html>`;
@@ -756,6 +1393,58 @@ export async function onRequest(context) {
       }
    }
 
+   // Fetch voice comments dynamically from GitHub
+   const voiceCommentsMd = await fetchFromGitHub('ship-december/day-4/voice-comments.md', githubToken);
+   let voiceCommentsHtml = '';
+
+   if (voiceCommentsMd) {
+      const voiceCards = mdToCards(voiceCommentsMd, 'ship-december/day-4/voice-comments.md');
+      if (voiceCards.length > 0) {
+         // Parse voice comments and create bubbles
+         const bubbles = voiceCards.map(card => {
+            // Extract audio src from the content
+            const audioMatch = card.content.match(/<audio[^>]*src="([^"]+)"/);
+            const audioSrc = audioMatch ? audioMatch[1] : '';
+
+            // Extract transcript
+            const transcriptMatch = card.content.match(/\*\*Transcript:\*\*\s*(.+)/s);
+            const transcript = transcriptMatch ? transcriptMatch[1].trim() : '';
+
+            // Get initials from user name
+            const user = card.user || 'Anonymous';
+            const parts = user.trim().split(/\s+/);
+            let initials;
+            if (parts.length === 1) {
+               initials = parts[0].substring(0, 2).toUpperCase();
+            } else {
+               initials = (parts[0][0] + parts[1][0]).toUpperCase();
+            }
+
+            // Extract duration from time string (e.g., "day-4 5.04pm 12s" -> "12s")
+            const timeStr = card.time || '';
+            const durationMatch = timeStr.match(/(\d+m?\d*s)$/);
+            const duration = durationMatch ? durationMatch[1] : '';
+
+            return `<div class="voice-comment-item">
+               <div class="voice-comment-bubble"
+                  data-audio="${audioSrc.replace(/"/g, '&quot;')}"
+                  data-transcript="${transcript.replace(/"/g, '&quot;').replace(/\n/g, ' ')}"
+                  data-user="${user}"
+                  data-time="${timeStr}"
+                  title="${user} - ${timeStr}">${initials}</div>
+               ${duration ? `<span class="voice-duration">${duration}</span>` : ''}
+            </div>`;
+         }).join('');
+
+         voiceCommentsHtml = `
+            <div class="voice-comments-section">
+               <h3>Voice Comments</h3>
+               <div class="voice-comments-list">${bubbles}</div>
+            </div>
+         `;
+      }
+   }
+
    // Comment form HTML
    const commentFormHtml = `
       <div class="comment-form">
@@ -773,6 +1462,7 @@ export async function onRequest(context) {
    <section class="comments-section">
       <h2>Comments</h2>
       ${commentsHtml}
+      ${voiceCommentsHtml}
       ${commentFormHtml}
    </section>`;
 

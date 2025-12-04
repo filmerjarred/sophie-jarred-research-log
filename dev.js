@@ -143,7 +143,7 @@ const server = createServer({
    let url = req.url.split('?')[0];
 
    // Check for API routes: /ship-december/day-X/api/name -> day-X/api/name.js
-   const apiMatch = url.match(/^\/ship-december\/(day-\d+)\/api\/(\w+)$/);
+   const apiMatch = url.match(/^\/ship-december\/(day-\d+)\/api\/([\w-]+)$/);
    if (apiMatch) {
       const apiPath = `ship-december/${apiMatch[1]}/api/${apiMatch[2]}.js`;
       if (existsSync(join(__dirname, apiPath))) {
