@@ -79,3 +79,9 @@ Personal voice notes into the margin and allowing readers to leave google-doc st
 *[ Jarred 5.30pm ]*
 
 Ok, that looks like it's working now. The duration is a bit bugged 😅 but I'd call that done for today.
+
+- - -
+
+*[ Sophie 4.37pm ]*
+
+hello! the font for this card is Gills Sans because `data-user="Sophie"`.

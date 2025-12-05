@@ -1,4 +1,5 @@
 import { marked } from 'marked';
+import { readFile } from 'node:fs/promises';
 
 const REPO_OWNER = 'filmerjarred';
 const REPO_NAME = 'sophie-jarred-research-log';
@@ -26,6 +27,16 @@ async function fetchFromGitHub(filePath, githubToken) {
    const data = await response.json();
    // Content is base64 encoded
    return atob(data.content.replace(/\n/g, ''));
+}
+
+async function readLocalMarkdown(relativePath) {
+   try {
+      const fileUrl = new URL(relativePath, import.meta.url);
+      return await readFile(fileUrl, 'utf8');
+   } catch (err) {
+      console.error(`Failed to read local file ${relativePath}:`, err);
+      return null;
+   }
 }
 
 // Convert markdown content to cards
@@ -479,6 +490,10 @@ function generateStyles() {
       /* Cards */
       .card {
          margin-bottom: 0;
+      }
+      .card[data-user="Sophie" i],
+      .comment[data-user="Sophie" i] {
+         font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
       }
 
       /* Comments */
@@ -1421,8 +1436,8 @@ export async function onRequest(context) {
    const currentDay = 'day-4';
    const githubToken = context?.env?.GIT_API_TOKEN || process.env?.GIT_API_TOKEN;
 
-   // Fetch post.md from GitHub
-   const postMd = await fetchFromGitHub('ship-december/day-4/post.md', githubToken);
+   // Load post.md from the local filesystem
+   const postMd = await readLocalMarkdown('./post.md');
    const cards = mdToCards(postMd || '', 'ship-december/day-4/post.md');
    let htmlContent = renderCards(cards);
 
