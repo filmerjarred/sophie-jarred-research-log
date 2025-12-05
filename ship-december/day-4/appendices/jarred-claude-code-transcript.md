@@ -127,3 +127,9 @@ can you add a different white hovering button but it's a microphone + an icon fo
 **[5:36pm]** can you have the transcription always be english
 
 **[5:37pm]** that works but duration is still bugged. let's just remove it for now
+
+**[8:41am]**    "in day-4 index.js, where we get the local markdown file, can you detect if the request is localhost, and if it is then use the filesystem, otherwise use the fetch from github?"
+
+**[8:43am]** context.request.url = '/ship-december/day-4/' which throws 500 invalid url
+
+**[8:44am]** "context.request.headers.get is not a function"

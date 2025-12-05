@@ -1436,8 +1436,17 @@ export async function onRequest(context) {
    const currentDay = 'day-4';
    const githubToken = context?.env?.GIT_API_TOKEN || process.env?.GIT_API_TOKEN;
 
-   // Load post.md from the local filesystem
-   const postMd = await readLocalMarkdown('./post.md');
+   // Check if request is from localhost
+   const host = context.request?.headers?.host || context.request?.host || '';
+   const isLocalhost = host.startsWith('localhost') || host.startsWith('127.0.0.1');
+
+   // Load post.md - use filesystem for localhost, GitHub for production
+   let postMd;
+   if (isLocalhost) {
+      postMd = await readLocalMarkdown('./post.md');
+   } else {
+      postMd = await fetchFromGitHub('ship-december/day-4/post.md', githubToken);
+   }
    const cards = mdToCards(postMd || '', 'ship-december/day-4/post.md');
    let htmlContent = renderCards(cards);
 
