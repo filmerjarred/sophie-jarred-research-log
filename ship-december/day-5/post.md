@@ -10,7 +10,7 @@ There are a number of tangles going on with this project.
 
 ---
 
-# on assorted genres of dread drifting about my system
+### an attempt to classify assorted wisps of dread drifting about my system
 
 1. Rapidly prototyping software often involves cutting corners. In programming the work to un-cut corners grows non-linearly with each additional temporary hack. There comes a point in every rapidly prototyped project where the ability to add new features starts to slow down and time spent working around the consequences of quick-fixes grows.
 
