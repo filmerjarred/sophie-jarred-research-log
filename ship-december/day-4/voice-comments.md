@@ -63,3 +63,11 @@
 <audio controls src="/ship-december/day-4/api/blob?file=1764926159468-henrybescelo.webm"></audio>
 
 **Transcript:** Yo bitches, what are you saying? Um, cool. Day 4 motherfuckers. Wicked. Alright.
+
+- - -
+
+*[ Henry Bescelo day-4 9.20am 0s ]*
+
+<audio controls src="/ship-december/day-4/api/blob?file=1764926417213-henrybescelo.webm"></audio>
+
+**Transcript:** The transcript, the transcript works pretty well now, it's good, yeah, banging, um, ra-ta-ta-ta-ta-ta. Yeah, I love it. I love it, I love it, yes, good, good, um, good.
