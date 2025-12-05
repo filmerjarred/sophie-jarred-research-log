@@ -113,7 +113,13 @@ const DAYS = [
          { name: 'jarred-claude-code-transcript.md', path: '/ship-december/day-4/appendices/jarred-claude-code-transcript.md' },
          { name: 'jarred-margin.md', path: '/ship-december/day-4/appendices/jarred-margin.md' }
       ]
-   }
+   },
+   {
+      folder: 'day-5', num: '5', title: 'Day 5', url: '/ship-december/day-5', appendices: [
+         { name: 'jarred-claude-code-transcript.md', path: '/ship-december/day-5/appendices/jarred-claude-code-transcript.md' },
+         { name: 'jarred-margin.md', path: '/ship-december/day-5/appendices/jarred-margin.md' }
+      ]
+   },
 ];
 
 function generateSidebarHTML(days, currentDay) {
@@ -1016,10 +1022,10 @@ function generateScript() {
             statusDiv.className = 'form-status';
 
             try {
-               const response = await fetch('/ship-december/day-4/api/comment', {
+               const response = await fetch('/ship-december/day-5/api/comment', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ comment: fullComment, day: 'day-4' })
+                  body: JSON.stringify({ comment: fullComment, day: 'day-5' })
                });
 
                const result = await response.json();
@@ -1251,8 +1257,8 @@ function generateScript() {
                });
 
                const endpoint = type === 'comment'
-                  ? '/ship-december/day-4/api/voice-comment'
-                  : '/ship-december/day-4/api/voice-margin';
+                  ? '/ship-december/day-5/api/voice-comment'
+                  : '/ship-december/day-5/api/voice-margin';
 
                const response = await fetch(endpoint, {
                   method: 'POST',
@@ -1260,7 +1266,7 @@ function generateScript() {
                   body: JSON.stringify({
                      audio: base64,
                      name: name,
-                     day: 'day-4',
+                     day: 'day-5',
                      duration: durationSecs
                   })
                });
@@ -1433,7 +1439,7 @@ function wrapHtml(content, title, days, currentDay) {
 }
 
 export async function onRequest(context) {
-   const currentDay = 'day-4';
+   const currentDay = 'day-5';
    const githubToken = context?.env?.GIT_API_TOKEN || process.env?.GIT_API_TOKEN;
 
    // Check if request is from localhost
@@ -1445,28 +1451,28 @@ export async function onRequest(context) {
    if (isLocalhost) {
       postMd = await readLocalMarkdown('./post.md');
    } else {
-      postMd = await fetchFromGitHub('ship-december/day-4/post.md', githubToken);
+      postMd = await fetchFromGitHub('ship-december/day-5/post.md', githubToken);
    }
-   const cards = mdToCards(postMd || '', 'ship-december/day-4/post.md');
+   const cards = mdToCards(postMd || '', 'ship-december/day-5/post.md');
    let htmlContent = renderCards(cards);
 
    // Fetch comments dynamically from GitHub
-   const commentsMd = await fetchFromGitHub('ship-december/day-4/comments.md', githubToken);
+   const commentsMd = await fetchFromGitHub('ship-december/day-5/comments.md', githubToken);
    let commentsHtml = '';
 
    if (commentsMd) {
-      const commentCards = mdToCards(commentsMd, 'ship-december/day-4/comments.md');
+      const commentCards = mdToCards(commentsMd, 'ship-december/day-5/comments.md');
       if (commentCards.length > 0) {
          commentsHtml = renderCards(commentCards, 'comment');
       }
    }
 
    // Fetch voice comments dynamically from GitHub
-   const voiceCommentsMd = await fetchFromGitHub('ship-december/day-4/voice-comments.md', githubToken);
+   const voiceCommentsMd = await fetchFromGitHub('ship-december/day-5/voice-comments.md', githubToken);
    let voiceCommentsHtml = '';
 
    if (voiceCommentsMd) {
-      const voiceCards = mdToCards(voiceCommentsMd, 'ship-december/day-4/voice-comments.md');
+      const voiceCards = mdToCards(voiceCommentsMd, 'ship-december/day-5/voice-comments.md');
       if (voiceCards.length > 0) {
          // Parse voice comments and create bubbles
          const bubbles = voiceCards.map(card => {

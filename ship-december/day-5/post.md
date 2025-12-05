@@ -4,4 +4,4 @@ Ah, right.
 
 The way the side-bar is at the moment we can't add day-5 unless we edit day-4.
 
-
+This whole code-base could really use a tidy.

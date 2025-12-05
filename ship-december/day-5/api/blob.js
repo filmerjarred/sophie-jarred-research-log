@@ -1,5 +1,5 @@
 // Blob proxy API - fetches audio blobs from GitHub
-// Usage: /ship-december/day-4/api/blob?file=1234567890-name.webm
+// Usage: /ship-december/day-5/api/blob?file=1234567890-name.webm
 
 const REPO_OWNER = 'filmerjarred';
 const REPO_NAME = 'sophie-jarred-research-log';
@@ -25,7 +25,7 @@ export async function onRequest(context) {
    const githubToken = env?.GIT_API_TOKEN || env?.GITHUB_TOKEN || process.env?.GIT_API_TOKEN;
 
    try {
-      const filePath = `ship-december/day-4/blobs/${safeFilename}`;
+      const filePath = `ship-december/day-5/blobs/${safeFilename}`;
       const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}?ref=${BRANCH}`;
 
       const headers = {

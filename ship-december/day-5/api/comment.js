@@ -79,7 +79,7 @@ export async function onRequest(context) {
    try {
       const body = await request.json();
       const comment = body.comment;
-      const day = body.day || 'day-4';  // default to day-4, or pass explicitly
+      const day = body.day || 'day-5';  // default to day-5, or pass explicitly
 
       if (!comment || typeof comment !== 'string') {
          return new Response(JSON.stringify({ error: 'comment required' }), {
@@ -112,8 +112,8 @@ export async function onRequest(context) {
 }
 
 // Dev test:
-// curl -X POST -k https://localhost:3000/ship-december/day-4/api/comment \
+// curl -X POST -k https://localhost:3000/ship-december/day-5/api/comment \
 //   -H "Content-Type: application/json" \
-//   -d '{"comment": "your comment here", "day": "day-4"}'
+//   -d '{"comment": "your comment here", "day": "day-5"}'
 
-// curl -X POST -k https://sophie-jarred.researchlog.dev/ship-december/day-4/api/comment -H "Content-Type: application/json" -d '{"comment": "your comment here", "day": "day-4"}'
+// curl -X POST -k https://sophie-jarred.researchlog.dev/ship-december/day-5/api/comment -H "Content-Type: application/json" -d '{"comment": "your comment here", "day": "day-5"}'
