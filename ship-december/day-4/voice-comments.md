@@ -55,3 +55,11 @@
 <audio controls src="/ship-december/day-4/api/blob?file=1764890548445-sandra.webm"></audio>
 
 **Transcript:** Can you make the font smaller in the sidebar when it says day one, day two, day three, when on mobile?
+
+- - -
+
+*[ Henry Bescelo day-4 9.15am 0s ]*
+
+<audio controls src="/ship-december/day-4/api/blob?file=1764926159468-henrybescelo.webm"></audio>
+
+**Transcript:** Yo bitches, what are you saying? Um, cool. Day 4 motherfuckers. Wicked. Alright.
