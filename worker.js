@@ -20,11 +20,11 @@ const apiRoutes = {
    '/ship-december/day-4/api/blob': day4Blob,
    '/ship-december/day-4/': day4,
 
-   '/ship-december/day-5/api/comment': day4Comment,
-   '/ship-december/day-5/api/voice-comment': day4VoiceComment,
-   '/ship-december/day-5/api/voice-margin': day4VoiceMargin,
-   '/ship-december/day-5/api/blob': day4Blob,
-   '/ship-december/day-5/': day4,
+   '/ship-december/day-5/api/comment': day5Comment,
+   '/ship-december/day-5/api/voice-comment': day5VoiceComment,
+   '/ship-december/day-5/api/voice-margin': day5VoiceMargin,
+   '/ship-december/day-5/api/blob': day5Blob,
+   '/ship-december/day-5/': day5,
 };
 
 export default {
