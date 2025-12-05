@@ -1540,7 +1540,7 @@ export async function onRequest(context) {
       ${commentFormHtml}
    </section>`;
 
-   const fullHtml = wrapHtml(htmlContent, 'Day 4', DAYS, currentDay);
+   const fullHtml = wrapHtml(htmlContent, 'Day 5', DAYS, currentDay);
 
    return new Response(fullHtml, {
       headers: { 'Content-Type': 'text/html' }

@@ -14,21 +14,21 @@ There are a number of tangles going on with this project.
 
 1. Rapidly prototyping software often involves cutting corners. In programming the work to un-cut corners grows non-linearly with each additional temporary hack. There comes a point in every rapidly prototyped project where the ability to add new features starts to slow down and time spent working around the consequences of quick-fixes grows.
 
-A surprising amount of human moral machinery gets repurposed in programming I think. When I'm not keeping a codebase "clean" there's a subtle self-disgust that starts to mount, as though I'm failing to take full care of my physical health via hygiene.
+   A surprising amount of human moral machinery gets repurposed in programming I think. When I'm not keeping a codebase "clean" there's a subtle self-disgust that starts to mount, as though I'm failing to take full care of my physical health via hygiene.
 
-I've noticed that AI-coding both expands the window of play before walls start to get hit, and also rams me into them sooner and harder.
+   I've noticed that AI-coding both expands the window of play before walls start to get hit, and also rams me into them sooner and harder.
 
-This wall might be around the corner or it might just be Friday.
+   This wall might be around the corner or it might just be Friday.
 
 2. There's a related dread when building prototypes which I think often masquerades as cutting-corners-shame-dread but is in fact something deeper that's actually more to do with the tension between an exciting vision and the reality. It's more akin to getting excited about a date, an apartment, or a holiday destination and then ignoring a sense of deflation on account of unmet hopes or unexpected difficulty.
 
-There's less of this genre of dread here with this project than I might have expected actually. Some reasons this might be:
+   There's less of this genre of dread here with this project than I might have expected actually. Some reasons this might be:
 
-- Because I'm working on it full time I can afford to keep "returning to the bone" / regenerating the source of my inspiration. There's enough time to complete full inspiration -> experiment -> mild deflation -> orienting -> inspiration loops. Maybe more practically speaking "there's enough time spare to put my headphones on and sit in my kitchen and write in order to re-contact a feeling that these experiments are worthwhile on their own terms.
+   - Because I'm working on it full time I can afford to keep "returning to the bone" / regenerating the source of my inspiration. There's enough time to complete full inspiration -> experiment -> mild deflation -> orienting -> inspiration loops. Maybe more practically speaking "there's enough time spare to put my headphones on and sit in my kitchen and write in order to re-contact a feeling that these experiments are worthwhile on their own terms.
 
-- It's actually a cool project with many interesting directions
+   - It's actually a cool project with many interesting directions
 
-- Something about "working in public" and or the research log. Normally when I'm doing research most of the interesting work is in the orienting before and after experiments. Generally this is just stored away a md file on my computer. There's something very nice about sharing it as I go and I think it takes a lot of the pressure off the results of the experiments themselves having to fully justify the time spent.
+   - Something about "working in public" and or the research log. Normally when I'm doing research most of the interesting work is in the orienting before and after experiments. Generally this is just stored away a md file on my computer. There's something very nice about sharing it as I go and I think it takes a lot of the pressure off the results of the experiments themselves having to fully justify the time spent.
 
 3. Sophie and I have become desynchronised in some way I don't understand and I continue to worry I'm not being a good collaborator. Or maybe more accurately there is a vague dread. Come to think of it this is also quite typical of my experience with collective research projects. 
 
@@ -82,8 +82,8 @@ H: "and they're together" and he might have held both his hands up to indicate t
 \
 J: "yes"
 \
-H: "when they care about the truth and also the good" and he sort of gestured at the space between his hands representing two 
-\different people
+H: "when they care about the truth and also the good" and he sort of gestured at the space between his hands representing two different people
+\
 H: "and truth and good and the truth about the good and the good about the truth can exist and move between them"
 \
 J: "yes"
@@ -96,9 +96,9 @@ H: "and when there's a lot of that going on"
 \
 J: "yes"
 \
-H: "well that's really good"
+H: "well then that's really good I think... it's really up there"
 
-I think the actual sentence he repeated was "a lively epistemic forum" but the above dialogue is how it exists in my mind and also might have actually happened at least in part or at least in spirit.
+I think the actual sentence he repeated was "a lively epistemic forum" but the above dialogue is how it exists in my mind and also might have actually happened at least in part or at the very least in spirit.
 
 According to me this also rhymes with what Anna reported in her experience of early EA. I think the word she used was "earnest". An unusual concentration of earnestness regarding the world and what a good world might look like.
 
