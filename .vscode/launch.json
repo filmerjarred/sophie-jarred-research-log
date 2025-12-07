@@ -6,12 +6,11 @@
       "type": "extensionHost",
       "request": "launch",
       "args": [
-        "--extensionDevelopmentPath=${workspaceFolder}/ship-december/day-3/vscode-extension"
+        "--extensionDevelopmentPath=${workspaceFolder}/ship-december/day-5/vscode-extension"
       ],
       "outFiles": [
-        "${workspaceFolder}/ship-december/day-3/vscode-extension/out/**/*.js"
+        "${workspaceFolder}/ship-december/day-5/vscode-extension/out/**/*.js"
       ],
-      "preLaunchTask": "npm: watch - ship-december/day-3/vscode-extension"
     }
   ]
 }

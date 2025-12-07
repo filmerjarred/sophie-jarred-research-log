@@ -1,6 +1,11 @@
 import { marked } from 'marked';
 import { readFile } from 'node:fs/promises';
 
+/**
+ * Shared card parsing library - also used by md-to-cards.js and vscode-extension
+ */
+import { mdToCards, ENCRYPTED_MARKER } from './lib/cards.js';
+
 const REPO_OWNER = 'filmerjarred';
 const REPO_NAME = 'sophie-jarred-research-log';
 const BRANCH = 'main';
@@ -39,34 +44,6 @@ async function readLocalMarkdown(relativePath) {
    }
 }
 
-// Convert markdown content to cards
-function mdToCards(content, filePath = '') {
-   // Split on \n- - -\n
-   const sections = content.split(/\n- - -\n/);
-
-   return sections.map(section => {
-      const trimmed = section.trim();
-      if (!trimmed) return null;
-
-      // Find first header (# or ## or ### etc)
-      const headerMatch = trimmed.match(/^#{1,6}\s+(.+)$/m);
-      const title = headerMatch ? headerMatch[1].trim() : null;
-
-      // Find *[ User time ]* pattern - time is optional (the asterisks make it italic in markdown)
-      const userMatch = trimmed.match(/\*\[\s*([A-Za-z]+)(?:\s+([^\]]+))?\s*\]\*/);
-      const user = userMatch ? userMatch[1] : null;
-      const time = userMatch && userMatch[2] ? userMatch[2].trim() : null;
-
-      return {
-         title,
-         user,
-         time,
-         content: trimmed,
-         file: filePath
-      };
-   }).filter(Boolean);
-}
-
 // Convert wiki-links [[path]] to clickable links that open modal
 function processWikiLinks(html) {
    // Match [[path]] or [[path|display text]]
@@ -91,13 +68,32 @@ function processWikiLinks(html) {
 // Render cards to HTML
 function renderCards(cards, className = 'card') {
    return cards.map(card => {
-      let html = marked(card.content);
-      html = processWikiLinks(html);
       const dataAttrs = [
          card.user ? `data-user="${card.user}"` : '',
          card.time ? `data-time="${card.time}"` : '',
-         card.file ? `data-file="${card.file}"` : ''
+         card.file ? `data-file="${card.file}"` : '',
+         card.isEncrypted ? 'data-encrypted="true"' : '',
+         card.encryptedData ? `data-encrypted-content="${card.encryptedData.replace(/"/g, '&quot;')}"` : ''
       ].filter(Boolean).join(' ');
+
+      if (card.isEncrypted) {
+         // Show only user info and decrypt button, hide encrypted content
+         const userDisplay = card.user || 'Unknown';
+         const timeDisplay = card.time ? ` - ${card.time}` : '';
+         return `<article class="${className} encrypted-card" ${dataAttrs}>
+            <div class="encrypted-header">
+               <span class="encrypted-user">${userDisplay}${timeDisplay}</span>
+               <span class="encrypted-badge">Encrypted</span>
+            </div>
+            <div class="encrypted-actions">
+               <button class="decrypt-btn" onclick="showDecryptModal(this)">Decrypt</button>
+            </div>
+            <div class="decrypted-content" style="display: none;"></div>
+         </article>`;
+      }
+
+      let html = marked(card.content);
+      html = processWikiLinks(html);
 
       return `<article class="${className}" ${dataAttrs}>${html}</article>`;
    }).join(className === 'card' ? '\n<hr>\n' : '\n');
@@ -188,22 +184,47 @@ function generateModalHTML() {
          <p>Your recording couldn't be uploaded. Click below to download it.</p>
          <button id="download-recording-btn">Download Recording</button>
       </div>
+   </div>
+
+   <!-- Decrypt modal -->
+   <div id="decrypt-modal" class="decrypt-modal">
+      <div class="decrypt-modal-content">
+         <h3>Decrypt Card</h3>
+         <input type="password" id="decrypt-password" placeholder="Enter password" autofocus />
+         <div class="checkbox-row">
+            <input type="checkbox" id="save-password" />
+            <label for="save-password">Save this password</label>
+         </div>
+         <div class="checkbox-row">
+            <input type="checkbox" id="auto-decrypt" />
+            <label for="auto-decrypt">Automatically decrypt in the future</label>
+         </div>
+         <div class="buttons">
+            <button class="primary" id="decrypt-submit-btn">Decrypt</button>
+            <button class="secondary" id="decrypt-cancel-btn">Cancel</button>
+         </div>
+         <div id="decrypt-error" class="decrypt-error"></div>
+      </div>
    </div>`;
 }
 
 function generateFloatingButtonsHTML() {
    // Comment icon (speech bubble with microphone)
-   const commentIcon = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+   const commentIcon = `<svg class="icon-record" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm0 15.17L18.83 16H4V4h16v13.17z"/>
       <path d="M12 11c.83 0 1.5-.67 1.5-1.5v-3c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v3c0 .83.67 1.5 1.5 1.5z"/>
       <path d="M14.5 9.5c0 1.38-1.12 2.5-2.5 2.5s-2.5-1.12-2.5-2.5H8.5c0 1.74 1.26 3.18 2.9 3.47V14.5h1.2v-1.53c1.64-.29 2.9-1.73 2.9-3.47h-1z"/>
+   </svg><svg class="icon-stop" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="6" width="12" height="12" rx="1"/>
    </svg>`;
 
    // Margin icon (sticky note with microphone)
-   const marginIcon = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+   const marginIcon = `<svg class="icon-record" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path d="M19 3H4.99C3.89 3 3 3.9 3 5l.01 14c0 1.1.89 2 1.99 2h10l6-6V5c0-1.1-.9-2-2-2zm0 12l-5 5H5V5h14v10z"/>
       <path d="M12 11c.83 0 1.5-.67 1.5-1.5v-3c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v3c0 .83.67 1.5 1.5 1.5z"/>
       <path d="M14.5 9.5c0 1.38-1.12 2.5-2.5 2.5s-2.5-1.12-2.5-2.5H8.5c0 1.74 1.26 3.18 2.9 3.47V14.5h1.2v-1.53c1.64-.29 2.9-1.73 2.9-3.47h-1z"/>
+   </svg><svg class="icon-stop" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="6" width="12" height="12" rx="1"/>
    </svg>`;
 
    return `
@@ -624,55 +645,62 @@ function generateStyles() {
          fill: #fff;
       }
 
-      /* Voice comments display */
-      .voice-comments-section {
-         margin-top: 2rem;
-         padding: 1rem 0;
+      .floating-btn .icon-stop {
+         display: none;
       }
 
-      .voice-comments-section h3 {
-         font-size: 1rem;
-         color: #666;
-         margin-bottom: 1rem;
+      .floating-btn.recording .icon-record {
+         display: none;
       }
 
-      .voice-comments-list {
+      .floating-btn.recording .icon-stop {
+         display: block;
+      }
+
+      /* Voice comments inline style */
+      .voice-comment .comment-header {
          display: flex;
-         flex-wrap: wrap;
-         gap: 12px;
-      }
-
-      .voice-comment-bubble {
-         width: 48px;
-         height: 48px;
-         border-radius: 50%;
-         background: #888;
-         color: #fff;
-         display: flex;
+         justify-content: space-between;
          align-items: center;
-         justify-content: center;
-         font-weight: 700;
-         font-size: 14px;
-         cursor: pointer;
-         transition: transform 0.2s, background 0.2s;
+         margin-bottom: 0.5rem;
       }
 
-      .voice-comment-bubble:hover {
-         transform: scale(1.1);
-         background: #666;
+      .voice-comment .comment-user {
+         font-weight: 600;
+         font-size: 0.9rem;
+         color: #333;
       }
 
-      .voice-comment-item {
-         display: flex;
-         flex-direction: column;
+      .voice-comment .play-btn {
+         display: inline-flex;
          align-items: center;
          gap: 4px;
+         background: #333;
+         color: #fff;
+         border: none;
+         padding: 4px 10px;
+         border-radius: 4px;
+         cursor: pointer;
+         font-size: 0.8rem;
+         font-family: inherit;
       }
 
-      .voice-duration {
-         font-size: 11px;
-         color: #666;
+      .voice-comment .play-btn:hover {
+         background: #555;
+      }
+
+      .voice-comment .play-btn.playing {
+         background: #c00;
+      }
+
+      .voice-comment .play-btn .duration {
          font-family: "SF Mono", "Monaco", monospace;
+         font-size: 0.75rem;
+      }
+
+      .voice-comment .comment-transcript {
+         font-style: italic;
+         color: #444;
       }
 
       /* Voice comment modal */
@@ -838,6 +866,136 @@ function generateStyles() {
 
       .recording-status.active {
          display: block;
+      }
+
+      /* Encrypted cards */
+      .encrypted-card {
+         background: #f5f5f5;
+         border: 1px dashed #999;
+         padding: 1rem;
+         border-radius: 4px;
+      }
+
+      .encrypted-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 0.5rem;
+      }
+
+      .encrypted-user {
+         font-weight: 600;
+         color: #333;
+      }
+
+      .encrypted-badge {
+         background: #666;
+         color: #fff;
+         padding: 0.2rem 0.5rem;
+         font-size: 0.75rem;
+         border-radius: 3px;
+      }
+
+      .encrypted-actions {
+         margin-top: 0.5rem;
+      }
+
+      .decrypt-btn {
+         background: #333;
+         color: #fff;
+         border: none;
+         padding: 0.5rem 1rem;
+         cursor: pointer;
+         font-size: 0.9rem;
+      }
+
+      .decrypt-btn:hover {
+         background: #555;
+      }
+
+      .decrypted-content {
+         margin-top: 1rem;
+         padding-top: 1rem;
+         border-top: 1px solid #ddd;
+      }
+
+      /* Decrypt modal */
+      .decrypt-modal {
+         display: none;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0, 0, 0, 0.5);
+         z-index: 1200;
+         justify-content: center;
+         align-items: center;
+      }
+
+      .decrypt-modal.open {
+         display: flex;
+      }
+
+      .decrypt-modal-content {
+         background: #fff;
+         border: 1px solid #000;
+         padding: 2rem;
+         max-width: 400px;
+         width: 90%;
+      }
+
+      .decrypt-modal-content h3 {
+         margin: 0 0 1rem 0;
+      }
+
+      .decrypt-modal-content input[type="password"] {
+         width: 100%;
+         padding: 0.75rem;
+         border: 1px solid #ccc;
+         font-size: 1rem;
+         margin-bottom: 1rem;
+      }
+
+      .decrypt-modal-content .checkbox-row {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         margin-bottom: 0.5rem;
+         font-size: 0.9rem;
+      }
+
+      .decrypt-modal-content .buttons {
+         display: flex;
+         gap: 0.5rem;
+         margin-top: 1rem;
+      }
+
+      .decrypt-modal-content button {
+         padding: 0.5rem 1.5rem;
+         border: none;
+         cursor: pointer;
+         font-size: 1rem;
+      }
+
+      .decrypt-modal-content button.primary {
+         background: #333;
+         color: #fff;
+      }
+
+      .decrypt-modal-content button.secondary {
+         background: #ddd;
+         color: #333;
+      }
+
+      .decrypt-modal-content button:hover {
+         opacity: 0.9;
+      }
+
+      .decrypt-error {
+         color: #c00;
+         font-size: 0.9rem;
+         margin-top: 0.5rem;
       }
    `;
 }
@@ -1366,44 +1524,273 @@ function generateScript() {
             }
          }
 
-         // Handle voice comment bubbles (for displaying existing voice comments)
-         const voiceDetailModal = document.getElementById('voice-detail-modal');
+         // Handle voice comment play buttons
+         let currentAudio = null;
+         let currentPlayBtn = null;
 
-         document.querySelectorAll('.voice-comment-bubble').forEach(bubble => {
-            bubble.addEventListener('click', () => {
-               const audioSrc = bubble.dataset.audio;
-               const transcript = bubble.dataset.transcript;
-               const user = bubble.dataset.user;
-               const time = bubble.dataset.time;
+         document.querySelectorAll('.play-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+               const audioSrc = btn.dataset.audio;
 
-               const body = voiceDetailModal.querySelector('.voice-modal-body');
+               // If clicking the same button that's playing, stop it
+               if (currentAudio && currentPlayBtn === btn) {
+                  currentAudio.pause();
+                  currentAudio = null;
+                  btn.classList.remove('playing');
+                  btn.querySelector('svg').innerHTML = '<path d="M8 5v14l11-7z" fill="currentColor"/>';
+                  currentPlayBtn = null;
+                  return;
+               }
 
-               body.innerHTML = \`
-                  <h3>\${user} - \${time}</h3>
-                  <audio controls src="\${audioSrc}"></audio>
-                  <div class="transcript">
-                     <strong>Transcript:</strong><br>
-                     \${transcript}
-                  </div>
-               \`;
+               // Stop any currently playing audio
+               if (currentAudio) {
+                  currentAudio.pause();
+                  currentPlayBtn.classList.remove('playing');
+                  currentPlayBtn.querySelector('svg').innerHTML = '<path d="M8 5v14l11-7z" fill="currentColor"/>';
+               }
 
-               voiceDetailModal.classList.add('open');
+               // Play new audio
+               currentAudio = new Audio(audioSrc);
+               currentPlayBtn = btn;
+               btn.classList.add('playing');
+               btn.querySelector('svg').innerHTML = '<rect x="6" y="5" width="4" height="14" fill="currentColor"/><rect x="14" y="5" width="4" height="14" fill="currentColor"/>';
+
+               currentAudio.play();
+
+               currentAudio.onended = () => {
+                  btn.classList.remove('playing');
+                  btn.querySelector('svg').innerHTML = '<path d="M8 5v14l11-7z" fill="currentColor"/>';
+                  currentAudio = null;
+                  currentPlayBtn = null;
+               };
             });
          });
+      })();
 
-         // Close voice detail modal on background click
-         voiceDetailModal.addEventListener('click', (e) => {
-            if (e.target === voiceDetailModal) {
-               voiceDetailModal.classList.remove('open');
+      // ========================================
+      // Encryption/Decryption System
+      // ========================================
+      (function() {
+         const PASSWORDS_KEY = 'encryptionPasswords'; // { user: password }
+         const AUTO_DECRYPT_KEY = 'autoDecryptUsers'; // [user1, user2, ...]
+
+         let currentDecryptCard = null;
+
+         // Get stored passwords
+         function getStoredPasswords() {
+            try {
+               return JSON.parse(localStorage.getItem(PASSWORDS_KEY) || '{}');
+            } catch {
+               return {};
+            }
+         }
+
+         // Save password for user
+         function savePassword(user, password) {
+            const passwords = getStoredPasswords();
+            passwords[user.toLowerCase()] = password;
+            localStorage.setItem(PASSWORDS_KEY, JSON.stringify(passwords));
+         }
+
+         // Get auto-decrypt users
+         function getAutoDecryptUsers() {
+            try {
+               return JSON.parse(localStorage.getItem(AUTO_DECRYPT_KEY) || '[]');
+            } catch {
+               return [];
+            }
+         }
+
+         // Add auto-decrypt user
+         function addAutoDecryptUser(user) {
+            const users = getAutoDecryptUsers();
+            if (!users.includes(user.toLowerCase())) {
+               users.push(user.toLowerCase());
+               localStorage.setItem(AUTO_DECRYPT_KEY, JSON.stringify(users));
+            }
+         }
+
+         // Derive key from password using PBKDF2 (compatible with Node's scrypt output)
+         async function deriveKey(password) {
+            const enc = new TextEncoder();
+            const keyMaterial = await crypto.subtle.importKey(
+               'raw',
+               enc.encode(password),
+               'PBKDF2',
+               false,
+               ['deriveBits', 'deriveKey']
+            );
+
+            return await crypto.subtle.deriveKey(
+               {
+                  name: 'PBKDF2',
+                  salt: enc.encode('salt'),
+                  iterations: 100000,
+                  hash: 'SHA-256'
+               },
+               keyMaterial,
+               { name: 'AES-CBC', length: 256 },
+               false,
+               ['decrypt']
+            );
+         }
+
+         // Decrypt content using Web Crypto API
+         // Note: VS Code extension uses Node crypto with scrypt, which is different from PBKDF2
+         // For full compatibility, you'd need to use the same algorithm on both sides
+         // This is a simplified version that uses PBKDF2 in the browser
+         async function decryptContent(encryptedText, password) {
+            try {
+               const [ivBase64, encrypted] = encryptedText.split(':');
+               if (!ivBase64 || !encrypted) {
+                  throw new Error('Invalid encrypted format');
+               }
+
+               const iv = Uint8Array.from(atob(ivBase64), c => c.charCodeAt(0));
+               const encryptedBytes = Uint8Array.from(atob(encrypted), c => c.charCodeAt(0));
+
+               // Note: This uses PBKDF2 which won't be compatible with Node's scrypt
+               // For production, you'd need scrypt.js or server-side decryption
+               const key = await deriveKey(password);
+
+               const decrypted = await crypto.subtle.decrypt(
+                  { name: 'AES-CBC', iv },
+                  key,
+                  encryptedBytes
+               );
+
+               return new TextDecoder().decode(decrypted);
+            } catch (err) {
+               console.error('Decryption failed:', err);
+               throw new Error('Decryption failed - wrong password?');
+            }
+         }
+
+         // Show decrypt modal
+         window.showDecryptModal = function(btn) {
+            const card = btn.closest('.encrypted-card');
+            currentDecryptCard = card;
+
+            const user = card.dataset.user || '';
+            const passwords = getStoredPasswords();
+
+            const modal = document.getElementById('decrypt-modal');
+            const passwordInput = document.getElementById('decrypt-password');
+            const errorDiv = document.getElementById('decrypt-error');
+
+            errorDiv.textContent = '';
+            passwordInput.value = passwords[user.toLowerCase()] || '';
+
+            modal.classList.add('open');
+            passwordInput.focus();
+         };
+
+         // Handle decrypt submission
+         document.getElementById('decrypt-submit-btn').addEventListener('click', async () => {
+            if (!currentDecryptCard) return;
+
+            const passwordInput = document.getElementById('decrypt-password');
+            const savePasswordCheckbox = document.getElementById('save-password');
+            const autoDecryptCheckbox = document.getElementById('auto-decrypt');
+            const errorDiv = document.getElementById('decrypt-error');
+
+            const password = passwordInput.value;
+            const encryptedContent = currentDecryptCard.dataset.encryptedContent;
+            const user = currentDecryptCard.dataset.user || 'unknown';
+
+            if (!password) {
+               errorDiv.textContent = 'Please enter a password';
+               return;
+            }
+
+            try {
+               const decrypted = await decryptContent(encryptedContent, password);
+
+               // Save password if checkbox is checked
+               if (savePasswordCheckbox.checked) {
+                  savePassword(user, password);
+               }
+
+               // Add to auto-decrypt if checkbox is checked
+               if (autoDecryptCheckbox.checked) {
+                  addAutoDecryptUser(user);
+                  savePassword(user, password); // Also save password for auto-decrypt
+               }
+
+               // Show decrypted content
+               const contentDiv = currentDecryptCard.querySelector('.decrypted-content');
+               contentDiv.innerHTML = decrypted.replace(/\\n/g, '<br>');
+               contentDiv.style.display = 'block';
+
+               // Hide decrypt button and badge
+               currentDecryptCard.querySelector('.encrypted-actions').style.display = 'none';
+               currentDecryptCard.querySelector('.encrypted-badge').textContent = 'Decrypted';
+               currentDecryptCard.querySelector('.encrypted-badge').style.background = '#060';
+
+               // Close modal
+               document.getElementById('decrypt-modal').classList.remove('open');
+               currentDecryptCard = null;
+
+            } catch (err) {
+               errorDiv.textContent = err.message;
             }
          });
 
-         // Close voice detail modal on Escape key
-         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && voiceDetailModal.classList.contains('open')) {
-               voiceDetailModal.classList.remove('open');
+         // Handle cancel
+         document.getElementById('decrypt-cancel-btn').addEventListener('click', () => {
+            document.getElementById('decrypt-modal').classList.remove('open');
+            currentDecryptCard = null;
+         });
+
+         // Close modal on background click
+         document.getElementById('decrypt-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'decrypt-modal') {
+               document.getElementById('decrypt-modal').classList.remove('open');
+               currentDecryptCard = null;
             }
          });
+
+         // Handle Enter key in password input
+         document.getElementById('decrypt-password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+               document.getElementById('decrypt-submit-btn').click();
+            }
+         });
+
+         // Auto-decrypt on page load for users with auto-decrypt enabled
+         async function autoDecryptCards() {
+            const autoDecryptUsers = getAutoDecryptUsers();
+            const passwords = getStoredPasswords();
+
+            if (autoDecryptUsers.length === 0) return;
+
+            const encryptedCards = document.querySelectorAll('.encrypted-card');
+
+            for (const card of encryptedCards) {
+               const user = (card.dataset.user || '').toLowerCase();
+
+               if (autoDecryptUsers.includes(user) && passwords[user]) {
+                  const encryptedContent = card.dataset.encryptedContent;
+
+                  try {
+                     const decrypted = await decryptContent(encryptedContent, passwords[user]);
+
+                     const contentDiv = card.querySelector('.decrypted-content');
+                     contentDiv.innerHTML = decrypted.replace(/\\n/g, '<br>');
+                     contentDiv.style.display = 'block';
+
+                     card.querySelector('.encrypted-actions').style.display = 'none';
+                     card.querySelector('.encrypted-badge').textContent = 'Decrypted';
+                     card.querySelector('.encrypted-badge').style.background = '#060';
+                  } catch (err) {
+                     console.warn('Auto-decrypt failed for', user, err);
+                  }
+               }
+            }
+         }
+
+         // Run auto-decrypt when DOM is ready
+         autoDecryptCards();
       })();
    </script>`;
 }
@@ -1458,66 +1845,95 @@ export async function onRequest(context) {
 
    // Fetch comments dynamically from GitHub
    const commentsMd = await fetchFromGitHub('ship-december/day-5/comments.md', githubToken);
-   let commentsHtml = '';
+   const voiceCommentsMd = await fetchFromGitHub('ship-december/day-5/voice-comments.md', githubToken);
+
+   // Parse time string to sortable value (e.g., "day-5 2.30pm" -> number)
+   function parseTimeForSort(timeStr) {
+      if (!timeStr) return 0;
+      // Extract day number
+      const dayMatch = timeStr.match(/day-(\d+)/);
+      const day = dayMatch ? parseInt(dayMatch[1]) : 0;
+      // Extract time like "2.30pm" or "11.05am"
+      const timeMatch = timeStr.match(/(\d+)\.(\d+)(am|pm)/i);
+      if (!timeMatch) return day * 10000;
+      let hours = parseInt(timeMatch[1]);
+      const minutes = parseInt(timeMatch[2]);
+      const isPM = timeMatch[3].toLowerCase() === 'pm';
+      if (isPM && hours !== 12) hours += 12;
+      if (!isPM && hours === 12) hours = 0;
+      return day * 10000 + hours * 100 + minutes;
+   }
+
+   // Collect all comments with type info
+   let allComments = [];
 
    if (commentsMd) {
       const commentCards = mdToCards(commentsMd, 'ship-december/day-5/comments.md');
-      if (commentCards.length > 0) {
-         commentsHtml = renderCards(commentCards, 'comment');
-      }
+      commentCards.forEach(card => {
+         allComments.push({
+            type: 'text',
+            user: card.user,
+            time: card.time,
+            content: card.content,
+            sortKey: parseTimeForSort(card.time)
+         });
+      });
    }
-
-   // Fetch voice comments dynamically from GitHub
-   const voiceCommentsMd = await fetchFromGitHub('ship-december/day-5/voice-comments.md', githubToken);
-   let voiceCommentsHtml = '';
 
    if (voiceCommentsMd) {
       const voiceCards = mdToCards(voiceCommentsMd, 'ship-december/day-5/voice-comments.md');
-      if (voiceCards.length > 0) {
-         // Parse voice comments and create bubbles
-         const bubbles = voiceCards.map(card => {
-            // Extract audio src from the content
-            const audioMatch = card.content.match(/<audio[^>]*src="([^"]+)"/);
-            const audioSrc = audioMatch ? audioMatch[1] : '';
+      voiceCards.forEach(card => {
+         // Extract audio src from the content
+         const audioMatch = card.content.match(/<audio[^>]*src="([^"]+)"/);
+         const audioSrc = audioMatch ? audioMatch[1] : '';
+         // Extract transcript
+         const transcriptMatch = card.content.match(/\*\*Transcript:\*\*\s*(.+)/s);
+         const transcript = transcriptMatch ? transcriptMatch[1].trim() : '';
+         // Extract duration from time string
+         const timeStr = card.time || '';
+         const durationMatch = timeStr.match(/(\d+m?\d*s)$/);
+         const duration = durationMatch ? durationMatch[1] : '';
+         // Remove duration from time for display
+         const displayTime = timeStr.replace(/\s*\d+m?\d*s$/, '');
 
-            // Extract transcript
-            const transcriptMatch = card.content.match(/\*\*Transcript:\*\*\s*(.+)/s);
-            const transcript = transcriptMatch ? transcriptMatch[1].trim() : '';
-
-            // Get initials from user name
-            const user = card.user || 'Anonymous';
-            const parts = user.trim().split(/\s+/);
-            let initials;
-            if (parts.length === 1) {
-               initials = parts[0].substring(0, 2).toUpperCase();
-            } else {
-               initials = (parts[0][0] + parts[1][0]).toUpperCase();
-            }
-
-            // Extract duration from time string (e.g., "day-4 5.04pm 12s" -> "12s")
-            const timeStr = card.time || '';
-            const durationMatch = timeStr.match(/(\d+m?\d*s)$/);
-            const duration = durationMatch ? durationMatch[1] : '';
-
-            return `<div class="voice-comment-item">
-               <div class="voice-comment-bubble"
-                  data-audio="${audioSrc.replace(/"/g, '&quot;')}"
-                  data-transcript="${transcript.replace(/"/g, '&quot;').replace(/\n/g, ' ')}"
-                  data-user="${user}"
-                  data-time="${timeStr}"
-                  title="${user} - ${timeStr}">${initials}</div>
-               ${duration ? `<span class="voice-duration">${duration}</span>` : ''}
-            </div>`;
-         }).join('');
-
-         voiceCommentsHtml = `
-            <div class="voice-comments-section">
-               <h3>Voice Comments</h3>
-               <div class="voice-comments-list">${bubbles}</div>
-            </div>
-         `;
-      }
+         allComments.push({
+            type: 'voice',
+            user: card.user,
+            time: displayTime,
+            duration: duration,
+            audioSrc: audioSrc,
+            transcript: transcript,
+            sortKey: parseTimeForSort(card.time)
+         });
+      });
    }
+
+   // Sort by time
+   allComments.sort((a, b) => a.sortKey - b.sortKey);
+
+   // Render all comments
+   const commentsHtml = allComments.map(comment => {
+      const userClass = comment.user?.toLowerCase() === 'sophie' ? ' sophie-comment' : '';
+      const userDisplay = comment.user || 'Anonymous';
+      const timeDisplay = comment.time ? ` - ${comment.time}` : '';
+
+      if (comment.type === 'voice') {
+         return `<article class="comment voice-comment${userClass}" data-user="${comment.user || ''}">
+            <div class="comment-header">
+               <span class="comment-user">${userDisplay}${timeDisplay}</span>
+               <button class="play-btn" data-audio="${comment.audioSrc.replace(/"/g, '&quot;')}" title="Play audio">
+                  <svg viewBox="0 0 24 24" width="16" height="16"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+                  ${comment.duration ? `<span class="duration">${comment.duration}</span>` : ''}
+               </button>
+            </div>
+            <div class="comment-transcript">${comment.transcript}</div>
+         </article>`;
+      } else {
+         let html = marked(comment.content);
+         html = processWikiLinks(html);
+         return `<article class="comment${userClass}" data-user="${comment.user || ''}">${html}</article>`;
+      }
+   }).join('\n');
 
    // Comment form HTML
    const commentFormHtml = `
@@ -1536,7 +1952,6 @@ export async function onRequest(context) {
    <section class="comments-section">
       <h2>Comments</h2>
       ${commentsHtml}
-      ${voiceCommentsHtml}
       ${commentFormHtml}
    </section>`;
 

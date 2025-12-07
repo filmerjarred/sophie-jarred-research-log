@@ -2,6 +2,11 @@
 import { readFileSync } from 'fs';
 import { relative } from 'path';
 
+/**
+ * Shared card parsing library - also used by index.js and vscode-extension
+ */
+import { mdToCards } from './lib/cards.js';
+
 const mdFile = process.argv[2];
 if (!mdFile) {
    console.error('Usage: node md-to-cards.js <markdown-file>');
@@ -11,21 +16,6 @@ if (!mdFile) {
 const content = readFileSync(mdFile, 'utf-8');
 const relativePath = relative(process.cwd(), mdFile);
 
-// Split on \n- - -\n
-const sections = content.split(/\n- - -\n/);
-
-const cards = sections.map(section => {
-   const trimmed = section.trim();
-
-   // Find first header (# or ## or ### etc)
-   const headerMatch = trimmed.match(/^#{1,6}\s+(.+)$/m);
-   const title = headerMatch ? headerMatch[1].trim() : null;
-
-   return {
-      title,
-      content: trimmed,
-      file: relativePath
-   };
-}).filter(card => card.content.length > 0);
+const cards = mdToCards(content, relativePath);
 
 console.log(JSON.stringify(cards, null, 2));

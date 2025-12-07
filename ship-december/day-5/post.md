@@ -10,7 +10,7 @@ There are a number of tangles going on with this project.
 
 ---
 
-### an attempt to classify assorted wisps of dread drifting about my system
+#### an attempt to classify assorted wisps of dread drifting about my system
 
 1. Rapidly prototyping software often involves cutting corners. In programming the work to un-cut corners grows non-linearly with each additional temporary hack. There comes a point in every rapidly prototyped project where the ability to add new features starts to slow down and time spent working around the consequences of quick-fixes grows.
 
@@ -30,11 +30,13 @@ There are a number of tangles going on with this project.
 
    - Something about "working in public" and or the research log. Normally when I'm doing research most of the interesting work is in the orienting before and after experiments. Generally this is just stored away a md file on my computer. There's something very nice about sharing it as I go and I think it takes a lot of the pressure off the results of the experiments themselves having to fully justify the time spent.
 
-3. Sophie and I have become desynchronised in some way I don't understand and I continue to worry I'm not being a good collaborator. Or maybe more accurately there is a vague dread. Come to think of it this is also quite typical of my experience with collective research projects. 
+3. Sophie and I have become desynchronised in some way I don't understand and I continue to worry I'm not being a good collaborator. Or maybe more accurately there is a vague dread. Come to think of it this is also quite typical of my experience with collective research projects.
+
+   Venting into the research log helps me to feel caught up with myself and have fluency with proceedings. Maybe I could add password protected cards and Sophie would find this helpful 🤔.
 
 - - -
 
-### some thoughts on things my friend Harri has once said to me
+#### some thoughts on some things my friend Harri has once said to me
 
 Harri once told me a story I think about often.
 
@@ -124,6 +126,52 @@ Hmmmm.
 
 hInteresting.
 
+- - -
+
+*[ Jarred 12pm ]*
+
+Ok. Let's take a look at what a password protected card might look like.
+
+   "🤖 Hello Claude-code"
+
+   "Please copy the vscode extension in day-3 into day-5, we're going to add to it."
+
+   "Please add the following feature to the vscode-extension in day-5"
+
+   "Add a command which will encrypt and decrypt the contents of a card. It will take all the text (except the user) within the card where the vscode cursor currently is and encrypt it with a password that's set in the .env. If there is no password set in the .env then it will request one and set it in .env."
+
+   "It will take something like the following card:
+   ```
+   [ Jarred 10.am ]
+
+   This is my message
+   ```
+
+   and turn it into
+
+   ```
+   [ Jarred 10.am ]
+   \[Encrypted]
+
+   asfdhunjndfgdfsg
+   ```
+
+   and if encryption is toggled again it will look like
+
+   ```
+   \[ Unencrypted ]
+   [ Jarred 10.am ]
+
+   This is my message
+   ```
+
+   and then we add a git commit to do a quick scan for cards with [ Unencrypted ] and we refuse to push then and tell the user to either remove it or encrypt it before pushing."
 
 
+   On the front-end, there should be a script that detects if a card is encrypted when it's rendering the page in the browser. If it's encrypted, don't show the encrypted text; instead, just display the user and a decrypt button. Then, ask for that user's password and add a checkbox that's like "Save this password" and "Automatically decrypt in the future" into local storage, which will just be like the username-password.
 
+- - -
+[Jarred 1pm]
+[Encrypted]
+
+KBhgeAR/HtF4DngpiE2Z5Q==:X/Hg7p7aFp11uwMtaZnnY8yFt4b8y87QRlTobFSU9SMZW5t2xQWh10OxDTKJMsipr4O72lG2Dus8xgFVBhvQkg==

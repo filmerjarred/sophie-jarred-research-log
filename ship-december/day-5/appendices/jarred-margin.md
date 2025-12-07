@@ -12,9 +12,11 @@ In sober terms, this process recently looks like my
 
 ---
 
-"Please add the following feature to the vscode-extension"
+"Please copy the vscode extension in day-3 into day 5, we're going to add to it."
 
-"Add a command which will encrypt and decrypt the contents of a card. It will take all the text (except the user) in the card where the cursor is and encrypt it with a password that's set in the .env. If there is no password set in the .env then it will request one and set it."
+"Please add the following feature to the vscode-extension in day-5"
+
+"Add a command which will encrypt and decrypt the contents of a card. It will take all the text (except the user) within the card where the vscode cursor currently is and encrypt it with a password that's set in the .env. If there is no password set in the .env then it will request one and set it in .env."
 
 "It will take something like the following card:
 ```
@@ -48,5 +50,7 @@ On the front-end, there should be a script that detects if a card is encrypted w
 
 ---
 
-Can you have the voice comments rather than be in circles? Just be interleaved with the text comments. With the play button to play the audio, and also a play button on the comments that are just text comments which will generate audio and play them. 
+Can you have the voice comments be with the text comments rather than be in circles? Just be interleaved with the text comments in time order and the transcribed comment shown and with the play button to play the associated audio
 
+
+Can you make the font smaller in the sidebar when it says day one, day two, day three, when on mobile?

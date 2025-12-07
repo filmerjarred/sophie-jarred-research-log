@@ -1,0 +1,66 @@
+{
+  "name": "ship-december",
+  "displayName": "Ship December",
+  "description": "A VS Code extension for managing ship-december daily folders",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ship-december.newDay",
+        "title": "New Day"
+      },
+      {
+        "command": "ship-december.toggleEncryption",
+        "title": "Toggle Card Encryption"
+      },
+      {
+        "command": "ship-december.newCard",
+        "title": "New Card"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "ship-december.newDay",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+
+    "_comment_copylib": "Copies shared lib from day-5/lib/ into out/lib/ - this lib is shared with index.js and md-to-cards.js",
+    "copylib": "mkdir -p out/lib && cp ../lib/*.js out/lib/",
+
+    "_comment_compile": "Compiles TypeScript and copies shared lib to output",
+    "compile": "tsc -p ./ && npm run copylib",
+
+    "_comment_watch": "Watches both TypeScript files and shared lib for changes, recompiling/copying as needed",
+    "watch": "concurrently \"tsc -watch -p ./\" \"chokidar '../lib/**/*.js' -c 'npm run copylib'\"",
+
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "publish": "npm version patch && npm run compile && vsce package && code --install-extension ship-december-$(node -p \"require('./package.json').version\").vsix"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "18.x",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.0",
+    "@vscode/test-electron": "^2.3.8",
+    "concurrently": "^8.2.0",
+    "chokidar-cli": "^3.0.0"
+  }
+}
